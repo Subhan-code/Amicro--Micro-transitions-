@@ -5,15 +5,17 @@ import { ButtonConfig } from '../data/buttons';
 interface AnimatedButtonProps {
   config: ButtonConfig;
   layoutMode: 'list' | 'grid' | 'matrix';
+  theme?: 'dark' | 'light';
 }
 
-export function AnimatedButton({ config, layoutMode }: AnimatedButtonProps) {
+export function AnimatedButton({ config, layoutMode, theme = 'dark' }: AnimatedButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
   
   const Icon1 = config.icon1 as React.ElementType;
   const Icon2 = config.icon2 as React.ElementType;
 
   const isMatrix = layoutMode === 'matrix';
+  const isLightTheme = theme === 'light';
 
   // State specific for one-time interactions
   const [hasInteracted, setHasInteracted] = useState(false);
@@ -50,7 +52,7 @@ export function AnimatedButton({ config, layoutMode }: AnimatedButtonProps) {
                   transition={{ type: "spring", stiffness: 600, damping: 25 }}
                   className={`flex items-center shrink-0 ${!isMatrix ? 'mr-2.5' : ''}`}
                 >
-                  <Icon1 className="w-[16px] h-[16px] text-[#e3e3e3]" />
+                  <Icon1 className={`w-[16px] h-[16px] ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`} />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -66,7 +68,7 @@ export function AnimatedButton({ config, layoutMode }: AnimatedButtonProps) {
                   transition={{ type: "spring", stiffness: 600, damping: 25 }}
                   className={`flex items-center shrink-0 ${!isMatrix ? 'ml-2.5' : ''}`}
                 >
-                  {Icon2 && <Icon2 className="w-[16px] h-[16px] text-[#e3e3e3]" />}
+                  {Icon2 && <Icon2 className={`w-[16px] h-[16px] ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`} />}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -87,7 +89,7 @@ export function AnimatedButton({ config, layoutMode }: AnimatedButtonProps) {
                     transition={{ type: "spring", stiffness: 600, damping: 25 }}
                     className="absolute inset-0 flex items-center justify-center"
                   >
-                    <Icon1 className="w-[16px] h-[16px] text-[#e3e3e3]" />
+                    <Icon1 className={`w-[16px] h-[16px] ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`} />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -98,7 +100,7 @@ export function AnimatedButton({ config, layoutMode }: AnimatedButtonProps) {
                     transition={{ type: "spring", stiffness: 600, damping: 25 }}
                     className="absolute inset-0 flex items-center justify-center"
                   >
-                    {Icon2 && <Icon2 className={`w-[16px] h-[16px] ${config.icon2Color || 'text-[#e3e3e3]'}`} />}
+                    {Icon2 && <Icon2 className={`w-[16px] h-[16px] ${config.icon2Color || (isLightTheme ? 'text-black' : 'text-[#e3e3e3]')}`} />}
                     <motion.div
                       initial={{ opacity: 0, scale: 0, rotate: -45, y: 10 }}
                       animate={{ opacity: 1, scale: 1, rotate: 0, y: 0 }}
@@ -144,7 +146,7 @@ export function AnimatedButton({ config, layoutMode }: AnimatedButtonProps) {
                     transition={{ type: "spring", stiffness: 600, damping: 25 }}
                     className="absolute inset-0 flex items-center justify-center"
                   >
-                    <Icon1 className={`w-[16px] h-[16px] ${isHovered && config.icon1Color ? config.icon1Color : 'text-[#e3e3e3]'}`} />
+                    <Icon1 className={`w-[16px] h-[16px] ${isHovered && config.icon1Color ? config.icon1Color : (isLightTheme ? 'text-black' : 'text-[#e3e3e3]')}`} />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -155,7 +157,7 @@ export function AnimatedButton({ config, layoutMode }: AnimatedButtonProps) {
                     transition={{ type: "spring", stiffness: 600, damping: 25 }}
                     className="absolute inset-0 flex items-center justify-center"
                   >
-                    {Icon2 && <Icon2 className={`w-[16px] h-[16px] ${config.icon2Color || 'text-[#e3e3e3]'}`} />}
+                    {Icon2 && <Icon2 className={`w-[16px] h-[16px] ${config.icon2Color || (isLightTheme ? 'text-black' : 'text-[#e3e3e3]')}`} />}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -174,7 +176,7 @@ export function AnimatedButton({ config, layoutMode }: AnimatedButtonProps) {
                 animate={{ scale: isHovered ? [1, 1.25, 1] : 1 }}
                 transition={{ duration: 0.4, ease: "easeInOut" }}
               >
-                <Icon1 className={`w-[16px] h-[16px] transition-colors duration-300 ${isHovered && config.icon1Color ? `${config.icon1Color} fill-current` : "text-[#e3e3e3]"}`} />
+                <Icon1 className={`w-[16px] h-[16px] transition-colors duration-300 ${isHovered && config.icon1Color ? `${config.icon1Color} fill-current` : (isLightTheme ? 'text-black' : 'text-[#e3e3e3]')}`} />
               </motion.div>
             </div>
             {!isMatrix && <motion.span layout className="font-medium tracking-tight text-[13px] whitespace-nowrap ml-2.5">{config.label}</motion.span>}
@@ -186,7 +188,7 @@ export function AnimatedButton({ config, layoutMode }: AnimatedButtonProps) {
           <>
             <div className="relative w-[16px] h-[16px] flex items-center justify-center shrink-0">
               <motion.div animate={{ rotate: isHovered ? 180 : 0 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
-                <Icon1 className="w-[16px] h-[16px] text-[#e3e3e3]" />
+                <Icon1 className={`w-[16px] h-[16px] ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`} />
               </motion.div>
             </div>
             {!isMatrix && <motion.span layout className="font-medium tracking-tight text-[13px] whitespace-nowrap ml-2.5">{config.label}</motion.span>}
@@ -204,10 +206,10 @@ export function AnimatedButton({ config, layoutMode }: AnimatedButtonProps) {
                 }}
                 transition={{ duration: 0.4 }}
               >
-                <Icon1 className={`w-[16px] h-[16px] transition-colors duration-300 ${isHovered && config.icon1Color ? config.icon1Color : "text-[#e3e3e3]"}`} />
+                <Icon1 className={`w-[16px] h-[16px] transition-colors duration-300 ${isHovered && config.icon1Color ? config.icon1Color : (isLightTheme ? 'text-black' : 'text-[#e3e3e3]')}`} />
               </motion.div>
             </div>
-            {!isMatrix && <motion.span layout className={`font-medium tracking-tight text-[13px] whitespace-nowrap transition-colors duration-300 ml-2.5 ${isHovered && config.icon1Color ? config.icon1Color : "text-[#e3e3e3]"}`}>{config.label}</motion.span>}
+            {!isMatrix && <motion.span layout className={`font-medium tracking-tight text-[13px] whitespace-nowrap transition-colors duration-300 ml-2.5 ${isHovered && config.icon1Color ? config.icon1Color : (isLightTheme ? 'text-black' : 'text-[#e3e3e3]')}`}>{config.label}</motion.span>}
           </>
         );
 
@@ -225,7 +227,7 @@ export function AnimatedButton({ config, layoutMode }: AnimatedButtonProps) {
                     transition={{ type: "spring", stiffness: 600, damping: 25 }}
                     className="absolute inset-0 flex items-center justify-center"
                   >
-                    <Icon1 className="w-[16px] h-[16px] text-[#e3e3e3]" />
+                    <Icon1 className={`w-[16px] h-[16px] ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`} />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -236,7 +238,7 @@ export function AnimatedButton({ config, layoutMode }: AnimatedButtonProps) {
                     transition={{ type: "spring", stiffness: 600, damping: 25 }}
                     className="absolute inset-0 flex items-center justify-center"
                   >
-                    {Icon2 && <Icon2 className={`w-[16px] h-[16px] ${config.icon2Color || 'text-[#e3e3e3]'}`} />}
+                    {Icon2 && <Icon2 className={`w-[16px] h-[16px] ${config.icon2Color || (isLightTheme ? 'text-black' : 'text-[#e3e3e3]')}`} />}
                     <motion.div 
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
@@ -267,11 +269,13 @@ export function AnimatedButton({ config, layoutMode }: AnimatedButtonProps) {
       animate={{ 
         paddingLeft: isMatrix ? 16 : (isHovered ? 28 : 24), 
         paddingRight: isMatrix ? 16 : (isHovered ? 28 : 24),
-        backgroundColor: (hasInteracted && config.id === '4') ? "rgba(255,255,255,0.08)" : (isHovered ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.04)")
+        backgroundColor: isLightTheme
+          ? ((hasInteracted && config.id === '4') ? "rgba(0,0,0,0.08)" : (isHovered ? "rgba(0,0,0,0.06)" : "rgba(0,0,0,0.04)"))
+          : ((hasInteracted && config.id === '4') ? "rgba(255,255,255,0.08)" : (isHovered ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.04)"))
       }}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.96 }}
-      className={`relative flex items-center justify-center text-[#e3e3e3] h-[36px] rounded-[40px] border-0 cursor-pointer shadow-none transition-colors duration-150 ${isMatrix ? 'w-[36px] px-0' : 'min-w-[75px]'}`}
+      className={`relative flex items-center justify-center h-[36px] rounded-[40px] border-0 cursor-pointer shadow-none transition-colors duration-150 ${isMatrix ? 'w-[36px] px-0' : 'min-w-[75px]'} ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`}
     >
       <motion.div layout transition={{ type: "spring", stiffness: 500, damping: 25 }} className="flex items-center justify-center w-full">
         {renderIconContent()}
