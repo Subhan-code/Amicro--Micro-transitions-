@@ -1,0 +1,6 @@
+{
+  "name": "Cinematic UI Interaction Demo",
+  "description": "A fully animated premium micro-interaction UI demo showcasing cursor orchestration, Apple & GitHub themed elements over a misty mountain background.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

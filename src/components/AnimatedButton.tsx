@@ -1,0 +1,281 @@
+import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { ButtonConfig } from '../data/buttons';
+
+interface AnimatedButtonProps {
+  config: ButtonConfig;
+  layoutMode: 'list' | 'grid' | 'matrix';
+}
+
+export function AnimatedButton({ config, layoutMode }: AnimatedButtonProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  const Icon1 = config.icon1 as React.ElementType;
+  const Icon2 = config.icon2 as React.ElementType;
+
+  const isMatrix = layoutMode === 'matrix';
+
+  // State specific for one-time interactions
+  const [hasInteracted, setHasInteracted] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    if (config.interactionType === 'morph' && (config.id === '4' || config.id === '21' || config.id === '22' || config.id === '24' || config.id === '25')) {
+      setHasInteracted(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    if (hasInteracted) {
+      setTimeout(() => setHasInteracted(false), 500);
+    }
+  };
+
+  const showIcon2 = hasInteracted || isHovered;
+
+  const renderIconContent = () => {
+    switch (config.interactionType) {
+      case 'slide-arrow':
+        return (
+          <>
+            <AnimatePresence mode="popLayout">
+              {!isHovered && (
+                <motion.div
+                  key="icon1"
+                  layout
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ type: "spring", stiffness: 600, damping: 25 }}
+                  className={`flex items-center shrink-0 ${!isMatrix ? 'mr-2.5' : ''}`}
+                >
+                  <Icon1 className="w-[16px] h-[16px] text-[#e3e3e3]" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+            {!isMatrix && <motion.span layout className="font-medium tracking-tight text-[13px] whitespace-nowrap">{config.label}</motion.span>}
+            <AnimatePresence mode="popLayout">
+              {isHovered && (
+                <motion.div
+                  key="icon2"
+                  layout
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  transition={{ type: "spring", stiffness: 600, damping: 25 }}
+                  className={`flex items-center shrink-0 ${!isMatrix ? 'ml-2.5' : ''}`}
+                >
+                  {Icon2 && <Icon2 className="w-[16px] h-[16px] text-[#e3e3e3]" />}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </>
+        );
+
+      case 'sparkle':
+        return (
+          <>
+            <div className="relative w-[16px] h-[16px] flex items-center justify-center shrink-0">
+              <AnimatePresence mode="popLayout" initial={false}>
+                {!isHovered ? (
+                  <motion.div
+                    key="icon1"
+                    initial={{ y: -15, opacity: 0, scale: 0.8 }}
+                    animate={{ y: 0, opacity: 1, scale: 1 }}
+                    exit={{ y: -15, opacity: 0, scale: 0.8 }}
+                    transition={{ type: "spring", stiffness: 600, damping: 25 }}
+                    className="absolute inset-0 flex items-center justify-center"
+                  >
+                    <Icon1 className="w-[16px] h-[16px] text-[#e3e3e3]" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="icon2"
+                    initial={{ y: 15, opacity: 0, scale: 0.8 }}
+                    animate={{ y: 0, opacity: 1, scale: 1 }}
+                    exit={{ y: 15, opacity: 0, scale: 0.8 }}
+                    transition={{ type: "spring", stiffness: 600, damping: 25 }}
+                    className="absolute inset-0 flex items-center justify-center"
+                  >
+                    {Icon2 && <Icon2 className={`w-[16px] h-[16px] ${config.icon2Color || 'text-[#e3e3e3]'}`} />}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0, rotate: -45, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, rotate: 0, y: 0 }}
+                      exit={{ opacity: 0, scale: 0, rotate: 45, y: 10 }}
+                      transition={{ type: "spring", stiffness: 600, damping: 25, delay: 0.05 }}
+                      className="absolute -top-3 -right-2"
+                    >
+                      <svg className="w-2.5 h-2.5 text-yellow-200" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2l2.4 7.6H22l-6.2 4.5 2.4 7.6-6.2-4.5-6.2 4.5 2.4-7.6L2 9.6h7.6z" />
+                      </svg>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0, rotate: 45, x: 10 }}
+                      animate={{ opacity: 1, scale: 1, rotate: 0, x: 0 }}
+                      exit={{ opacity: 0, scale: 0, rotate: -45, x: 10 }}
+                      transition={{ type: "spring", stiffness: 600, damping: 25, delay: 0.1 }}
+                      className="absolute -top-1 -left-3"
+                    >
+                      <svg className="w-1.5 h-1.5 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2l2.4 7.6H22l-6.2 4.5 2.4 7.6-6.2-4.5-6.2 4.5 2.4-7.6L2 9.6h7.6z" />
+                      </svg>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+            {!isMatrix && <motion.span layout className="font-medium tracking-tight text-[13px] whitespace-nowrap ml-2.5">{config.label}</motion.span>}
+          </>
+        );
+
+      case 'morph':
+      case 'color-morph':
+        return (
+          <>
+            <div className="relative w-[16px] h-[16px] flex items-center justify-center shrink-0">
+              <AnimatePresence mode="popLayout" initial={false}>
+                {!showIcon2 ? (
+                  <motion.div
+                    key="icon1"
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.5, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 600, damping: 25 }}
+                    className="absolute inset-0 flex items-center justify-center"
+                  >
+                    <Icon1 className={`w-[16px] h-[16px] ${isHovered && config.icon1Color ? config.icon1Color : 'text-[#e3e3e3]'}`} />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="icon2"
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.5, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 600, damping: 25 }}
+                    className="absolute inset-0 flex items-center justify-center"
+                  >
+                    {Icon2 && <Icon2 className={`w-[16px] h-[16px] ${config.icon2Color || 'text-[#e3e3e3]'}`} />}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+            {!isMatrix && <motion.span layout className="font-medium tracking-tight text-[13px] whitespace-nowrap ml-2.5">
+              {config.id === '4' && showIcon2 ? 'Copied' : config.label}
+            </motion.span>}
+          </>
+        );
+
+      case 'pulse':
+        return (
+          <>
+            <div className="relative w-[16px] h-[16px] flex items-center justify-center shrink-0">
+              <motion.div
+                animate={{ scale: isHovered ? [1, 1.25, 1] : 1 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+              >
+                <Icon1 className={`w-[16px] h-[16px] transition-colors duration-300 ${isHovered && config.icon1Color ? `${config.icon1Color} fill-current` : "text-[#e3e3e3]"}`} />
+              </motion.div>
+            </div>
+            {!isMatrix && <motion.span layout className="font-medium tracking-tight text-[13px] whitespace-nowrap ml-2.5">{config.label}</motion.span>}
+          </>
+        );
+
+      case 'rotate':
+        return (
+          <>
+            <div className="relative w-[16px] h-[16px] flex items-center justify-center shrink-0">
+              <motion.div animate={{ rotate: isHovered ? 180 : 0 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+                <Icon1 className="w-[16px] h-[16px] text-[#e3e3e3]" />
+              </motion.div>
+            </div>
+            {!isMatrix && <motion.span layout className="font-medium tracking-tight text-[13px] whitespace-nowrap ml-2.5">{config.label}</motion.span>}
+          </>
+        );
+
+      case 'shake':
+        return (
+          <>
+            <div className="relative w-[16px] h-[16px] flex items-center justify-center shrink-0">
+              <motion.div
+                animate={{ 
+                  y: isHovered ? [0, -2, 0, -2, 0] : 0,
+                  rotate: isHovered ? [0, -10, 10, -10, 0] : 0
+                }}
+                transition={{ duration: 0.4 }}
+              >
+                <Icon1 className={`w-[16px] h-[16px] transition-colors duration-300 ${isHovered && config.icon1Color ? config.icon1Color : "text-[#e3e3e3]"}`} />
+              </motion.div>
+            </div>
+            {!isMatrix && <motion.span layout className={`font-medium tracking-tight text-[13px] whitespace-nowrap transition-colors duration-300 ml-2.5 ${isHovered && config.icon1Color ? config.icon1Color : "text-[#e3e3e3]"}`}>{config.label}</motion.span>}
+          </>
+        );
+
+      case 'ring':
+        return (
+          <>
+            <div className="relative w-[16px] h-[16px] flex items-center justify-center shrink-0">
+              <AnimatePresence mode="popLayout" initial={false}>
+                {!isHovered ? (
+                  <motion.div
+                    key="icon1"
+                    initial={{ rotate: -15, scale: 0.8, opacity: 0 }}
+                    animate={{ rotate: 0, scale: 1, opacity: 1 }}
+                    exit={{ rotate: 15, scale: 0.8, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 600, damping: 25 }}
+                    className="absolute inset-0 flex items-center justify-center"
+                  >
+                    <Icon1 className="w-[16px] h-[16px] text-[#e3e3e3]" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="icon2"
+                    initial={{ rotate: -15, scale: 0.8, opacity: 0 }}
+                    animate={{ rotate: 0, scale: 1, opacity: 1 }}
+                    exit={{ rotate: 15, scale: 0.8, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 600, damping: 25 }}
+                    className="absolute inset-0 flex items-center justify-center"
+                  >
+                    {Icon2 && <Icon2 className={`w-[16px] h-[16px] ${config.icon2Color || 'text-[#e3e3e3]'}`} />}
+                    <motion.div 
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 600, damping: 15, delay: 0.1 }}
+                      className="absolute top-0 right-0 w-1.5 h-1.5 bg-red-500 rounded-full border border-transparent" 
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+            {!isMatrix && <motion.span layout className="font-medium tracking-tight text-[13px] whitespace-nowrap ml-2.5">{config.label}</motion.span>}
+          </>
+        );
+      
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <motion.button
+      layout
+      transition={{ type: "spring", stiffness: 500, damping: 25 }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onFocus={handleMouseEnter}
+      onBlur={handleMouseLeave}
+      animate={{ 
+        paddingLeft: isMatrix ? 16 : (isHovered ? 28 : 24), 
+        paddingRight: isMatrix ? 16 : (isHovered ? 28 : 24),
+        backgroundColor: (hasInteracted && config.id === '4') ? "rgba(255,255,255,0.08)" : (isHovered ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.04)")
+      }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.96 }}
+      className={`relative flex items-center justify-center text-[#e3e3e3] h-[36px] rounded-[40px] border-0 cursor-pointer shadow-none transition-colors duration-150 ${isMatrix ? 'w-[36px] px-0' : 'min-w-[75px]'}`}
+    >
+      <motion.div layout transition={{ type: "spring", stiffness: 500, damping: 25 }} className="flex items-center justify-center w-full">
+        {renderIconContent()}
+      </motion.div>
+    </motion.button>
+  );
+}
