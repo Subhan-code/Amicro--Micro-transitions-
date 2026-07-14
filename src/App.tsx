@@ -379,7 +379,7 @@ export default function App() {
                       layout 
                       key={button.id}
                       transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                      className={`${layout === 'list' ? 'w-full flex justify-center' : ''} ${layout === 'grid' ? 'w-full sm:w-[320px]' : ''}`}
+                      className={`${layout === 'list' ? 'w-full flex justify-center' : ''} ${layout === 'grid' ? 'w-full sm:w-[320px] flex justify-center' : ''}`}
                     >
                       {layout === 'grid' ? (
                         <div className={`relative w-full max-w-[320px] sm:w-[320px] h-[268px] rounded-[24px] transition-all duration-300 group ${theme === 'dark' ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] border border-neutral-100/85 hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] text-black'}`}>
