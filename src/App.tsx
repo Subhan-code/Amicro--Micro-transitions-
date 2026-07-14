@@ -248,7 +248,7 @@ export default function App() {
                 </p>
 
                 {/* Hero CTAs */}
-                <div className="flex items-center gap-3 mt-8">
+                <div className="flex items-center gap-2 mt-8">
                   <motion.a 
                     href="https://github.com/Subhan-code/Amicro--Micro-transitions-" 
                     target="_blank" 
@@ -262,7 +262,7 @@ export default function App() {
                         boxShadow: theme === 'dark' ? '0 10px 25px -5px rgba(255,255,255,0.1)' : '0 10px 25px -5px rgba(0,0,0,0.15)'
                       }
                     }}
-                    className={`inline-flex items-center justify-center gap-2 h-[40px] px-[20px] rounded-full text-[13px] font-medium no-underline transition-colors cursor-pointer border-0 ${theme === 'dark' ? 'bg-white text-black hover:bg-neutral-200' : 'bg-neutral-950 text-white hover:bg-neutral-800'}`}
+                    className={`inline-flex items-center justify-center gap-1.5 h-[32px] px-[12px] rounded-full text-[12px] font-medium no-underline transition-colors cursor-pointer border-0 ${theme === 'dark' ? 'bg-white text-black hover:bg-neutral-200' : 'bg-neutral-950 text-white hover:bg-neutral-800'}`}
                   >
                     <motion.div 
                       variants={{
@@ -271,11 +271,11 @@ export default function App() {
                       transition={{ duration: 0.4 }}
                       className="flex items-center shrink-0"
                     >
-                      <Github className="w-4 h-4" />
+                      <Github className="w-3.5 h-3.5" />
                     </motion.div>
                     <span>GitHub Repo</span>
                     {stars !== null && (
-                      <span className={`text-[11px] px-1.5 py-0.5 rounded-full font-semibold ml-1 ${theme === 'dark' ? 'bg-black/10 text-black/70' : 'bg-white/20 text-white/90'}`}>
+                      <span className={`text-[10px] px-1 py-0.2 rounded-full font-semibold ml-1 ${theme === 'dark' ? 'bg-black/10 text-black/70' : 'bg-white/20 text-white/90'}`}>
                         {stars}
                       </span>
                     )}
@@ -296,16 +296,16 @@ export default function App() {
                         boxShadow: theme === 'dark' ? '0 10px 25px -5px rgba(0,0,0,0.3)' : '0 10px 25px -5px rgba(0,0,0,0.05)'
                       }
                     }}
-                    className={`inline-flex items-center justify-center h-[40px] px-[20px] rounded-full text-[13px] font-medium border cursor-pointer transition-colors ${theme === 'dark' ? 'bg-[#181818] border-neutral-800 text-white hover:bg-neutral-800' : 'bg-white border-neutral-200 text-black hover:bg-neutral-50 shadow-sm'}`}
+                    className={`inline-flex items-center justify-center h-[32px] px-[12px] rounded-full text-[12px] font-medium border cursor-pointer transition-colors ${theme === 'dark' ? 'bg-[#181818] border-neutral-800 text-white hover:bg-neutral-800' : 'bg-white border-neutral-200 text-black hover:bg-neutral-50 shadow-sm'}`}
                   >
                     <motion.div
                       variants={{
                         hover: { y: [0, -4, 4, -2, 2, 0] }
                       }}
                       transition={{ duration: 0.6 }}
-                      className="flex items-center shrink-0 mr-1.5"
+                      className="flex items-center shrink-0 mr-1"
                     >
-                      <ArrowDownAZ className="w-3.5 h-3.5" />
+                      <ArrowDownAZ className="w-3 h-3" />
                     </motion.div>
                     <span>Browse Components</span>
                   </motion.button>
