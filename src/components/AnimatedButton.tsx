@@ -19,6 +19,7 @@ export function AnimatedButton({ config, layoutMode, theme = 'dark' }: AnimatedB
 
   // State specific for one-time interactions
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [mouseCoords, setMouseCoords] = useState({ x: 0, y: 0 });
 
   const handleMouseEnter = () => {
     // Only hover on devices supporting hover to prevent sticky mobile states
@@ -30,9 +31,21 @@ export function AnimatedButton({ config, layoutMode, theme = 'dark' }: AnimatedB
     }
   };
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (config.interactionType === 'magnetic') {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      setMouseCoords({ x: x * 0.35, y: y * 0.35 });
+    }
+  };
+
   const handleMouseLeave = () => {
     if (window.matchMedia('(hover: hover)').matches) {
       setIsHovered(false);
+    }
+    if (config.interactionType === 'magnetic') {
+      setMouseCoords({ x: 0, y: 0 });
     }
     if (hasInteracted) {
       setTimeout(() => setHasInteracted(false), 500);
@@ -273,6 +286,86 @@ export function AnimatedButton({ config, layoutMode, theme = 'dark' }: AnimatedB
             {!isMatrix && <motion.span layout className="font-medium tracking-tight text-[13px] whitespace-nowrap ml-2.5">{config.label}</motion.span>}
           </>
         );
+
+      case 'glare':
+        return (
+          <>
+            <Icon1 className={`w-[16px] h-[16px] ${!isMatrix ? 'mr-2.5' : ''} ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`} />
+            {!isMatrix && <span className="font-medium tracking-tight text-[13px] whitespace-nowrap">{config.label}</span>}
+            <motion.div
+              animate={{ x: isHovered ? ['-150%', '150%'] : '-150%' }}
+              transition={{ duration: 0.85, ease: "easeInOut", repeat: isHovered ? Infinity : 0, repeatDelay: 1 }}
+              className={`absolute top-0 bottom-0 w-[50px] skew-x-[-20deg] pointer-events-none z-10`}
+              style={{
+                background: isLightTheme 
+                  ? 'linear-gradient(90deg, transparent, rgba(0,0,0,0.12), transparent)'
+                  : 'linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)'
+              }}
+            />
+          </>
+        );
+
+      case 'text-reveal':
+        return (
+          <>
+            <div className="relative w-[16px] h-[16px] flex items-center justify-center shrink-0 mr-2.5">
+              <motion.div animate={{ rotate: isHovered ? 45 : 0 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+                <Icon1 className={`w-[16px] h-[16px] ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`} />
+              </motion.div>
+            </div>
+            {!isMatrix && (
+              <div className="relative h-[18px] overflow-hidden">
+                <motion.div
+                  animate={{ y: isHovered ? -18 : 0 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                  className="flex flex-col"
+                >
+                  <span className={`block h-[18px] leading-[18px] font-medium tracking-tight text-[13px] whitespace-nowrap ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`}>
+                    {config.label}
+                  </span>
+                  <span className={`block h-[18px] leading-[18px] font-medium tracking-tight text-[13px] whitespace-nowrap ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`}>
+                    {config.label}
+                  </span>
+                </motion.div>
+              </div>
+            )}
+          </>
+        );
+
+      case 'magnetic':
+        return (
+          <>
+            <Icon1 className={`w-[16px] h-[16px] ${!isMatrix ? 'mr-2.5' : ''} ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`} />
+            {!isMatrix && <span className="font-medium tracking-tight text-[13px] whitespace-nowrap">{config.label}</span>}
+          </>
+        );
+
+      case 'expand-ring':
+        return (
+          <>
+            <div className="relative w-[16px] h-[16px] flex items-center justify-center shrink-0">
+              <motion.div
+                animate={{ scale: isHovered ? 1.1 : 1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 20 }}
+              >
+                <Icon1 className={`w-[16px] h-[16px] ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`} />
+              </motion.div>
+            </div>
+            {!isMatrix && <span className="font-medium tracking-tight text-[13px] whitespace-nowrap ml-2.5">{config.label}</span>}
+            <AnimatePresence>
+              {isHovered && (
+                <motion.div
+                  key="expand-ring-div"
+                  initial={{ opacity: 1, scale: 1 }}
+                  animate={{ opacity: 0, scale: 1.15 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  className={`absolute inset-0 rounded-[40px] pointer-events-none border ${isLightTheme ? 'border-black/25' : 'border-white/25'}`}
+                />
+              )}
+            </AnimatePresence>
+          </>
+        );
       
       default:
         return null;
@@ -284,6 +377,7 @@ export function AnimatedButton({ config, layoutMode, theme = 'dark' }: AnimatedB
       layout
       transition={{ type: "spring", stiffness: 500, damping: 25 }}
       onMouseEnter={handleMouseEnter}
+      onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onFocus={handleMouseEnter}
       onBlur={handleMouseLeave}
@@ -292,13 +386,15 @@ export function AnimatedButton({ config, layoutMode, theme = 'dark' }: AnimatedB
       animate={{ 
         paddingLeft: isMatrix ? 16 : (isHovered ? 28 : 24), 
         paddingRight: isMatrix ? 16 : (isHovered ? 28 : 24),
+        x: isHovered && config.interactionType === 'magnetic' ? mouseCoords.x : 0,
+        y: isHovered && config.interactionType === 'magnetic' ? mouseCoords.y : 0,
         backgroundColor: isLightTheme
           ? ((hasInteracted && config.id === '4') ? "rgba(0,0,0,0.08)" : (isHovered ? "rgba(0,0,0,0.06)" : "rgba(0,0,0,0.04)"))
           : ((hasInteracted && config.id === '4') ? "rgba(255,255,255,0.08)" : (isHovered ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.04)"))
       }}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.96 }}
-      className={`relative flex items-center justify-center h-[36px] rounded-[40px] border-0 cursor-pointer shadow-none transition-colors duration-150 ${isMatrix ? 'w-[36px] px-0' : 'min-w-[75px]'} ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`}
+      className={`relative flex items-center justify-center h-[36px] rounded-[40px] border-0 cursor-pointer shadow-none transition-colors duration-150 ${isMatrix ? 'w-[36px] px-0' : 'min-w-[75px]'} ${config.interactionType === 'glare' ? 'overflow-hidden' : ''} ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`}
     >
       <motion.div layout transition={{ type: "spring", stiffness: 500, damping: 25 }} className="flex items-center justify-center w-full">
         {renderIconContent()}

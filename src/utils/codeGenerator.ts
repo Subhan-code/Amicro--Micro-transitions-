@@ -329,6 +329,151 @@ export default function RingButton() {
   );
 }`;
 
+    case 'glare':
+      return `import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { ${icon1Name} } from 'lucide-react';
+
+export default function GlareButton() {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.button
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.96 }}
+      className="relative flex items-center justify-center text-white h-[36px] px-6 rounded-[40px] bg-white/[0.04] hover:bg-white/[0.06] border border-white/5 cursor-pointer overflow-hidden transition-colors duration-150"
+    >
+      <${icon1Name} className="w-4 h-4 mr-2.5" />
+      <span className="font-medium tracking-tight text-[13px]">${button.label}</span>
+      <motion.div
+        animate={{ x: isHovered ? ['-150%', '150%'] : '-150%' }}
+        transition={{ duration: 0.85, ease: "easeInOut", repeat: isHovered ? Infinity : 0, repeatDelay: 1 }}
+        className="absolute top-0 bottom-0 w-[50px] skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none z-10"
+      />
+    </motion.button>
+  );
+}`;
+
+    case 'text-reveal':
+      return `import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { ${icon1Name} } from 'lucide-react';
+
+export default function TextRevealButton() {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.button
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.96 }}
+      className="relative flex items-center justify-center text-white h-[36px] px-6 rounded-[40px] bg-white/[0.04] hover:bg-white/[0.06] border border-white/5 cursor-pointer transition-colors duration-150"
+    >
+      <div className="relative w-[16px] h-[16px] flex items-center justify-center shrink-0 mr-2.5">
+        <motion.div animate={{ rotate: isHovered ? 45 : 0 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+          <${icon1Name} className="w-4 h-4" />
+        </motion.div>
+      </div>
+      <div className="relative h-[18px] overflow-hidden">
+        <motion.div
+          animate={{ y: isHovered ? -18 : 0 }}
+          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          className="flex flex-col"
+        >
+          <span className="block h-[18px] leading-[18px] font-medium tracking-tight text-[13px] whitespace-nowrap text-white">
+            ${button.label}
+          </span>
+          <span className="block h-[18px] leading-[18px] font-medium tracking-tight text-[13px] whitespace-nowrap text-white">
+            ${button.label}
+          </span>
+        </motion.div>
+      </div>
+    </motion.button>
+  );
+}`;
+
+    case 'magnetic':
+      return `import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { ${icon1Name} } from 'lucide-react';
+
+export default function MagneticButton() {
+  const [isHovered, setIsHovered] = useState(false);
+  const [mouseCoords, setMouseCoords] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    setMouseCoords({ x: x * 0.35, y: y * 0.35 });
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setMouseCoords({ x: 0, y: 0 });
+  };
+
+  return (
+    <motion.button
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      animate={{
+        x: isHovered ? mouseCoords.x : 0,
+        y: isHovered ? mouseCoords.y : 0
+      }}
+      whileTap={{ scale: 0.96 }}
+      className="relative flex items-center justify-center text-white h-[36px] px-6 rounded-[40px] bg-white/[0.04] hover:bg-white/[0.06] border border-white/5 cursor-pointer transition-colors duration-150"
+    >
+      <${icon1Name} className="w-4 h-4 mr-2.5" />
+      <span className="font-medium tracking-tight text-[13px]">${button.label}</span>
+    </motion.button>
+  );
+}`;
+
+    case 'expand-ring':
+      return `import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ${icon1Name} } from 'lucide-react';
+
+export default function ExpandRingButton() {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.button
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.96 }}
+      className="relative flex items-center justify-center text-white h-[36px] px-6 rounded-[40px] bg-white/[0.04] hover:bg-white/[0.06] border border-white/5 cursor-pointer transition-colors duration-150"
+    >
+      <div className="relative w-[16px] h-[16px] flex items-center justify-center shrink-0">
+        <motion.div
+          animate={{ scale: isHovered ? 1.1 : 1 }}
+          transition={{ type: "spring", stiffness: 400, damping: 20 }}
+        >
+          <${icon1Name} className="w-4 h-4" />
+        </motion.div>
+      </div>
+      <span className="font-medium tracking-tight text-[13px] ml-2.5">${button.label}</span>
+      <AnimatePresence>
+        {isHovered && (
+          <motion.div
+            initial={{ opacity: 1, scale: 1 }}
+            animate={{ opacity: 0, scale: 1.15 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="absolute inset-0 rounded-[40px] pointer-events-none border border-white/20"
+          />
+        )}
+      </AnimatePresence>
+    </motion.button>
+  );
+}`;
+
     default:
       return `// No interaction component defined for this type.`;
   }
@@ -888,6 +1033,163 @@ export default function FocusBlur({
           </a>
         );
       })}
+    </div>
+  );
+}`;
+
+    case 'card-3d-tilt':
+      return `import React, { useState, useRef } from 'react';
+import { motion, useSpring } from 'framer-motion';
+
+export default function Card3DTilt() {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const rotateX = useSpring(0, { stiffness: 120, damping: 15 });
+  const rotateY = useSpring(0, { stiffness: 120, damping: 15 });
+  const glareX = useSpring(50, { stiffness: 120, damping: 15 });
+  const glareY = useSpring(50, { stiffness: 120, damping: 15 });
+  const glareOpacity = useSpring(0, { stiffness: 120, damping: 15 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const rx = -((e.clientY - rect.top - rect.height / 2) / (rect.height / 2)) * 18;
+    const ry = ((e.clientX - rect.left - rect.width / 2) / (rect.width / 2)) * 18;
+
+    rotateX.set(rx);
+    rotateY.set(ry);
+
+    glareX.set(((e.clientX - rect.left) / rect.width) * 100);
+    glareY.set(((e.clientY - rect.top) / rect.height) * 100);
+    glareOpacity.set(0.65);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    rotateX.set(0);
+    rotateY.set(0);
+    glareOpacity.set(0);
+  };
+
+  return (
+    <div 
+      ref={cardRef}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      onMouseMove={handleMouseMove}
+      style={{ perspective: 1000 }}
+      className="relative w-[128px] h-[176px] cursor-pointer"
+    >
+      <motion.div
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        className="absolute inset-0 rounded-2xl bg-gradient-to-br from-neutral-800 to-neutral-900 border border-white/10 overflow-hidden p-4 flex flex-col justify-between"
+      >
+        <div style={{ transform: 'translateZ(20px)' }} className="w-6 h-6 rounded-full bg-white/20 border border-white/20 shadow-inner" />
+        <div style={{ transform: 'translateZ(10px)' }} className="space-y-1" { ...{ className: "space-y-1" } }>
+          <div className="h-2 w-12 rounded bg-white/30" />
+          <div className="h-1.5 w-8 rounded bg-white/20" />
+        </div>
+        <motion.div
+          style={{
+            opacity: glareOpacity,
+            background: \`radial-gradient(circle 75px at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255,255,255,0.3), transparent)\`
+          }}
+          className="absolute inset-0 pointer-events-none mix-blend-overlay z-20"
+          ref={(node) => {
+            if (node) {
+              glareX.on("change", (val) => node.style.setProperty("--glare-x", \`\${val}%\`));
+              glareY.on("change", (val) => node.style.setProperty("--glare-y", \`\${val}%\`));
+            }
+          }}
+        />
+      </motion.div>
+    </div>
+  );
+}`;
+
+    case 'card-stack-deck':
+      return `import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+
+export default function CardStackDeck() {
+  const [isHovered, setIsHovered] = useState(false);
+  const cards = [0, 1, 2];
+
+  return (
+    <div 
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="relative w-[128px] h-[176px] cursor-pointer flex items-center justify-center"
+    >
+      {cards.map((i) => {
+        const dist = i - 1;
+        return (
+          <motion.div
+            key={i}
+            animate={{
+              y: isHovered ? dist * 32 : dist * 4,
+              rotate: isHovered ? dist * 6 : 0,
+              scale: isHovered && dist === 0 ? 1.03 : 1
+            }}
+            transition={{ type: "spring", stiffness: 180, damping: 20 }}
+            style={{ zIndex: 3 - Math.abs(dist) }}
+            className="absolute inset-0 rounded-2xl bg-neutral-800 border border-white/10"
+          />
+        );
+      })}
+    </div>
+  );
+}`;
+
+    case 'card-border-glow':
+      return `import React, { useState, useRef } from 'react';
+import { motion, useSpring } from 'framer-motion';
+
+export default function CardBorderGlow() {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const glowX = useSpring(50, { stiffness: 150, damping: 20 });
+  const glowY = useSpring(50, { stiffness: 150, damping: 20 });
+  const glowOpacity = useSpring(0, { stiffness: 150, damping: 20 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    glowX.set(((e.clientX - rect.left) / rect.width) * 100);
+    glowY.set(((e.clientY - rect.top) / rect.height) * 100);
+    glowOpacity.set(1);
+  };
+
+  return (
+    <div 
+      ref={cardRef}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); glowOpacity.set(0); }}
+      onMouseMove={handleMouseMove}
+      className="relative w-[128px] h-[176px] rounded-2xl overflow-hidden p-[1.5px] cursor-pointer bg-white/5"
+    >
+      <motion.div
+        style={{
+          opacity: glowOpacity,
+          background: \`radial-gradient(circle 50px at var(--glow-x, 50%) var(--glow-y, 50%), rgba(99, 102, 241, 0.8), rgba(236, 72, 153, 0.4), transparent)\`
+        }}
+        className="absolute inset-0 pointer-events-none z-0"
+        ref={(node) => {
+          if (node) {
+            glowX.on("change", (val) => node.style.setProperty("--glow-x", \`\${val}%\`));
+            glowY.on("change", (val) => node.style.setProperty("--glow-y", \`\${val}%\`));
+          }
+        }}
+      />
+      <div className="relative z-10 w-full h-full rounded-[14px] bg-neutral-900 p-4 flex flex-col justify-between">
+        <div className="w-5 h-5 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-[10px] font-bold text-indigo-400">G</div>
+        <div className="space-y-1.5">
+          <div className="h-2 w-12 rounded bg-indigo-400/30" />
+          <div className="h-1.5 w-8 rounded bg-indigo-400/15" />
+        </div>
+      </div>
     </div>
   );
 }`;

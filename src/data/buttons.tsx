@@ -15,7 +15,11 @@ export type InteractionType =
   | 'rotate' 
   | 'shake' 
   | 'ring' 
-  | 'color-morph';
+  | 'color-morph'
+  | 'glare'
+  | 'text-reveal'
+  | 'magnetic'
+  | 'expand-ring';
 
 export interface ButtonConfig {
   id: string;
@@ -65,4 +69,8 @@ export const buttonsData: ButtonConfig[] = [
   { id: '28', label: 'Expand', icon1: Maximize, icon2: Minimize, interactionType: 'morph', hoverBg: '#1f1f1f', icon2Color: 'text-white' },
   { id: '29', label: 'Reload', icon1: RefreshCw, interactionType: 'rotate', hoverBg: '#1f1f1f' },
   { id: '30', label: 'Favorite', icon1: Star, icon2: Star, interactionType: 'color-morph', hoverBg: '#1f1f1f', icon2Color: 'text-yellow-400 fill-yellow-400' },
+  { id: '31', label: 'Glare Shine', icon1: Star, interactionType: 'glare', hoverBg: '#1f1f1f' },
+  { id: '32', label: 'Text Reveal', icon1: ArrowRight, interactionType: 'text-reveal', hoverBg: '#1f1f1f' },
+  { id: '33', label: 'Magnetic Field', icon1: Github, interactionType: 'magnetic', hoverBg: '#1f1f1f' },
+  { id: '34', label: 'Expand Ring', icon1: Link, interactionType: 'expand-ring', hoverBg: '#1f1f1f' },
 ];
