@@ -105,12 +105,12 @@ export default function App() {
   };
 
   return (
-    <div className={`relative w-full min-h-screen flex flex-col font-sans antialiased transition-colors duration-300 ${theme === 'dark' ? 'bg-[#121212] text-[#ffffff] selection:bg-neutral-850' : 'bg-[#f8f9fa] text-black selection:bg-neutral-200'}`}>
+    <div className={`relative w-full min-h-screen flex flex-col overflow-x-clip font-sans antialiased transition-colors duration-300 ${theme === 'dark' ? 'bg-[#121212] text-[#ffffff] selection:bg-neutral-850' : 'bg-[#f8f9fa] text-black selection:bg-neutral-200'}`}>
       
       {/* Site Navbar */}
-      <header className="relative z-50 w-full pt-4 pb-4 px-6 border-b border-transparent">
-        <div className="relative z-[3] flex items-center justify-between gap-4 max-w-[1240px] mx-auto">
-          <div className="flex items-center gap-[34px] min-w-0">
+      <header className="relative z-50 w-full pt-4 pb-4 px-4 sm:px-6 border-b border-transparent">
+        <div className="relative z-[3] flex items-center justify-between gap-2 sm:gap-4 max-w-[1240px] mx-auto">
+          <div className="flex items-center gap-2 sm:gap-[34px] min-w-0">
             <button 
               onClick={() => navigateTo('home')}
               className={`inline-flex items-center gap-[4px] h-[35px] py-[5px] no-underline shrink-0 group transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.02] cursor-pointer text-left border-0 bg-transparent ${theme === 'dark' ? 'text-white' : 'text-black'}`}
@@ -174,12 +174,13 @@ export default function App() {
               href="https://github.com/Subhan-code/Amicro--Micro-transitions-" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className={`inline-flex items-center justify-center gap-1.5 h-[36px] px-[13px] rounded-full font-sans text-[13px] font-medium leading-[16px] no-underline transition-colors duration-150 group ${theme === 'dark' ? 'bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(255,255,255,0.1)] text-[rgba(237,237,237,0.6)] hover:text-[#ededed]' : 'bg-neutral-200/80 hover:bg-neutral-300/80 text-black hover:text-black'}`}
+              aria-label="Star Amicro on GitHub"
+              className={`inline-flex items-center justify-center gap-1.5 w-[36px] h-[36px] px-0 sm:w-auto sm:px-[13px] rounded-full font-sans text-[13px] font-medium leading-[16px] no-underline transition-colors duration-150 group ${theme === 'dark' ? 'bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(255,255,255,0.1)] text-[rgba(237,237,237,0.6)] hover:text-[#ededed]' : 'bg-neutral-200/80 hover:bg-neutral-300/80 text-black hover:text-black'}`}
             >
               <svg viewBox="0 0 16 16" fill="currentColor" className="w-auto h-[16px] max-w-[16px] block">
                 <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
               </svg>
-              <span className="inline-block">{stars !== null ? stars : 'Star'}</span>
+              <span className="hidden sm:inline-block">{stars !== null ? stars : 'Star'}</span>
             </a>
             <a 
               href="https://x.com/SubhanHQ" 
@@ -236,19 +237,20 @@ export default function App() {
             className="w-full flex flex-col"
           >
             {/* Main Content */}
-            <div className="relative z-10 flex-1 w-full max-w-[1240px] mx-auto px-6 flex flex-col items-center">
+            <div className="relative z-10 flex-1 w-full max-w-[1240px] mx-auto px-4 sm:px-6 flex flex-col items-center">
               
-              <div className="mt-12 mb-16 text-center w-full flex flex-col items-center">
+              <div className="mt-10 mb-12 sm:mt-12 sm:mb-16 text-center w-full flex flex-col items-center">
                 
-                <h1 className={`text-[46px] font-medium leading-[52px] tracking-[-0.01em] mb-3 font-sans transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                  Amicro — Micro-transitions
+                <h1 className={`w-full max-w-[600px] px-2 text-balance text-[34px] sm:text-[46px] font-medium leading-[38px] sm:leading-[52px] tracking-[-0.01em] mb-3 font-sans transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                  <span className="block sm:inline">Amicro — </span>
+                  <span>Micro-transitions</span>
                 </h1>
-                <p className={`text-[17px] leading-[25px] max-w-[530px] transition-colors duration-300 ${theme === 'dark' ? 'text-[#767676]' : 'text-black'}`}>
+                <p className={`w-full max-w-[530px] px-2 text-balance text-[16px] sm:text-[17px] leading-[24px] sm:leading-[25px] transition-colors duration-300 ${theme === 'dark' ? 'text-[#767676]' : 'text-black'}`}>
                   A curated library of premium micro-interactions and transition components. Built with React and Motion.
                 </p>
 
                 {/* Hero CTAs */}
-                <div className="flex items-center gap-3 mt-8">
+                <div className="flex w-full max-w-[340px] flex-col items-stretch sm:w-auto sm:max-w-none sm:flex-row sm:items-center gap-3 mt-8">
                   <motion.a 
                     href="https://github.com/Subhan-code/Amicro--Micro-transitions-" 
                     target="_blank" 
@@ -262,7 +264,7 @@ export default function App() {
                         boxShadow: theme === 'dark' ? '0 10px 25px -5px rgba(255,255,255,0.1)' : '0 10px 25px -5px rgba(0,0,0,0.15)'
                       }
                     }}
-                    className={`inline-flex items-center justify-center gap-1.5 h-[36px] px-[16px] rounded-full text-[13px] font-medium no-underline transition-colors cursor-pointer border-0 ${theme === 'dark' ? 'bg-white text-black hover:bg-neutral-200' : 'bg-neutral-950 text-white hover:bg-neutral-800'}`}
+                    className={`inline-flex items-center justify-center w-full sm:w-auto gap-1.5 h-[36px] px-[16px] rounded-full text-[13px] font-medium no-underline transition-colors cursor-pointer border-0 ${theme === 'dark' ? 'bg-white text-black hover:bg-neutral-200' : 'bg-neutral-950 text-white hover:bg-neutral-800'}`}
                   >
                     <motion.div 
                       variants={{
@@ -296,7 +298,7 @@ export default function App() {
                         boxShadow: theme === 'dark' ? '0 10px 25px -5px rgba(0,0,0,0.3)' : '0 10px 25px -5px rgba(0,0,0,0.05)'
                       }
                     }}
-                    className={`inline-flex items-center justify-center h-[36px] px-[16px] rounded-full text-[13px] font-medium border cursor-pointer transition-colors ${theme === 'dark' ? 'bg-[#181818] border-neutral-800 text-white hover:bg-neutral-800' : 'bg-white border-neutral-200 text-black hover:bg-neutral-50 shadow-sm'}`}
+                    className={`inline-flex items-center justify-center w-full sm:w-auto h-[36px] px-[16px] rounded-full text-[13px] font-medium border cursor-pointer transition-colors ${theme === 'dark' ? 'bg-[#181818] border-neutral-800 text-white hover:bg-neutral-800' : 'bg-white border-neutral-200 text-black hover:bg-neutral-50 shadow-sm'}`}
                   >
                     <motion.div
                       variants={{
@@ -312,7 +314,7 @@ export default function App() {
                 </div>
 
                 {/* Filter and layout controls */}
-                <div className="flex items-center gap-3 mt-12">
+                <div className="flex flex-wrap items-center justify-center gap-3 mt-10 sm:mt-12">
                   <div className={`flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
                     <button
                       onClick={() => setSortBy(sortBy === 'default' ? 'alphabetical' : 'default')}
@@ -365,7 +367,7 @@ export default function App() {
               <div 
                 id="component-grid"
                 className={`
-                  w-full flex justify-center gap-[24px] scroll-mt-24 mb-16
+                  w-full flex justify-center gap-4 sm:gap-[24px] scroll-mt-24 mb-16
                   ${layout === 'list' ? 'flex-col items-center max-w-md mx-auto' : ''}
                   ${layout === 'grid' ? 'flex-wrap' : ''}
                   ${layout === 'matrix' ? 'flex-wrap max-w-4xl gap-4' : ''}
@@ -377,7 +379,7 @@ export default function App() {
                       layout 
                       key={button.id}
                       transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                      className={`${layout === 'list' ? 'w-full' : ''}`}
+                      className={`${layout === 'list' ? 'w-full' : ''} ${layout === 'grid' ? 'w-full sm:w-[320px] flex justify-center' : ''}`}
                     >
                       {layout === 'grid' ? (
                         <div className={`relative w-full max-w-[320px] sm:w-[320px] h-[268px] rounded-[24px] transition-all duration-300 group ${theme === 'dark' ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] border border-neutral-100/85 hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] text-black'}`}>
@@ -411,7 +413,7 @@ export default function App() {
             </div>
 
             {/* Recommended course CTA */}
-            <aside className="relative z-10 w-full max-w-[720px] mx-auto mt-[20px] mb-[70px] flex items-start sm:items-center gap-2.5 sm:gap-[24px] px-6 sm:px-0">
+            <aside className="relative z-10 w-full max-w-[720px] mx-auto mt-[20px] mb-[70px] flex items-start sm:items-center gap-2.5 sm:gap-[24px] px-4 sm:px-0">
               <span className={`w-[2px] h-[78px] rounded-[1px] shrink-0 transition-colors ${theme === 'dark' ? 'bg-white/[0.14]' : 'bg-neutral-300'}`} aria-hidden="true" />
               <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-[24px]">
                 <div className="flex-1 min-w-0 flex flex-col gap-[10px] max-w-[432px]">
@@ -440,7 +442,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <footer className="relative z-10 w-full text-center pb-[24px] text-[13px] leading-[14px]">
+      <footer className="relative z-10 w-full px-4 text-center pb-[24px] text-[13px] leading-[14px]">
         <span className={theme === 'dark' ? 'text-[#8f8f8f]' : 'text-black opacity-60'}>Created by</span>
         <a className={`no-underline ml-[4px] font-medium transition-colors ${theme === 'dark' ? 'text-[#e9e9e9] hover:text-white' : 'text-black hover:text-black'}`} href="https://x.com/SubhanHQ" target="_blank" rel="noopener noreferrer">Syed Subhan</a>
         <span className={`mx-1 ${theme === 'dark' ? 'text-[#8f8f8f]' : 'text-black opacity-60'}`}>·</span>
@@ -448,14 +450,14 @@ export default function App() {
       </footer>
 
       {/* Copy-Success Toast Alert */}
-      <div className="fixed bottom-6 right-6 z-[100] pointer-events-none">
+      <div className="fixed inset-x-4 bottom-4 sm:inset-x-auto sm:bottom-6 sm:right-6 z-[100] pointer-events-none">
         <AnimatePresence>
           {toastMessage && (
             <motion.div
               initial={{ opacity: 0, y: 50, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.9 }}
-              className={`px-4 py-3 rounded-xl border flex items-center gap-2.5 text-[13px] font-medium shadow-lg pointer-events-auto ${
+              className={`px-4 py-3 rounded-xl border flex items-center justify-center gap-2.5 text-[13px] font-medium shadow-lg pointer-events-auto ${
                 theme === 'dark' 
                   ? 'bg-[#181818] border-neutral-800 text-white shadow-black/20' 
                   : 'bg-white border-neutral-200 text-black shadow-neutral-200/50'
