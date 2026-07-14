@@ -19,9 +19,9 @@ import { CardLinearSpread } from './components/cards/CardLinearSpread';
 import { CardCornerFan } from './components/cards/CardCornerFan';
 import { CardStampArc } from './components/cards/CardStampArc';
 import { FocusBlur } from './components/cards/FocusBlur';
-import { Card3DTilt } from './components/cards/Card3DTilt';
-import { CardStackDeck } from './components/cards/CardStackDeck';
-import { CardBorderGlow } from './components/cards/CardBorderGlow';
+import { CardCascadeStagger } from './components/cards/CardCascadeStagger';
+import { CardScatterSpread } from './components/cards/CardScatterSpread';
+import { CardWheelFan } from './components/cards/CardWheelFan';
 
 type LayoutMode = 'list' | 'grid' | 'matrix';
 type SortMode = 'default' | 'alphabetical';
@@ -491,9 +491,9 @@ export default function App() {
                                   className="scale-[1.2] origin-center text-sm" 
                                 />
                               )}
-                              {card.interactionType === 'card-3d-tilt' && <Card3DTilt hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-stack-deck' && <CardStackDeck hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-border-glow' && <CardBorderGlow hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-cascade-stagger' && <CardCascadeStagger hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-scatter-spread' && <CardScatterSpread hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-wheel-fan' && <CardWheelFan hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
                             </div>
                             <div className="absolute left-[20px] bottom-[14px] w-[calc(100%-80px)] flex flex-col gap-[2px]">
                               <div className={`text-[13px] font-semibold leading-[18px] transition-colors ${theme === 'dark' ? 'text-[#ededed]' : 'text-black'}`}>{card.label}</div>

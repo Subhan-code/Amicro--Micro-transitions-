@@ -6,9 +6,9 @@ export type CardInteractionType =
   | 'card-corner-fan' 
   | 'card-stamp-arc' 
   | 'focus-blur'
-  | 'card-3d-tilt'
-  | 'card-stack-deck'
-  | 'card-border-glow';
+  | 'card-cascade-stagger'
+  | 'card-scatter-spread'
+  | 'card-wheel-fan';
 
 export interface CardConfig {
   id: string;
@@ -70,23 +70,23 @@ export const cardsData: CardConfig[] = [
   },
   { 
     id: 'c8', 
-    label: '3D Tilt Card', 
-    interactionType: 'card-3d-tilt', 
-    description: 'Interactive card that tilts in 3D perspective to follow the cursor.',
-    cliCommand: 'npx amicro@latest add card-3d-tilt' 
+    label: 'Cascade Stagger Fan', 
+    interactionType: 'card-cascade-stagger', 
+    description: 'Deploys 5 cards vertically and staggered in a diagonal cascade stack.',
+    cliCommand: 'npx amicro@latest add card-cascade-stagger' 
   },
   { 
     id: 'c9', 
-    label: 'Stack Deck Stagger', 
-    interactionType: 'card-stack-deck', 
-    description: 'Cascading vertical stack deck that spreads and fans on hover.',
-    cliCommand: 'npx amicro@latest add card-stack-deck' 
+    label: 'Scatter Desk Deal', 
+    interactionType: 'card-scatter-spread', 
+    description: 'Scatters cards into an overlapping dealt hand layout on hover.',
+    cliCommand: 'npx amicro@latest add card-scatter-spread' 
   },
   { 
     id: 'c10', 
-    label: 'Interactive Border Glow', 
-    interactionType: 'card-border-glow', 
-    description: 'Glowing border gradient effect tracking the cursor coordinate.',
-    cliCommand: 'npx amicro@latest add card-border-glow' 
+    label: 'Wheel Radial Fan', 
+    interactionType: 'card-wheel-fan', 
+    description: 'Fans cards outward in a radial semi-circle around a bottom-center anchor.',
+    cliCommand: 'npx amicro@latest add card-wheel-fan' 
   }
 ];

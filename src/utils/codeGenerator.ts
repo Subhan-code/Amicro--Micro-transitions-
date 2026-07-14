@@ -1037,104 +1037,47 @@ export default function FocusBlur({
   );
 }`;
 
-    case 'card-3d-tilt':
-      return `import React, { useState, useRef } from 'react';
-import { motion, useSpring } from 'framer-motion';
-
-export default function Card3DTilt() {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
-
-  const rotateX = useSpring(0, { stiffness: 120, damping: 15 });
-  const rotateY = useSpring(0, { stiffness: 120, damping: 15 });
-  const glareX = useSpring(50, { stiffness: 120, damping: 15 });
-  const glareY = useSpring(50, { stiffness: 120, damping: 15 });
-  const glareOpacity = useSpring(0, { stiffness: 120, damping: 15 });
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const rx = -((e.clientY - rect.top - rect.height / 2) / (rect.height / 2)) * 18;
-    const ry = ((e.clientX - rect.left - rect.width / 2) / (rect.width / 2)) * 18;
-
-    rotateX.set(rx);
-    rotateY.set(ry);
-
-    glareX.set(((e.clientX - rect.left) / rect.width) * 100);
-    glareY.set(((e.clientY - rect.top) / rect.height) * 100);
-    glareOpacity.set(0.65);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    rotateX.set(0);
-    rotateY.set(0);
-    glareOpacity.set(0);
-  };
-
-  return (
-    <div 
-      ref={cardRef}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      onMouseMove={handleMouseMove}
-      style={{ perspective: 1000 }}
-      className="relative w-[128px] h-[176px] cursor-pointer"
-    >
-      <motion.div
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="absolute inset-0 rounded-2xl bg-gradient-to-br from-neutral-800 to-neutral-900 border border-white/10 overflow-hidden p-4 flex flex-col justify-between"
-      >
-        <div style={{ transform: 'translateZ(20px)' }} className="w-6 h-6 rounded-full bg-white/20 border border-white/20 shadow-inner" />
-        <div style={{ transform: 'translateZ(10px)' }} className="space-y-1" { ...{ className: "space-y-1" } }>
-          <div className="h-2 w-12 rounded bg-white/30" />
-          <div className="h-1.5 w-8 rounded bg-white/20" />
-        </div>
-        <motion.div
-          style={{
-            opacity: glareOpacity,
-            background: \`radial-gradient(circle 75px at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255,255,255,0.3), transparent)\`
-          }}
-          className="absolute inset-0 pointer-events-none mix-blend-overlay z-20"
-          ref={(node) => {
-            if (node) {
-              glareX.on("change", (val) => node.style.setProperty("--glare-x", \`\${val}%\`));
-              glareY.on("change", (val) => node.style.setProperty("--glare-y", \`\${val}%\`));
-            }
-          }}
-        />
-      </motion.div>
-    </div>
-  );
-}`;
-
-    case 'card-stack-deck':
+    case 'card-cascade-stagger':
       return `import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
-export default function CardStackDeck() {
+interface CardCascadeStaggerProps {
+  className?: string;
+  cardClassName?: string;
+}
+
+export default function CardCascadeStagger({
+  className = '',
+  cardClassName = 'bg-neutral-800'
+}: CardCascadeStaggerProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const cards = [0, 1, 2];
+  const cards = [0, 1, 2, 3, 4];
+  const center = 2;
 
   return (
     <div 
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative w-[128px] h-[176px] cursor-pointer flex items-center justify-center"
+      className={\`relative w-[8rem] h-[11rem] cursor-pointer flex items-center justify-center \${className}\`}
     >
       {cards.map((i) => {
-        const dist = i - 1;
+        const dist = i - center;
+        const targetY = isHovered ? dist * -28 - 14 : dist * 2;
+        const targetX = isHovered ? dist * 14 : 0;
+        const targetRotate = isHovered ? dist * 6 : 0;
+
         return (
           <motion.div
             key={i}
             animate={{
-              y: isHovered ? dist * 32 : dist * 4,
-              rotate: isHovered ? dist * 6 : 0,
-              scale: isHovered && dist === 0 ? 1.03 : 1
+              y: targetY,
+              x: targetX,
+              rotate: targetRotate,
+              scale: isHovered ? (dist === 0 ? 1.05 : 0.98) : 1
             }}
-            transition={{ type: "spring", stiffness: 180, damping: 20 }}
-            style={{ zIndex: 3 - Math.abs(dist) }}
-            className="absolute inset-0 rounded-2xl bg-neutral-800 border border-white/10"
+            transition={{ type: "spring", stiffness: 200, damping: 22, mass: 0.9 }}
+            style={{ zIndex: 5 - Math.abs(dist) }}
+            className={\`absolute inset-0 rounded-2xl shadow-[0_4px_12px_-2px_rgba(0,0,0,0.15)] border border-white/5 \${cardClassName}\`}
           />
         );
       })}
@@ -1142,54 +1085,112 @@ export default function CardStackDeck() {
   );
 }`;
 
-    case 'card-border-glow':
-      return `import React, { useState, useRef } from 'react';
-import { motion, useSpring } from 'framer-motion';
+    case 'card-scatter-spread':
+      return `import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 
-export default function CardBorderGlow() {
-  const cardRef = useRef<HTMLDivElement>(null);
+interface CardScatterSpreadProps {
+  className?: string;
+  cardClassName?: string;
+}
+
+export default function CardScatterSpread({
+  className = '',
+  cardClassName = 'bg-neutral-850'
+}: CardScatterSpreadProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const cards = [0, 1, 2, 3, 4];
 
-  const glowX = useSpring(50, { stiffness: 150, damping: 20 });
-  const glowY = useSpring(50, { stiffness: 150, damping: 20 });
-  const glowOpacity = useSpring(0, { stiffness: 150, damping: 20 });
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    glowX.set(((e.clientX - rect.left) / rect.width) * 100);
-    glowY.set(((e.clientY - rect.top) / rect.height) * 100);
-    glowOpacity.set(1);
-  };
+  const offsets = [
+    { x: -75, y: 15, rotate: -14 },
+    { x: -35, y: -15, rotate: -6 },
+    { x: 0, y: -30, rotate: 2 },
+    { x: 35, y: -10, rotate: 8 },
+    { x: 75, y: 20, rotate: 15 }
+  ];
 
   return (
     <div 
-      ref={cardRef}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => { setIsHovered(false); glowOpacity.set(0); }}
-      onMouseMove={handleMouseMove}
-      className="relative w-[128px] h-[176px] rounded-2xl overflow-hidden p-[1.5px] cursor-pointer bg-white/5"
+      onMouseLeave={() => setIsHovered(false)}
+      className={\`relative w-[8rem] h-[11rem] cursor-pointer flex items-center justify-center \${className}\`}
     >
-      <motion.div
-        style={{
-          opacity: glowOpacity,
-          background: \`radial-gradient(circle 50px at var(--glow-x, 50%) var(--glow-y, 50%), rgba(99, 102, 241, 0.8), rgba(236, 72, 153, 0.4), transparent)\`
-        }}
-        className="absolute inset-0 pointer-events-none z-0"
-        ref={(node) => {
-          if (node) {
-            glowX.on("change", (val) => node.style.setProperty("--glow-x", \`\${val}%\`));
-            glowY.on("change", (val) => node.style.setProperty("--glow-y", \`\${val}%\`));
-          }
-        }}
-      />
-      <div className="relative z-10 w-full h-full rounded-[14px] bg-neutral-900 p-4 flex flex-col justify-between">
-        <div className="w-5 h-5 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-[10px] font-bold text-indigo-400">G</div>
-        <div className="space-y-1.5">
-          <div className="h-2 w-12 rounded bg-indigo-400/30" />
-          <div className="h-1.5 w-8 rounded bg-indigo-400/15" />
-        </div>
-      </div>
+      {cards.map((i) => {
+        const targetX = isHovered ? offsets[i].x : 0;
+        const targetY = isHovered ? offsets[i].y : 0;
+        const targetRotate = isHovered ? offsets[i].rotate : 0;
+
+        return (
+          <motion.div
+            key={i}
+            animate={{
+              x: targetX,
+              y: targetY,
+              rotate: targetRotate,
+              scale: isHovered ? (i === 2 ? 1.05 : 0.98) : 1
+            }}
+            transition={{ type: "spring", stiffness: 180, damping: 20, mass: 0.8 }}
+            style={{ zIndex: 5 - Math.abs(i - 2) }}
+            className={\`absolute inset-0 rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.15)] border border-white/5 \${cardClassName}\`}
+          />
+        );
+      })}
+    </div>
+  );
+}`;
+
+    case 'card-wheel-fan':
+      return `import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+
+interface CardWheelFanProps {
+  className?: string;
+  cardClassName?: string;
+}
+
+export default function CardWheelFan({
+  className = '',
+  cardClassName = 'bg-neutral-800'
+}: CardWheelFanProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const cards = [0, 1, 2, 3, 4];
+  const center = 2;
+
+  return (
+    <div 
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={\`relative w-[8rem] h-[11rem] cursor-pointer flex items-center justify-center \${className}\`}
+    >
+      {cards.map((i) => {
+        const dist = i - center;
+        const targetRotate = isHovered ? dist * 18 : 0;
+        
+        let targetY = 0;
+        if (isHovered) {
+          if (Math.abs(dist) === 2) targetY = -8;
+          else if (Math.abs(dist) === 1) targetY = -22;
+          else targetY = -28;
+        }
+
+        return (
+          <motion.div
+            key={i}
+            animate={{
+              rotate: targetRotate,
+              y: targetY,
+              scale: isHovered ? (dist === 0 ? 1.05 : 0.98) : 1
+            }}
+            transition={{ type: "spring", stiffness: 180, damping: 20, mass: 0.8 }}
+            style={{
+              zIndex: 5 - Math.abs(dist),
+              originX: 0.5,
+              originY: 1.1
+            }}
+            className={\`absolute inset-0 rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.15)] border border-white/5 \${cardClassName}\`}
+          />
+        );
+      })}
     </div>
   );
 }`;
