@@ -6,9 +6,19 @@ import {
 } from 'lucide-react';
 import { buttonsData } from './data/buttons';
 import { AnimatedButton } from './components/AnimatedButton';
-import { getComponentCode, ThemeToggleCode } from './utils/codeGenerator';
+import { getComponentCode, ThemeToggleCode, getCardComponentCode } from './utils/codeGenerator';
 import { CliPage } from './components/CliPage';
 import { SkillsPage } from './components/SkillsPage';
+
+// Card layouts imports
+import { cardsData, CardConfig } from './data/cards';
+import { CardArc5 } from './components/cards/CardArc5';
+import { CardArc7 } from './components/cards/CardArc7';
+import { CardLongArc5 } from './components/cards/CardLongArc5';
+import { CardLinearSpread } from './components/cards/CardLinearSpread';
+import { CardCornerFan } from './components/cards/CardCornerFan';
+import { CardStampArc } from './components/cards/CardStampArc';
+import { FocusBlur } from './components/cards/FocusBlur';
 
 type LayoutMode = 'list' | 'grid' | 'matrix';
 type SortMode = 'default' | 'alphabetical';
@@ -21,7 +31,7 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [stars, setStars] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState<PageMode>('home');
-  // Trigger update for skills routing HMR cache invalidation
+  const [catalogTab, setCatalogTab] = useState<'buttons' | 'cards'>('buttons');
   const [copiedText, setCopiedText] = useState<string | null>(null);
 
   // Hash-based router
@@ -67,6 +77,13 @@ export default function App() {
       .catch(() => showToast("Failed to copy code."));
   };
 
+  const handleCopyCardCode = (card: CardConfig) => {
+    const code = getCardComponentCode(card);
+    navigator.clipboard.writeText(code)
+      .then(() => showToast(`Copied ${card.label} component code!`))
+      .catch(() => showToast("Failed to copy code."));
+  };
+
   const copyCliCommand = (text: string, id: string) => {
     navigator.clipboard.writeText(text)
       .then(() => {
@@ -86,6 +103,14 @@ export default function App() {
 
   const displayedButtons = useMemo(() => {
     let sorted = [...buttonsData];
+    if (sortBy === 'alphabetical') {
+      sorted.sort((a, b) => a.label.localeCompare(b.label));
+    }
+    return sorted;
+  }, [sortBy]);
+
+  const displayedCards = useMemo(() => {
+    let sorted = [...cardsData];
     if (sortBy === 'alphabetical') {
       sorted.sort((a, b) => a.label.localeCompare(b.label));
     }
@@ -312,7 +337,31 @@ export default function App() {
                 </div>
 
                 {/* Filter and layout controls */}
-                <div className="flex items-center gap-3 mt-12">
+                <div className="flex flex-wrap items-center justify-center gap-3 mt-12 w-full">
+                  {/* Category Pill Switcher */}
+                  <div className={`flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
+                    <button
+                      onClick={() => setCatalogTab('buttons')}
+                      className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 ${
+                        catalogTab === 'buttons' 
+                          ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
+                          : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
+                      }`}
+                    >
+                      Buttons
+                    </button>
+                    <button
+                      onClick={() => setCatalogTab('cards')}
+                      className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 ${
+                        catalogTab === 'cards' 
+                          ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
+                          : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
+                      }`}
+                    >
+                      Card Spreads
+                    </button>
+                  </div>
+
                   <div className={`flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
                     <button
                       onClick={() => setSortBy(sortBy === 'default' ? 'alphabetical' : 'default')}
@@ -372,37 +421,105 @@ export default function App() {
                 `}
               >
                 <AnimatePresence mode="popLayout">
-                  {displayedButtons.map((button) => (
-                    <motion.div 
-                      layout 
-                      key={button.id}
-                      transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                      className={`${layout === 'list' ? 'w-full' : ''}`}
-                    >
-                      {layout === 'grid' ? (
-                        <div className={`relative w-full max-w-[320px] sm:w-[320px] h-[268px] rounded-[24px] transition-all duration-300 group ${theme === 'dark' ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] border border-neutral-100/85 hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] text-black'}`}>
-                          <div className={`absolute left-[12px] top-[12px] right-[12px] h-[188px] rounded-[14px] overflow-hidden flex items-center justify-center transition-colors duration-300 ${theme === 'dark' ? 'bg-[#131313]' : 'bg-[#f4f4f6]'}`}>
-                            <div className={`absolute inset-0 rounded-[14px] pointer-events-none z-10 ${theme === 'dark' ? 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]' : 'shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)]'}`} />
-                            <AnimatedButton config={button} layoutMode={layout} theme={theme} />
+                  {catalogTab === 'buttons' ? (
+                    displayedButtons.map((button) => (
+                      <motion.div 
+                        layout 
+                        key={button.id}
+                        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                        className={`${layout === 'list' ? 'w-full' : ''}`}
+                      >
+                        {layout === 'grid' ? (
+                          <div className={`relative w-full max-w-[320px] sm:w-[320px] h-[268px] rounded-[24px] transition-all duration-300 group ${theme === 'dark' ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] border border-neutral-100/85 hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] text-black'}`}>
+                            <div className={`absolute left-[12px] top-[12px] right-[12px] h-[188px] rounded-[14px] overflow-hidden flex items-center justify-center transition-colors duration-300 ${theme === 'dark' ? 'bg-[#131313]' : 'bg-[#f4f4f6]'}`}>
+                              <div className={`absolute inset-0 rounded-[14px] pointer-events-none z-10 ${theme === 'dark' ? 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]' : 'shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)]'}`} />
+                              <AnimatedButton config={button} layoutMode={layout} theme={theme} />
+                            </div>
+                            <div className="absolute left-[20px] bottom-[14px] w-[calc(100%-80px)] flex flex-col gap-[2px]">
+                              <div className={`text-[13px] font-semibold leading-[18px] transition-colors ${theme === 'dark' ? 'text-[#ededed]' : 'text-black'}`}>{button.label}</div>
+                              <div className={`text-[11px] font-normal leading-[13px] transition-colors ${theme === 'dark' ? 'text-[#767676]' : 'text-black opacity-70'} capitalize`}>{button.interactionType.replace('-', ' ')} interaction</div>
+                            </div>
+                            <button 
+                              onClick={() => handleCopyCode(button)}
+                              type="button" 
+                              className={`absolute right-[20px] bottom-[12px] w-[32px] h-[32px] rounded-full flex items-center justify-center transition-colors cursor-pointer border-0 focus-visible:outline focus-visible:outline-2 ${theme === 'dark' ? 'bg-white/[0.08] hover:bg-white/[0.12] text-[#ededed]/60 hover:text-[#ededed]' : 'bg-neutral-100 hover:bg-neutral-200 text-black hover:text-black'}`} 
+                              aria-label="Copy interaction code"
+                            >
+                              <Copy className="w-3.5 h-3.5 transition-transform duration-300 group-hover:scale-110" />
+                            </button>
                           </div>
-                          <div className="absolute left-[20px] bottom-[14px] w-[calc(100%-80px)] flex flex-col gap-[2px]">
-                            <div className={`text-[13px] font-semibold leading-[18px] transition-colors ${theme === 'dark' ? 'text-[#ededed]' : 'text-black'}`}>{button.label}</div>
-                            <div className={`text-[11px] font-normal leading-[13px] transition-colors ${theme === 'dark' ? 'text-[#767676]' : 'text-black opacity-70'} capitalize`}>{button.interactionType.replace('-', ' ')} interaction</div>
+                        ) : (
+                          <AnimatedButton config={button} layoutMode={layout} theme={theme} />
+                        )}
+                      </motion.div>
+                    ))
+                  ) : (
+                    displayedCards.map((card) => (
+                      <motion.div 
+                        layout 
+                        key={card.id}
+                        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                        className={`${layout === 'list' ? 'w-full' : ''}`}
+                      >
+                        {layout === 'grid' || layout === 'matrix' ? (
+                          <div className={`relative w-full max-w-[320px] sm:w-[320px] h-[268px] rounded-[24px] transition-all duration-300 group ${theme === 'dark' ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] border border-neutral-100/85 hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] text-black'}`}>
+                            <div className={`absolute left-[12px] top-[12px] right-[12px] h-[188px] rounded-[14px] overflow-hidden flex items-center justify-center transition-colors duration-300 ${theme === 'dark' ? 'bg-[#131313]' : 'bg-[#f4f4f6]'}`}>
+                              <div className={`absolute inset-0 rounded-[14px] pointer-events-none z-10 ${theme === 'dark' ? 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]' : 'shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)]'}`} />
+                              
+                              {card.interactionType === 'card-arc-5' && <CardArc5 />}
+                              {card.interactionType === 'card-arc-7' && <CardArc7 />}
+                              {card.interactionType === 'card-long-arc-5' && <CardLongArc5 />}
+                              {card.interactionType === 'card-linear-spread' && <CardLinearSpread />}
+                              {card.interactionType === 'card-corner-fan' && <CardCornerFan />}
+                              {card.interactionType === 'card-stamp-arc' && <CardStampArc isColorful={true} />}
+                              {card.interactionType === 'focus-blur' && (
+                                <FocusBlur 
+                                  items={[
+                                    { label: '@X', href: '#' },
+                                    { label: '@Threads', href: '#' },
+                                    { label: '@GitHub', href: '#' }
+                                  ]} 
+                                  showBrackets={true} 
+                                  className="scale-[0.8] origin-center text-sm" 
+                                />
+                              )}
+                            </div>
+                            <div className="absolute left-[20px] bottom-[14px] w-[calc(100%-80px)] flex flex-col gap-[2px]">
+                              <div className={`text-[13px] font-semibold leading-[18px] transition-colors ${theme === 'dark' ? 'text-[#ededed]' : 'text-black'}`}>{card.label}</div>
+                              <div className={`text-[11px] font-normal leading-[13px] transition-colors ${theme === 'dark' ? 'text-[#767676]' : 'text-black opacity-70'}`}>{card.description}</div>
+                            </div>
+                            <button 
+                              onClick={() => handleCopyCardCode(card)}
+                              type="button" 
+                              className={`absolute right-[20px] bottom-[12px] w-[32px] h-[32px] rounded-full flex items-center justify-center transition-colors cursor-pointer border-0 focus-visible:outline focus-visible:outline-2 ${theme === 'dark' ? 'bg-white/[0.08] hover:bg-white/[0.12] text-[#ededed]/60 hover:text-[#ededed]' : 'bg-neutral-100 hover:bg-neutral-200 text-black hover:text-black'}`} 
+                              aria-label="Copy card code"
+                            >
+                              <Copy className="w-3.5 h-3.5 transition-transform duration-300 group-hover:scale-110" />
+                            </button>
                           </div>
-                          <button 
-                            onClick={() => handleCopyCode(button)}
-                            type="button" 
-                            className={`absolute right-[20px] bottom-[12px] w-[32px] h-[32px] rounded-full flex items-center justify-center transition-colors cursor-pointer border-0 focus-visible:outline focus-visible:outline-2 ${theme === 'dark' ? 'bg-white/[0.08] hover:bg-white/[0.12] text-[#ededed]/60 hover:text-[#ededed]' : 'bg-neutral-100 hover:bg-neutral-200 text-black hover:text-black'}`} 
-                            aria-label="Copy interaction code"
-                          >
-                            <Copy className="w-3.5 h-3.5 transition-transform duration-300 group-hover:scale-110" />
-                          </button>
-                        </div>
-                      ) : (
-                        <AnimatedButton config={button} layoutMode={layout} theme={theme} />
-                      )}
-                    </motion.div>
-                  ))}
+                        ) : (
+                          // List view for cards
+                          <div className={`w-[320px] sm:w-[500px] flex items-center justify-between p-4 rounded-xl border transition-colors ${theme === 'dark' ? 'bg-[#181818] border-neutral-850 text-white' : 'bg-white border-neutral-200 shadow-sm text-black'}`}>
+                            <div className="flex items-center gap-4">
+                              <div className={`w-12 h-12 rounded-lg flex items-center justify-center shrink-0 ${theme === 'dark' ? 'bg-[#131313]' : 'bg-neutral-100'}`}>
+                                <LayoutTemplate className="w-5 h-5 text-neutral-400" />
+                              </div>
+                              <div>
+                                <div className="text-[14px] font-semibold">{card.label}</div>
+                                <div className={`text-[11px] ${theme === 'dark' ? 'text-neutral-500' : 'text-neutral-400'}`}>{card.description}</div>
+                              </div>
+                            </div>
+                            <button 
+                              onClick={() => handleCopyCardCode(card)}
+                              className={`p-2 rounded-lg cursor-pointer border-0 ${theme === 'dark' ? 'bg-white/[0.06] text-neutral-300 hover:bg-white/[0.1]' : 'bg-neutral-150 text-neutral-750 hover:bg-neutral-200'}`}
+                            >
+                              <Copy className="w-4 h-4" />
+                            </button>
+                          </div>
+                        )}
+                      </motion.div>
+                    ))
+                  )}
                 </AnimatePresence>
               </div>
 
