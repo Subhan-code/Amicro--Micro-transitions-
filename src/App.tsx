@@ -240,15 +240,15 @@ export default function App() {
               
               <div className="mt-12 mb-16 text-center w-full flex flex-col items-center">
                 
-                <h1 className={`text-[42px] font-medium leading-[48px] tracking-[-0.01em] mb-3 font-sans transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                <h1 className={`text-[46px] font-medium leading-[52px] tracking-[-0.01em] mb-3 font-sans transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                   Amicro — Micro-transitions
                 </h1>
-                <p className={`text-[16px] leading-[24px] max-w-[520px] transition-colors duration-300 ${theme === 'dark' ? 'text-[#767676]' : 'text-black'}`}>
+                <p className={`text-[17px] leading-[25px] max-w-[530px] transition-colors duration-300 ${theme === 'dark' ? 'text-[#767676]' : 'text-black'}`}>
                   A curated library of premium micro-interactions and transition components. Built with React and Motion.
                 </p>
 
                 {/* Hero CTAs */}
-                <div className="flex items-center gap-2 mt-8">
+                <div className="flex items-center gap-3 mt-8">
                   <motion.a 
                     href="https://github.com/Subhan-code/Amicro--Micro-transitions-" 
                     target="_blank" 
@@ -262,7 +262,7 @@ export default function App() {
                         boxShadow: theme === 'dark' ? '0 10px 25px -5px rgba(255,255,255,0.1)' : '0 10px 25px -5px rgba(0,0,0,0.15)'
                       }
                     }}
-                    className={`inline-flex items-center justify-center gap-1.5 h-[32px] px-[12px] rounded-full text-[12px] font-medium no-underline transition-colors cursor-pointer border-0 ${theme === 'dark' ? 'bg-white text-black hover:bg-neutral-200' : 'bg-neutral-950 text-white hover:bg-neutral-800'}`}
+                    className={`inline-flex items-center justify-center gap-1.5 h-[36px] px-[16px] rounded-full text-[13px] font-medium no-underline transition-colors cursor-pointer border-0 ${theme === 'dark' ? 'bg-white text-black hover:bg-neutral-200' : 'bg-neutral-950 text-white hover:bg-neutral-800'}`}
                   >
                     <motion.div 
                       variants={{
@@ -271,11 +271,11 @@ export default function App() {
                       transition={{ duration: 0.4 }}
                       className="flex items-center shrink-0"
                     >
-                      <Github className="w-3.5 h-3.5" />
+                      <Github className="w-4 h-4" />
                     </motion.div>
                     <span>GitHub Repo</span>
                     {stars !== null && (
-                      <span className={`text-[10px] px-1 py-0.2 rounded-full font-semibold ml-1 ${theme === 'dark' ? 'bg-black/10 text-black/70' : 'bg-white/20 text-white/90'}`}>
+                      <span className={`text-[10.5px] px-1.5 py-0.5 rounded-full font-semibold ml-1 ${theme === 'dark' ? 'bg-black/10 text-black/70' : 'bg-white/20 text-white/90'}`}>
                         {stars}
                       </span>
                     )}
@@ -296,7 +296,7 @@ export default function App() {
                         boxShadow: theme === 'dark' ? '0 10px 25px -5px rgba(0,0,0,0.3)' : '0 10px 25px -5px rgba(0,0,0,0.05)'
                       }
                     }}
-                    className={`inline-flex items-center justify-center h-[32px] px-[12px] rounded-full text-[12px] font-medium border cursor-pointer transition-colors ${theme === 'dark' ? 'bg-[#181818] border-neutral-800 text-white hover:bg-neutral-800' : 'bg-white border-neutral-200 text-black hover:bg-neutral-50 shadow-sm'}`}
+                    className={`inline-flex items-center justify-center h-[36px] px-[16px] rounded-full text-[13px] font-medium border cursor-pointer transition-colors ${theme === 'dark' ? 'bg-[#181818] border-neutral-800 text-white hover:bg-neutral-800' : 'bg-white border-neutral-200 text-black hover:bg-neutral-50 shadow-sm'}`}
                   >
                     <motion.div
                       variants={{
