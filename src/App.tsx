@@ -38,6 +38,13 @@ export default function App() {
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
 
+  const cardShowcaseImages = useMemo(() => [
+    'https://i.pinimg.com/736x/15/f5/cf/15f5cf3ceb20c19d7ded0f1cd8faba74.jpg',
+    'https://i.pinimg.com/1200x/58/b9/97/58b9976f721ae439f8c54c8d80370422.jpg',
+    'https://i.pinimg.com/736x/d1/ad/8a/d1ad8add3b6ade5232613a2bcc1c8c63.jpg',
+    'https://i.pinimg.com/736x/ec/b7/6e/ecb76e1556e8aba8575d2f8c499b2a54.jpg'
+  ], []);
+
   // Hash-based router
   useEffect(() => {
     const handleHashChange = () => {
@@ -473,13 +480,12 @@ export default function App() {
                           >
                             <div className={`absolute left-[12px] top-[12px] right-[12px] h-[300px] rounded-[14px] flex items-center justify-center transition-colors duration-300 ${theme === 'dark' ? 'bg-[#131313]' : 'bg-[#f4f4f6]'}`}>
                               <div className={`absolute inset-0 rounded-[14px] pointer-events-none z-10 ${theme === 'dark' ? 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]' : 'shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)]'}`} />
-                              
-                              {card.interactionType === 'card-arc-5' && <CardArc5 hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-arc-7' && <CardArc7 hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-long-arc-5' && <CardLongArc5 hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-linear-spread' && <CardLinearSpread hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-corner-fan' && <CardCornerFan hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-stamp-arc' && <CardStampArc isColorful={true} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                                                             {card.interactionType === 'card-arc-5' && <CardArc5 images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-arc-7' && <CardArc7 images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-long-arc-5' && <CardLongArc5 images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-linear-spread' && <CardLinearSpread images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-corner-fan' && <CardCornerFan images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-stamp-arc' && <CardStampArc images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
                               {card.interactionType === 'focus-blur' && (
                                 <FocusBlur 
                                   items={[
@@ -491,9 +497,9 @@ export default function App() {
                                   className="scale-[1.2] origin-center text-sm" 
                                 />
                               )}
-                              {card.interactionType === 'card-cascade-stagger' && <CardCascadeStagger hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-scatter-spread' && <CardScatterSpread hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-wheel-fan' && <CardWheelFan hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-cascade-stagger' && <CardCascadeStagger images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-scatter-spread' && <CardScatterSpread images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-wheel-fan' && <CardWheelFan images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
                             </div>
                             <div className="absolute left-[20px] bottom-[14px] w-[calc(100%-80px)] flex flex-col gap-[2px]">
                               <div className={`text-[13px] font-semibold leading-[18px] transition-colors ${theme === 'dark' ? 'text-[#ededed]' : 'text-black'}`}>{card.label}</div>

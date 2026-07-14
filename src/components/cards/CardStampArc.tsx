@@ -10,6 +10,7 @@ interface CardStampArcProps {
   hoverIntensity?: number;
   className?: string;
   hovered?: boolean;
+  images?: string[];
 }
 
 export function CardStampArc({
@@ -20,7 +21,8 @@ export function CardStampArc({
   duration = 0.5,
   hoverIntensity = 1,
   className = '',
-  hovered
+  hovered,
+  images
 }: CardStampArcProps) {
   const [isHovered, setIsHovered] = useState(false);
   const active = hovered !== undefined ? hovered : isHovered;
@@ -97,10 +99,13 @@ export function CardStampArc({
             style={{
               zIndex: 3 - Math.abs(dist),
               originX: 0.5,
-              originY: 1
+              originY: 1,
+              backgroundImage: images ? `url(${images[i % images.length]})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
             }}
             className={`absolute inset-0 rounded-2xl shadow-[0_4px_10px_-2px_rgba(0,0,0,0.15),0_2px_6px_-2px_rgba(0,0,0,0.1)] border-2 border-dashed border-white/60 dark:border-black/35 ${
-              isColorful ? stamp.color : 'bg-neutral-400 dark:bg-neutral-800'
+              images ? '' : (isColorful ? stamp.color : 'bg-neutral-400 dark:bg-neutral-800')
             }`}
           />
         );

@@ -5,12 +5,14 @@ interface CardCascadeStaggerProps {
   className?: string;
   cardClassName?: string;
   hovered?: boolean;
+  images?: string[];
 }
 
 export function CardCascadeStagger({
   className = '',
-  cardClassName = 'bg-neutral-400 dark:bg-neutral-850',
-  hovered
+  cardClassName = 'bg-neutral-400 dark:bg-neutral-800',
+  hovered,
+  images
 }: CardCascadeStaggerProps) {
   const [isHovered, setIsHovered] = useState(false);
   const active = hovered !== undefined ? hovered : isHovered;
@@ -53,7 +55,10 @@ export function CardCascadeStagger({
             style={{
               zIndex: 5 - Math.abs(dist),
               originX: 0.5,
-              originY: 0.5
+              originY: 0.5,
+              backgroundImage: images ? `url(${images[i % images.length]})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
             }}
             className={`absolute inset-0 rounded-2xl shadow-[0_4px_12px_-2px_rgba(0,0,0,0.15)] border border-neutral-200/20 ${cardClassName}`}
           />
