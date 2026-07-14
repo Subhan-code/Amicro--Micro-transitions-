@@ -347,6 +347,60 @@ export default function App() {
                   </motion.button>
                 </div>
 
+                {/* Example Showcase Marquee Section */}
+                <div className="w-full mt-14 max-w-[1240px]">
+                  <div className="text-center sm:text-left mb-6">
+                    <h3 className={`text-[12px] font-bold tracking-widest uppercase opacity-45 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                      Example Showcase
+                    </h3>
+                  </div>
+                  
+                  {/* Scrolling Row */}
+                  <div className="relative w-full overflow-x-auto py-6 no-scrollbar">
+                    <div className="flex items-center gap-8 min-w-max px-4">
+                      {/* Item 1: Cascade Stagger */}
+                      <div className={`relative flex flex-col items-center justify-center w-[200px] h-[250px] rounded-[20px] transition-all duration-300 ${theme === 'dark' ? 'bg-[#181818] border border-white/5' : 'bg-white border border-neutral-200/60 shadow-sm'}`}>
+                        <div className="h-[170px] flex items-center justify-center">
+                          <CardCascadeStagger images={cardShowcaseImages} className="scale-[1.05]" />
+                        </div>
+                        <span className={`text-[11.5px] font-medium tracking-tight mt-1.5 ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>
+                          Cascade Stagger
+                        </span>
+                      </div>
+
+                      {/* Item 2: Scatter Spread */}
+                      <div className={`relative flex flex-col items-center justify-center w-[200px] h-[250px] rounded-[20px] transition-all duration-300 ${theme === 'dark' ? 'bg-[#181818] border border-white/5' : 'bg-white border border-neutral-200/60 shadow-sm'}`}>
+                        <div className="h-[170px] flex items-center justify-center">
+                          <CardScatterSpread images={cardShowcaseImages} className="scale-[1.05]" />
+                        </div>
+                        <span className={`text-[11.5px] font-medium tracking-tight mt-1.5 ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>
+                          Scatter Desk Deal
+                        </span>
+                      </div>
+
+                      {/* Item 3: Wheel Radial */}
+                      <div className={`relative flex flex-col items-center justify-center w-[200px] h-[250px] rounded-[20px] transition-all duration-300 ${theme === 'dark' ? 'bg-[#181818] border border-white/5' : 'bg-white border border-neutral-200/60 shadow-sm'}`}>
+                        <div className="h-[170px] flex items-center justify-center">
+                          <CardWheelFan images={cardShowcaseImages} className="scale-[1.05]" />
+                        </div>
+                        <span className={`text-[11.5px] font-medium tracking-tight mt-1.5 ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>
+                          Wheel Radial Fan
+                        </span>
+                      </div>
+
+                      {/* Item 4: ARC (5 Cards) */}
+                      <div className={`relative flex flex-col items-center justify-center w-[200px] h-[250px] rounded-[20px] transition-all duration-300 ${theme === 'dark' ? 'bg-[#181818] border border-white/5' : 'bg-white border border-neutral-200/60 shadow-sm'}`}>
+                        <div className="h-[170px] flex items-center justify-center">
+                          <CardArc5 images={cardShowcaseImages} className="scale-[1.05]" />
+                        </div>
+                        <span className={`text-[11.5px] font-medium tracking-tight mt-1.5 ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>
+                          ARC (5 Cards)
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Filter and layout controls */}
                 <div className="flex flex-wrap items-center justify-center gap-3 mt-12 w-full">
                   {/* Category Pill Switcher */}
@@ -480,12 +534,12 @@ export default function App() {
                           >
                             <div className={`absolute left-[12px] top-[12px] right-[12px] h-[300px] rounded-[14px] flex items-center justify-center transition-colors duration-300 ${theme === 'dark' ? 'bg-[#131313]' : 'bg-[#f4f4f6]'}`}>
                               <div className={`absolute inset-0 rounded-[14px] pointer-events-none z-10 ${theme === 'dark' ? 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]' : 'shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)]'}`} />
-                                                             {card.interactionType === 'card-arc-5' && <CardArc5 images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-arc-7' && <CardArc7 images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-long-arc-5' && <CardLongArc5 images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-linear-spread' && <CardLinearSpread images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-corner-fan' && <CardCornerFan images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-stamp-arc' && <CardStampArc images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                                                            {card.interactionType === 'card-arc-5' && <CardArc5 hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-arc-7' && <CardArc7 hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-long-arc-5' && <CardLongArc5 hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-linear-spread' && <CardLinearSpread hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-corner-fan' && <CardCornerFan hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-stamp-arc' && <CardStampArc hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
                               {card.interactionType === 'focus-blur' && (
                                 <FocusBlur 
                                   items={[
@@ -497,9 +551,9 @@ export default function App() {
                                   className="scale-[1.2] origin-center text-sm" 
                                 />
                               )}
-                              {card.interactionType === 'card-cascade-stagger' && <CardCascadeStagger images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-scatter-spread' && <CardScatterSpread images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-wheel-fan' && <CardWheelFan images={cardShowcaseImages} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-cascade-stagger' && <CardCascadeStagger hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-scatter-spread' && <CardScatterSpread hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-wheel-fan' && <CardWheelFan hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
                             </div>
                             <div className="absolute left-[20px] bottom-[14px] w-[calc(100%-80px)] flex flex-col gap-[2px]">
                               <div className={`text-[13px] font-semibold leading-[18px] transition-colors ${theme === 'dark' ? 'text-[#ededed]' : 'text-black'}`}>{card.label}</div>
