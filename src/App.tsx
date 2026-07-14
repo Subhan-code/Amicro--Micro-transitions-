@@ -415,10 +415,10 @@ export default function App() {
               <div 
                 id="component-grid"
                 className={`
-                  w-full flex justify-center gap-[24px] scroll-mt-24 mb-16
-                  ${layout === 'list' ? 'flex-col items-center max-w-md mx-auto' : ''}
-                  ${layout === 'grid' ? 'flex-wrap' : ''}
-                  ${layout === 'matrix' ? 'flex-wrap max-w-4xl gap-4' : ''}
+                  w-full flex justify-center gap-[24px] scroll-mt-24 mb-16 mx-auto
+                  ${layout === 'list' ? 'flex-col items-center max-w-md' : ''}
+                  ${layout === 'grid' ? `flex-wrap ${catalogTab === 'cards' ? 'max-w-6xl' : ''}` : ''}
+                  ${layout === 'matrix' ? `flex-wrap gap-4 ${catalogTab === 'cards' ? 'max-w-6xl' : 'max-w-4xl'}` : ''}
                 `}
               >
                 <AnimatePresence mode="popLayout">
@@ -466,17 +466,17 @@ export default function App() {
                           <div 
                             onMouseEnter={() => setHoveredCardId(card.id)}
                             onMouseLeave={() => setHoveredCardId(null)}
-                            className={`relative w-full max-w-[320px] sm:w-[320px] h-[268px] rounded-[24px] transition-all duration-300 group ${theme === 'dark' ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] border border-neutral-100/85 hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] text-black'}`}
+                            className={`relative w-full max-w-[480px] sm:w-[480px] h-[380px] rounded-[24px] transition-all duration-300 group ${theme === 'dark' ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] border border-neutral-100/85 hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] text-black'}`}
                           >
-                            <div className={`absolute left-[12px] top-[12px] right-[12px] h-[188px] rounded-[14px] flex items-center justify-center transition-colors duration-300 ${theme === 'dark' ? 'bg-[#131313]' : 'bg-[#f4f4f6]'}`}>
+                            <div className={`absolute left-[12px] top-[12px] right-[12px] h-[300px] rounded-[14px] flex items-center justify-center transition-colors duration-300 ${theme === 'dark' ? 'bg-[#131313]' : 'bg-[#f4f4f6]'}`}>
                               <div className={`absolute inset-0 rounded-[14px] pointer-events-none z-10 ${theme === 'dark' ? 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]' : 'shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)]'}`} />
                               
-                              {card.interactionType === 'card-arc-5' && <CardArc5 hovered={hoveredCardId === card.id} />}
-                              {card.interactionType === 'card-arc-7' && <CardArc7 hovered={hoveredCardId === card.id} />}
-                              {card.interactionType === 'card-long-arc-5' && <CardLongArc5 hovered={hoveredCardId === card.id} />}
-                              {card.interactionType === 'card-linear-spread' && <CardLinearSpread hovered={hoveredCardId === card.id} />}
-                              {card.interactionType === 'card-corner-fan' && <CardCornerFan hovered={hoveredCardId === card.id} />}
-                              {card.interactionType === 'card-stamp-arc' && <CardStampArc isColorful={true} hovered={hoveredCardId === card.id} />}
+                              {card.interactionType === 'card-arc-5' && <CardArc5 hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-arc-7' && <CardArc7 hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-long-arc-5' && <CardLongArc5 hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-linear-spread' && <CardLinearSpread hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-corner-fan' && <CardCornerFan hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-stamp-arc' && <CardStampArc isColorful={true} hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
                               {card.interactionType === 'focus-blur' && (
                                 <FocusBlur 
                                   items={[
@@ -485,7 +485,7 @@ export default function App() {
                                     { label: '@GitHub', href: '#' }
                                   ]} 
                                   showBrackets={true} 
-                                  className="scale-[0.8] origin-center text-sm" 
+                                  className="scale-[1.2] origin-center text-sm" 
                                 />
                               )}
                             </div>
