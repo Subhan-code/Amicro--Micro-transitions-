@@ -9,6 +9,7 @@ interface CardArc7Props {
   hoverIntensity?: number;
   cardClassName?: string;
   className?: string;
+  hovered?: boolean;
 }
 
 export function CardArc7({
@@ -18,9 +19,11 @@ export function CardArc7({
   duration = 0.5,
   hoverIntensity = 1,
   cardClassName = 'bg-neutral-400 dark:bg-neutral-800',
-  className = ''
+  className = '',
+  hovered
 }: CardArc7Props) {
   const [isHovered, setIsHovered] = useState(false);
+  const active = hovered !== undefined ? hovered : isHovered;
   const cards = [0, 1, 2, 3, 4, 5, 6];
   const center = 3;
 
@@ -32,11 +35,11 @@ export function CardArc7({
     >
       {cards.map((i) => {
         const dist = i - center;
-        const targetRotate = isHovered ? dist * (angle / center) * hoverIntensity : 0;
-        const targetX = isHovered ? dist * (gap / center) * hoverIntensity : 0;
+        const targetRotate = active ? dist * (angle / center) * hoverIntensity : 0;
+        const targetX = active ? dist * (gap / center) * hoverIntensity : 0;
         
         let targetY = 0;
-        if (isHovered) {
+        if (active) {
           if (Math.abs(dist) === 3) targetY = yOffset;
           else if (Math.abs(dist) === 2) targetY = 0.33 * yOffset;
           else if (Math.abs(dist) === 1) targetY = -0.17 * yOffset;
@@ -58,7 +61,7 @@ export function CardArc7({
               rotate: targetRotate,
               x: targetX,
               y: targetY,
-              scale: isHovered ? (dist === 0 ? 1.05 : 1) : 1
+              scale: active ? (dist === 0 ? 1.05 : 1) : 1
             }}
             transition={{
               ...springConfig,
