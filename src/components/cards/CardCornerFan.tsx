@@ -7,6 +7,7 @@ interface CardCornerFanProps {
   hoverIntensity?: number;
   cardClassName?: string;
   className?: string;
+  hovered?: boolean;
 }
 
 export function CardCornerFan({
@@ -14,9 +15,11 @@ export function CardCornerFan({
   duration = 0.5,
   hoverIntensity = 1,
   cardClassName = 'bg-neutral-400 dark:bg-neutral-800',
-  className = ''
+  className = '',
+  hovered
 }: CardCornerFanProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const active = hovered !== undefined ? hovered : isHovered;
   const cards = [0, 1, 2, 3, 4];
   const total = cards.length;
 
@@ -30,7 +33,7 @@ export function CardCornerFan({
         // Rotate from -10deg to +30deg (span of 40deg)
         const offsetRatio = i / (total - 1); // 0, 0.25, 0.5, 0.75, 1
         const startAngle = -10;
-        const targetRotate = isHovered ? (startAngle + offsetRatio * angle) * hoverIntensity : 0;
+        const targetRotate = active ? (startAngle + offsetRatio * angle) * hoverIntensity : 0;
 
         const springConfig = {
           type: "spring",
@@ -44,7 +47,7 @@ export function CardCornerFan({
             key={i}
             animate={{
               rotate: targetRotate,
-              scale: isHovered && i === 2 ? 1.03 : 1
+              scale: active && i === 2 ? 1.03 : 1
             }}
             transition={{
               ...springConfig,

@@ -7,6 +7,7 @@ interface CardLinearSpreadProps {
   hoverIntensity?: number;
   cardClassName?: string;
   className?: string;
+  hovered?: boolean;
 }
 
 export function CardLinearSpread({
@@ -14,9 +15,11 @@ export function CardLinearSpread({
   duration = 0.5,
   hoverIntensity = 1,
   cardClassName = 'bg-neutral-400 dark:bg-neutral-800',
-  className = ''
+  className = '',
+  hovered
 }: CardLinearSpreadProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const active = hovered !== undefined ? hovered : isHovered;
   const cards = [0, 1, 2, 3, 4];
   const center = 2;
 
@@ -28,7 +31,7 @@ export function CardLinearSpread({
     >
       {cards.map((i) => {
         const dist = i - center;
-        const targetX = isHovered ? dist * (gap / center) * hoverIntensity : 0;
+        const targetX = active ? dist * (gap / center) * hoverIntensity : 0;
 
         const springConfig = {
           type: "spring",
@@ -42,7 +45,7 @@ export function CardLinearSpread({
             key={i}
             animate={{
               x: targetX,
-              scale: isHovered ? (dist === 0 ? 1.05 : 1) : 1
+              scale: active ? (dist === 0 ? 1.05 : 1) : 1
             }}
             transition={{
               ...springConfig,

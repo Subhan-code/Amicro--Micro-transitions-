@@ -9,6 +9,7 @@ interface CardStampArcProps {
   duration?: number;
   hoverIntensity?: number;
   className?: string;
+  hovered?: boolean;
 }
 
 export function CardStampArc({
@@ -18,9 +19,11 @@ export function CardStampArc({
   isColorful = false,
   duration = 0.5,
   hoverIntensity = 1,
-  className = ''
+  className = '',
+  hovered
 }: CardStampArcProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const active = hovered !== undefined ? hovered : isHovered;
 
   const stamps = [
     { id: 0, color: 'bg-red-400 dark:bg-red-500' },
@@ -42,8 +45,8 @@ export function CardStampArc({
         let targetRotate = 0;
         let targetX = 0;
         let targetY = 0;
-
-        if (isHovered) {
+ 
+        if (active) {
           if (i === 0) {
             targetRotate = -1 * arc;
             targetX = -1 * spread;
@@ -85,7 +88,7 @@ export function CardStampArc({
               rotate: targetRotate,
               x: targetX,
               y: targetY,
-              scale: isHovered ? (dist === 0 ? 1.05 : 1) : 1
+              scale: active ? (dist === 0 ? 1.05 : 1) : 1
             }}
             transition={{
               ...springConfig,
