@@ -240,40 +240,46 @@ export default function App() {
               
               <div className="mt-12 mb-16 text-center w-full flex flex-col items-center">
                 
-                {/* Visual badge indicator */}
-                <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-medium mb-6 border ${
-                  theme === 'dark' ? 'bg-neutral-900 border-neutral-800 text-neutral-300' : 'bg-neutral-100 border-neutral-200 text-neutral-700'
-                }`}>
-                  <Terminal className="w-3.5 h-3.5 text-blue-500" />
-                  <span>Now installable via CLI</span>
-                </div>
-
-                <h1 className={`text-[42px] sm:text-[62px] font-bold leading-[1.1] tracking-tight mb-4 font-sans transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                  Amicro <span className="bg-gradient-to-r from-neutral-400 via-neutral-200 to-neutral-400 bg-clip-text text-transparent opacity-90">—</span> Micro-interactions
+                <h1 className={`text-[42px] font-medium leading-[48px] tracking-[-0.01em] mb-3 font-sans transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                  Amicro — Micro-transitions
                 </h1>
-                
-                <p className={`text-[16px] sm:text-[18px] leading-[26px] max-w-[550px] transition-colors duration-300 ${theme === 'dark' ? 'text-[#a3a3a3]' : 'text-neutral-600'}`}>
+                <p className={`text-[16px] leading-[24px] max-w-[520px] transition-colors duration-300 ${theme === 'dark' ? 'text-[#767676]' : 'text-black'}`}>
                   A curated library of premium micro-interactions and transition components. Built with React and Motion.
                 </p>
 
-                {/* Hero CTAs - Stack vertically on mobile, side-by-side on desktop */}
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mt-8 w-full max-w-[340px] sm:max-w-none">
-                  <motion.button 
-                    onClick={() => navigateTo('cli')}
+                {/* Hero CTAs */}
+                <div className="flex items-center gap-3 mt-8">
+                  <motion.a 
+                    href="https://github.com/Subhan-code/Amicro--Micro-transitions-" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
                     whileHover="hover"
                     initial="initial"
                     whileTap={{ scale: 0.98 }}
                     variants={{
                       hover: { 
-                        scale: 1.03,
-                        boxShadow: theme === 'dark' ? '0 10px 25px -5px rgba(255,255,255,0.08)' : '0 10px 25px -5px rgba(0,0,0,0.12)'
+                        scale: 1.04,
+                        boxShadow: theme === 'dark' ? '0 10px 25px -5px rgba(255,255,255,0.1)' : '0 10px 25px -5px rgba(0,0,0,0.15)'
                       }
                     }}
-                    className={`inline-flex items-center justify-center h-[44px] w-full sm:w-auto px-[26px] rounded-full text-[13.5px] font-semibold no-underline transition-colors cursor-pointer border-0 ${theme === 'dark' ? 'bg-white text-black hover:bg-neutral-200' : 'bg-neutral-950 text-white hover:bg-neutral-800'}`}
+                    className={`inline-flex items-center justify-center gap-2 h-[40px] px-[20px] rounded-full text-[13px] font-medium no-underline transition-colors cursor-pointer border-0 ${theme === 'dark' ? 'bg-white text-black hover:bg-neutral-200' : 'bg-neutral-950 text-white hover:bg-neutral-800'}`}
                   >
-                    <span>Get Started</span>
-                  </motion.button>
-                  
+                    <motion.div 
+                      variants={{
+                        hover: { rotate: [0, -15, 15, -15, 0], scale: 1.15 }
+                      }}
+                      transition={{ duration: 0.4 }}
+                      className="flex items-center shrink-0"
+                    >
+                      <Github className="w-4 h-4" />
+                    </motion.div>
+                    <span>GitHub Repo</span>
+                    {stars !== null && (
+                      <span className={`text-[11px] px-1.5 py-0.5 rounded-full font-semibold ml-1 ${theme === 'dark' ? 'bg-black/10 text-black/70' : 'bg-white/20 text-white/90'}`}>
+                        {stars}
+                      </span>
+                    )}
+                  </motion.a>
                   <motion.button 
                     onClick={() => {
                       const element = document.getElementById('component-grid');
@@ -286,13 +292,22 @@ export default function App() {
                     whileTap={{ scale: 0.98 }}
                     variants={{
                       hover: { 
-                        scale: 1.03,
-                        boxShadow: theme === 'dark' ? '0 10px 25px -5px rgba(0,0,0,0.3)' : '0 10px 25px -5px rgba(0,0,0,0.04)'
+                        scale: 1.04,
+                        boxShadow: theme === 'dark' ? '0 10px 25px -5px rgba(0,0,0,0.3)' : '0 10px 25px -5px rgba(0,0,0,0.05)'
                       }
                     }}
-                    className={`inline-flex items-center justify-center h-[44px] w-full sm:w-auto px-[26px] rounded-full text-[13.5px] font-semibold border cursor-pointer transition-colors ${theme === 'dark' ? 'bg-[#181818] border-neutral-800 text-white hover:bg-neutral-850' : 'bg-white border-neutral-200 text-black hover:bg-neutral-50 shadow-sm'}`}
+                    className={`inline-flex items-center justify-center h-[40px] px-[20px] rounded-full text-[13px] font-medium border cursor-pointer transition-colors ${theme === 'dark' ? 'bg-[#181818] border-neutral-800 text-white hover:bg-neutral-800' : 'bg-white border-neutral-200 text-black hover:bg-neutral-50 shadow-sm'}`}
                   >
-                    <span>View Components</span>
+                    <motion.div
+                      variants={{
+                        hover: { y: [0, -4, 4, -2, 2, 0] }
+                      }}
+                      transition={{ duration: 0.6 }}
+                      className="flex items-center shrink-0 mr-1.5"
+                    >
+                      <ArrowDownAZ className="w-3.5 h-3.5" />
+                    </motion.div>
+                    <span>Browse Components</span>
                   </motion.button>
                 </div>
 
