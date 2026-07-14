@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { LayoutGrid, List, LayoutTemplate, ArrowDownAZ, Copy, Sun, Moon, Github } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
 import { buttonsData } from './data/buttons';
 import { AnimatedButton } from './components/AnimatedButton';
 import { getComponentCode, ThemeToggleCode } from './utils/codeGenerator';
@@ -343,6 +344,7 @@ export default function App() {
         </AnimatePresence>
       </div>
 
+      <Analytics />
     </div>
   );
 }
