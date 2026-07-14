@@ -5,7 +5,10 @@ export type CardInteractionType =
   | 'card-linear-spread' 
   | 'card-corner-fan' 
   | 'card-stamp-arc' 
-  | 'focus-blur';
+  | 'focus-blur'
+  | 'card-3d-tilt'
+  | 'card-stack-deck'
+  | 'card-border-glow';
 
 export interface CardConfig {
   id: string;
@@ -64,5 +67,26 @@ export const cardsData: CardConfig[] = [
     interactionType: 'focus-blur', 
     description: 'Focuses active element while blurring out inactive sibling links.',
     cliCommand: 'npx amicro@latest add focus-blur' 
+  },
+  { 
+    id: 'c8', 
+    label: '3D Tilt Card', 
+    interactionType: 'card-3d-tilt', 
+    description: 'Interactive card that tilts in 3D perspective to follow the cursor.',
+    cliCommand: 'npx amicro@latest add card-3d-tilt' 
+  },
+  { 
+    id: 'c9', 
+    label: 'Stack Deck Stagger', 
+    interactionType: 'card-stack-deck', 
+    description: 'Cascading vertical stack deck that spreads and fans on hover.',
+    cliCommand: 'npx amicro@latest add card-stack-deck' 
+  },
+  { 
+    id: 'c10', 
+    label: 'Interactive Border Glow', 
+    interactionType: 'card-border-glow', 
+    description: 'Glowing border gradient effect tracking the cursor coordinate.',
+    cliCommand: 'npx amicro@latest add card-border-glow' 
   }
 ];
