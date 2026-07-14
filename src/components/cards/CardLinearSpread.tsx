@@ -8,6 +8,7 @@ interface CardLinearSpreadProps {
   cardClassName?: string;
   className?: string;
   hovered?: boolean;
+  images?: string[];
 }
 
 export function CardLinearSpread({
@@ -16,7 +17,8 @@ export function CardLinearSpread({
   hoverIntensity = 1,
   cardClassName = 'bg-neutral-400 dark:bg-neutral-800',
   className = '',
-  hovered
+  hovered,
+  images
 }: CardLinearSpreadProps) {
   const [isHovered, setIsHovered] = useState(false);
   const active = hovered !== undefined ? hovered : isHovered;
@@ -52,7 +54,10 @@ export function CardLinearSpread({
               duration
             }}
             style={{
-              zIndex: 3 - Math.abs(dist)
+              zIndex: 3 - Math.abs(dist),
+              backgroundImage: images ? `url(${images[i % images.length]})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
             }}
             className={`absolute inset-0 rounded-2xl shadow-[0_4px_10px_-2px_rgba(0,0,0,0.15),0_2px_6px_-2px_rgba(0,0,0,0.1)] border border-neutral-200/20 ${cardClassName}`}
           />
