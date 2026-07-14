@@ -11,7 +11,7 @@ interface CardCornerFanProps {
   images?: string[];
 }
 
-export function CardCornerFan({
+export const CardCornerFan = React.memo(function CardCornerFan({
   angle = 40, // Total rotation fan span
   duration = 0.5,
   hoverIntensity = 1,
@@ -69,4 +69,4 @@ export function CardCornerFan({
       })}
     </div>
   );
-}
+});

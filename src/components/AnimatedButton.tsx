@@ -8,7 +8,7 @@ interface AnimatedButtonProps {
   theme?: 'dark' | 'light';
 }
 
-export function AnimatedButton({ config, layoutMode, theme = 'dark' }: AnimatedButtonProps) {
+export const AnimatedButton = React.memo(function AnimatedButton({ config, layoutMode, theme = 'dark' }: AnimatedButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
   
   const Icon1 = config.icon1 as React.ElementType;
@@ -401,4 +401,4 @@ export function AnimatedButton({ config, layoutMode, theme = 'dark' }: AnimatedB
       </motion.div>
     </motion.button>
   );
-}
+});

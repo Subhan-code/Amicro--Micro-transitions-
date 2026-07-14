@@ -13,7 +13,7 @@ interface CardStampArcProps {
   images?: string[];
 }
 
-export function CardStampArc({
+export const CardStampArc = React.memo(function CardStampArc({
   arc = 25,
   spread = 180,
   yOffset = 40,
@@ -112,4 +112,4 @@ export function CardStampArc({
       })}
     </div>
   );
-}
+});

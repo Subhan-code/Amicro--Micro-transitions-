@@ -11,7 +11,7 @@ interface CardLinearSpreadProps {
   images?: string[];
 }
 
-export function CardLinearSpread({
+export const CardLinearSpread = React.memo(function CardLinearSpread({
   gap = 90,
   duration = 0.5,
   hoverIntensity = 1,
@@ -65,4 +65,4 @@ export function CardLinearSpread({
       })}
     </div>
   );
-}
+});

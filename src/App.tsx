@@ -1,8 +1,9 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   LayoutGrid, List, LayoutTemplate, ArrowDownAZ, Copy, Sun, Moon, Github, 
-  Terminal, Check, Cpu, Zap, Code, ShieldCheck, Sparkles, ChevronRight
+  Terminal, Check, Cpu, Zap, Code, ShieldCheck, Sparkles, RefreshCw, Smartphone, 
+  ChevronRight, Shield, Layers, HelpCircle, Palette, Activity
 } from 'lucide-react';
 import { buttonsData } from './data/buttons';
 import { AnimatedButton } from './components/AnimatedButton';
@@ -38,13 +39,6 @@ export default function App() {
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
 
-  const cardShowcaseImages = useMemo(() => [
-    'https://i.pinimg.com/736x/15/f5/cf/15f5cf3ceb20c19d7ded0f1cd8faba74.jpg',
-    'https://i.pinimg.com/1200x/58/b9/97/58b9976f721ae439f8c54c8d80370422.jpg',
-    'https://i.pinimg.com/736x/d1/ad/8a/d1ad8add3b6ade5232613a2bcc1c8c63.jpg',
-    'https://i.pinimg.com/736x/ec/b7/6e/ecb76e1556e8aba8575d2f8c499b2a54.jpg'
-  ], []);
-
   // Hash-based router
   useEffect(() => {
     const handleHashChange = () => {
@@ -74,43 +68,43 @@ export default function App() {
       .catch(err => console.error('Error fetching stars:', err));
   }, []);
 
-  const showToast = (message: string) => {
+  const showToast = useCallback((message: string) => {
     setToastMessage(message);
     setTimeout(() => {
       setToastMessage(null);
     }, 3000);
-  };
+  }, []);
 
-  const handleCopyCode = (button: typeof buttonsData[0]) => {
+  const handleCopyCode = useCallback((button: typeof buttonsData[0]) => {
     const code = getComponentCode(button);
     navigator.clipboard.writeText(code)
       .then(() => showToast(`Copied ${button.label} component code!`))
       .catch(() => showToast("Failed to copy code."));
-  };
+  }, [showToast]);
 
-  const handleCopyCardCode = (card: CardConfig) => {
+  const handleCopyCardCode = useCallback((card: CardConfig) => {
     const code = getCardComponentCode(card);
     navigator.clipboard.writeText(code)
       .then(() => showToast(`Copied ${card.label} component code!`))
       .catch(() => showToast("Failed to copy code."));
-  };
+  }, [showToast]);
 
-  const copyCliCommand = (text: string, id: string) => {
+  const copyCliCommand = useCallback((text: string, id: string) => {
     navigator.clipboard.writeText(text)
       .then(() => {
         setCopiedText(id);
         setTimeout(() => setCopiedText(null), 2000);
       })
       .catch(() => showToast("Failed to copy command."));
-  };
+  }, [showToast]);
 
-  const handleThemeToggle = () => {
+  const handleThemeToggle = useCallback(() => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(nextTheme);
     navigator.clipboard.writeText(ThemeToggleCode)
       .then(() => showToast("Theme toggled & ThemeToggle code copied!"))
       .catch(() => showToast("Failed to copy theme code."));
-  };
+  }, [theme, showToast]);
 
   const displayedButtons = useMemo(() => {
     let sorted = [...buttonsData];
@@ -345,60 +339,6 @@ export default function App() {
                     </motion.div>
                     <span>Browse Components</span>
                   </motion.button>
-                </div>
-
-                {/* Example Showcase Marquee Section */}
-                <div className="w-full mt-14 max-w-[1240px]">
-                  <div className="text-center sm:text-left mb-6">
-                    <h3 className={`text-[12px] font-bold tracking-widest uppercase opacity-45 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                      Example Showcase
-                    </h3>
-                  </div>
-                  
-                  {/* Scrolling Row */}
-                  <div className="relative w-full overflow-x-auto py-6 no-scrollbar">
-                    <div className="flex items-center gap-8 min-w-max px-4">
-                      {/* Item 1: Cascade Stagger */}
-                      <div className={`relative flex flex-col items-center justify-center w-[200px] h-[250px] rounded-[20px] transition-all duration-300 ${theme === 'dark' ? 'bg-[#181818] border border-white/5' : 'bg-white border border-neutral-200/60 shadow-sm'}`}>
-                        <div className="h-[170px] flex items-center justify-center">
-                          <CardCascadeStagger images={cardShowcaseImages} className="scale-[1.05]" />
-                        </div>
-                        <span className={`text-[11.5px] font-medium tracking-tight mt-1.5 ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>
-                          Cascade Stagger
-                        </span>
-                      </div>
-
-                      {/* Item 2: Scatter Spread */}
-                      <div className={`relative flex flex-col items-center justify-center w-[200px] h-[250px] rounded-[20px] transition-all duration-300 ${theme === 'dark' ? 'bg-[#181818] border border-white/5' : 'bg-white border border-neutral-200/60 shadow-sm'}`}>
-                        <div className="h-[170px] flex items-center justify-center">
-                          <CardScatterSpread images={cardShowcaseImages} className="scale-[1.05]" />
-                        </div>
-                        <span className={`text-[11.5px] font-medium tracking-tight mt-1.5 ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>
-                          Scatter Desk Deal
-                        </span>
-                      </div>
-
-                      {/* Item 3: Wheel Radial */}
-                      <div className={`relative flex flex-col items-center justify-center w-[200px] h-[250px] rounded-[20px] transition-all duration-300 ${theme === 'dark' ? 'bg-[#181818] border border-white/5' : 'bg-white border border-neutral-200/60 shadow-sm'}`}>
-                        <div className="h-[170px] flex items-center justify-center">
-                          <CardWheelFan images={cardShowcaseImages} className="scale-[1.05]" />
-                        </div>
-                        <span className={`text-[11.5px] font-medium tracking-tight mt-1.5 ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>
-                          Wheel Radial Fan
-                        </span>
-                      </div>
-
-                      {/* Item 4: ARC (5 Cards) */}
-                      <div className={`relative flex flex-col items-center justify-center w-[200px] h-[250px] rounded-[20px] transition-all duration-300 ${theme === 'dark' ? 'bg-[#181818] border border-white/5' : 'bg-white border border-neutral-200/60 shadow-sm'}`}>
-                        <div className="h-[170px] flex items-center justify-center">
-                          <CardArc5 images={cardShowcaseImages} className="scale-[1.05]" />
-                        </div>
-                        <span className={`text-[11.5px] font-medium tracking-tight mt-1.5 ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>
-                          ARC (5 Cards)
-                        </span>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 {/* Filter and layout controls */}

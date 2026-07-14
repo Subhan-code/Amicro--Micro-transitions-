@@ -8,7 +8,7 @@ interface CardScatterSpreadProps {
   images?: string[];
 }
 
-export function CardScatterSpread({
+export const CardScatterSpread = React.memo(function CardScatterSpread({
   className = '',
   cardClassName = 'bg-neutral-400 dark:bg-neutral-800',
   hovered,
@@ -72,4 +72,4 @@ export function CardScatterSpread({
       })}
     </div>
   );
-}
+});
