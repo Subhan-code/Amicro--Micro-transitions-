@@ -13,7 +13,7 @@ interface CardArc5Props {
   images?: string[];
 }
 
-export function CardArc5({
+export const CardArc5 = React.memo(function CardArc5({
   angle = 30,
   gap = 70,
   yOffset = 10,
@@ -83,4 +83,4 @@ export function CardArc5({
       })}
     </div>
   );
-}
+});

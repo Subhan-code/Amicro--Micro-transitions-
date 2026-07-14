@@ -8,7 +8,7 @@ interface CardWheelFanProps {
   images?: string[];
 }
 
-export function CardWheelFan({
+export const CardWheelFan = React.memo(function CardWheelFan({
   className = '',
   cardClassName = 'bg-neutral-400 dark:bg-neutral-800',
   hovered,
@@ -71,4 +71,4 @@ export function CardWheelFan({
       })}
     </div>
   );
-}
+});

@@ -8,7 +8,7 @@ interface CardCascadeStaggerProps {
   images?: string[];
 }
 
-export function CardCascadeStagger({
+export const CardCascadeStagger = React.memo(function CardCascadeStagger({
   className = '',
   cardClassName = 'bg-neutral-400 dark:bg-neutral-800',
   hovered,
@@ -66,4 +66,4 @@ export function CardCascadeStagger({
       })}
     </div>
   );
-}
+});

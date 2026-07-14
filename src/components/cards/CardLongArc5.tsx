@@ -13,7 +13,7 @@ interface CardLongArc5Props {
   images?: string[];
 }
 
-export function CardLongArc5({
+export const CardLongArc5 = React.memo(function CardLongArc5({
   angle = 15,
   gap = 140,
   yOffset = 20,
@@ -82,4 +82,4 @@ export function CardLongArc5({
       })}
     </div>
   );
-}
+});
