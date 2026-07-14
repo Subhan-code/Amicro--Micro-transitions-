@@ -21,17 +21,38 @@ export function AnimatedButton({ config, layoutMode, theme = 'dark' }: AnimatedB
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
+    // Only hover on devices supporting hover to prevent sticky mobile states
+    if (window.matchMedia('(hover: hover)').matches) {
+      setIsHovered(true);
+    }
     if (config.interactionType === 'morph' && (config.id === '4' || config.id === '21' || config.id === '22' || config.id === '24' || config.id === '25')) {
       setHasInteracted(true);
     }
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
+    if (window.matchMedia('(hover: hover)').matches) {
+      setIsHovered(false);
+    }
     if (hasInteracted) {
       setTimeout(() => setHasInteracted(false), 500);
     }
+  };
+
+  const handleTouchStart = () => {
+    setIsHovered(true);
+    if (config.interactionType === 'morph' && (config.id === '4' || config.id === '21' || config.id === '22' || config.id === '24' || config.id === '25')) {
+      setHasInteracted(true);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setTimeout(() => {
+      setIsHovered(false);
+      if (hasInteracted) {
+        setTimeout(() => setHasInteracted(false), 500);
+      }
+    }, 500);
   };
 
   const showIcon2 = hasInteracted || isHovered;
@@ -266,6 +287,8 @@ export function AnimatedButton({ config, layoutMode, theme = 'dark' }: AnimatedB
       onMouseLeave={handleMouseLeave}
       onFocus={handleMouseEnter}
       onBlur={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       animate={{ 
         paddingLeft: isMatrix ? 16 : (isHovered ? 28 : 24), 
         paddingRight: isMatrix ? 16 : (isHovered ? 28 : 24),
