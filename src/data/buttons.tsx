@@ -19,7 +19,8 @@ export type InteractionType =
   | 'glare'
   | 'text-reveal'
   | 'magnetic'
-  | 'expand-ring';
+  | 'expand-ring'
+  | 'focus-blur';
 
 export interface ButtonConfig {
   id: string;
@@ -73,4 +74,5 @@ export const buttonsData: ButtonConfig[] = [
   { id: '32', label: 'Text Reveal', icon1: ArrowRight, interactionType: 'text-reveal', hoverBg: '#1f1f1f' },
   { id: '33', label: 'Magnetic Field', icon1: Github, interactionType: 'magnetic', hoverBg: '#1f1f1f' },
   { id: '34', label: 'Expand Ring', icon1: Link, interactionType: 'expand-ring', hoverBg: '#1f1f1f' },
+  { id: '35', label: 'Focus Blur Links', icon1: Link, interactionType: 'focus-blur', hoverBg: '#1f1f1f' },
 ];

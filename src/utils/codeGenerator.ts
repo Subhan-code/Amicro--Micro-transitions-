@@ -474,6 +474,80 @@ export default function ExpandRingButton() {
   );
 }`;
 
+    case 'focus-blur':
+      return `import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+interface FocusBlurItem {
+  label: string;
+  href?: string;
+}
+
+interface FocusBlurProps {
+  items?: FocusBlurItem[];
+  blurAmount?: number;
+  opacityAmount?: number;
+  showBrackets?: boolean;
+  className?: string;
+}
+
+export default function FocusBlur({
+  items = [
+    { label: '@Twitter', href: '#' },
+    { label: '@Threads', href: '#' },
+    { label: '@Instagram', href: '#' },
+    { label: '@GitHub', href: '#' }
+  ],
+  blurAmount = 4,
+  opacityAmount = 0.4,
+  showBrackets = true,
+  className = ''
+}: FocusBlurProps) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <div className={\`flex flex-wrap justify-center items-center gap-6 py-6 px-10 cursor-default \${className}\`}>
+      {items.map((item, index) => {
+        const isHovered = hoveredIndex === index;
+        const isAnyHovered = hoveredIndex !== null;
+        const isInactive = isAnyHovered && !isHovered;
+
+        return (
+          <a
+            key={index}
+            href={item.href || '#'}
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(null)}
+            className="relative font-semibold text-lg sm:text-2xl no-underline transition-all duration-300 select-none outline-none"
+            style={{
+              filter: isInactive ? \`blur(\${blurAmount}px)\` : 'none',
+              opacity: isInactive ? opacityAmount : 1,
+              color: isHovered ? '#3b82f6' : 'inherit'
+            }}
+          >
+            <span className="relative z-10">{item.label}</span>
+            
+            {showBrackets && (
+              <AnimatePresence>
+                {isHovered && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 1.3 }}
+                    animate={{ opacity: 1, scale: 1.1 }}
+                    exit={{ opacity: 0, scale: 1.3 }}
+                    transition={{ type: 'spring', stiffness: 350, damping: 20 }}
+                    className="absolute inset-0 border-2 border-dashed border-neutral-700 rounded-lg pointer-events-none z-0"
+                    style={{ margin: '-4px -8px' }}
+                  />
+                )}
+              </AnimatePresence>
+            )}
+          </a>
+        );
+      })}
+    </div>
+  );
+}`;
+
     default:
       return `// No interaction component defined for this type.`;
   }
@@ -963,80 +1037,6 @@ export default function CardStampArc({
   );
 }`;
 
-    case 'focus-blur':
-      return `import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-
-interface FocusBlurItem {
-  label: string;
-  href?: string;
-}
-
-interface FocusBlurProps {
-  items?: FocusBlurItem[];
-  blurAmount?: number;
-  opacityAmount?: number;
-  showBrackets?: boolean;
-  className?: string;
-}
-
-export default function FocusBlur({
-  items = [
-    { label: '@Twitter', href: '#' },
-    { label: '@Threads', href: '#' },
-    { label: '@Instagram', href: '#' },
-    { label: '@GitHub', href: '#' }
-  ],
-  blurAmount = 4,
-  opacityAmount = 0.4,
-  showBrackets = true,
-  className = ''
-}: FocusBlurProps) {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
-  return (
-    <div className={\`flex flex-wrap justify-center items-center gap-6 py-6 px-10 cursor-default \${className}\`}>
-      {items.map((item, index) => {
-        const isHovered = hoveredIndex === index;
-        const isAnyHovered = hoveredIndex !== null;
-        const isInactive = isAnyHovered && !isHovered;
-
-        return (
-          <a
-            key={index}
-            href={item.href || '#'}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
-            className="relative font-semibold text-lg sm:text-2xl no-underline transition-all duration-300 select-none outline-none"
-            style={{
-              filter: isInactive ? \`blur(\${blurAmount}px)\` : 'none',
-              opacity: isInactive ? opacityAmount : 1,
-              color: isHovered ? '#3b82f6' : 'inherit'
-            }}
-          >
-            <span className="relative z-10">{item.label}</span>
-            
-            {showBrackets && (
-              <AnimatePresence>
-                {isHovered && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 1.3 }}
-                    animate={{ opacity: 1, scale: 1.1 }}
-                    exit={{ opacity: 0, scale: 1.3 }}
-                    transition={{ type: 'spring', stiffness: 350, damping: 20 }}
-                    className="absolute inset-0 border-2 border-dashed border-neutral-700 rounded-lg pointer-events-none z-0"
-                    style={{ margin: '-4px -8px' }}
-                  />
-                )}
-              </AnimatePresence>
-            )}
-          </a>
-        );
-      })}
-    </div>
-  );
-}`;
-
     case 'card-cascade-stagger':
       return `import React, { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -1191,6 +1191,889 @@ export default function CardWheelFan({
           />
         );
       })}
+    </div>
+  );
+}`;
+
+    case 'card-carousel':
+      return `import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+const DEFAULT_ASSETS = [
+  {
+    src: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
+    title: 'Sunset Beach',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=80',
+    title: 'Misty Mountains',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=600&q=80',
+    title: 'Forest Trail',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=80',
+    title: 'Sunlight Woods',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=600&q=80',
+    title: 'Green Hills',
+  },
+];
+
+interface CardCarouselProps {
+  className?: string;
+  images?: { src: string; title: string }[];
+}
+
+export default function CardCarousel({
+  className = '',
+  images = DEFAULT_ASSETS
+}: CardCarouselProps) {
+  const [activeIndex, setActiveIndex] = useState(2);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const toPrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveIndex(prev => Math.max(0, prev - 1));
+  };
+
+  const toNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveIndex(prev => Math.min(images.length - 1, prev + 1));
+  };
+
+  const toSlide = (e: React.MouseEvent, index: number) => {
+    e.stopPropagation();
+    setActiveIndex(index);
+  };
+
+  const slideWidth = 160;
+
+  return (
+    <div 
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={\`w-full h-full flex flex-col items-center justify-center relative overflow-hidden select-none \${className}\`}
+    >
+      <div 
+        className="relative h-[180px] flex items-center justify-start overflow-visible"
+        style={{ width: \`\${slideWidth}px\` }}
+      >
+        <motion.div 
+          className="flex w-fit items-center"
+          animate={{ x: -activeIndex * slideWidth }}
+          transition={{ type: 'spring', bounce: 0.1, duration: 0.8 }}
+        >
+          {images.map((item, i) => {
+            const isActive = activeIndex === i;
+            const diff = i - activeIndex;
+
+            const targetRotate = isHovered ? diff * 20 : diff * 5;
+            const targetScale = isActive ? 1.05 : (isHovered ? 0.65 : 0.8);
+            const targetY = isHovered ? diff * 24 : 0;
+
+            return (
+              <motion.div 
+                key={i}
+                className="shrink-0 flex flex-col items-center gap-1.5 will-change-[transform,scale]"
+                style={{ width: \`\${slideWidth}px\` }}
+                animate={{ 
+                  rotate: targetRotate, 
+                  scale: targetScale, 
+                  y: targetY 
+                }}
+                transition={{ type: 'spring', bounce: 0.2, duration: 0.8 }}
+              >
+                <div 
+                  className={\`text-[10px] md:text-xs font-semibold whitespace-nowrap transition-all duration-300 \${isActive ? 'opacity-100 scale-100 text-white' : 'opacity-0 scale-75 text-neutral-400'}\`} 
+                >
+                  {item.title}
+                </div>
+
+                <img 
+                  src={item.src} 
+                  alt={item.title} 
+                  referrerPolicy="no-referrer"
+                  className="w-[110px] h-[110px] object-cover rounded-xl shadow-lg border border-white/10 cursor-pointer" 
+                  onClick={(e) => toSlide(e, i)} 
+                />
+              </motion.div>
+            )
+          })}
+        </motion.div>
+      </div>
+
+      <div className="mt-4 px-1.5 py-0.5 flex items-center gap-2 justify-center text-neutral-400 rounded-full bg-neutral-900/60 backdrop-blur-md border border-white/5 shadow-md z-20">
+        <button onClick={toPrev} className="p-1 cursor-pointer hover:bg-white/5 rounded-full transition-colors border-0 bg-transparent text-neutral-400 hover:text-white">
+          <ChevronLeft className="w-3.5 h-3.5" />
+        </button>
+        <div className="flex justify-center items-center gap-1">
+          {images.map((_, i) => (
+            <div 
+              key={i} 
+              onClick={(e) => toSlide(e, i)}
+              className={\`rounded-full cursor-pointer h-1 transition-all duration-300 \${activeIndex === i ? 'w-4 bg-white' : 'w-1 bg-white/30 hover:bg-white/50'}\`}>
+            </div>
+          ))}
+        </div>
+        <button onClick={toNext} className="p-1 cursor-pointer hover:bg-white/5 rounded-full transition-colors border-0 bg-transparent text-neutral-400 hover:text-white">
+          <ChevronRight className="w-3.5 h-3.5" />
+        </button>
+      </div>
+    </div>
+  );
+}`;
+
+    case 'card-cover-flow':
+      return `import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+const DEFAULT_ASSETS = [
+  {
+    src: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
+    title: 'Sunset Beach',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=80',
+    title: 'Misty Mountains',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=600&q=80',
+    title: 'Forest Trail',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=80',
+    title: 'Sunlight Woods',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=600&q=80',
+    title: 'Green Hills',
+  },
+];
+
+interface CardCoverFlowProps {
+  className?: string;
+  images?: { src: string; title: string }[];
+}
+
+export default function CardCoverFlow({
+  className = '',
+  images = DEFAULT_ASSETS
+}: CardCoverFlowProps) {
+  const [activeIndex, setActiveIndex] = useState(2);
+
+  const toPrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveIndex(prev => Math.max(0, prev - 1));
+  };
+
+  const toNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveIndex(prev => Math.min(images.length - 1, prev + 1));
+  };
+
+  const toSlide = (e: React.MouseEvent, index: number) => {
+    e.stopPropagation();
+    setActiveIndex(index);
+  };
+
+  return (
+    <div className={\`w-full h-full flex flex-col items-center justify-center relative overflow-hidden select-none bg-zinc-950/40 rounded-2xl \${className}\`} style={{ perspective: '1000px' }}>
+      <div className="w-full flex justify-center items-center relative h-[140px] [transform-style:preserve-3d]">
+        {images.map((item, i) => {
+          const isActive = activeIndex === i;
+          const offset = i - activeIndex;
+          const absOffset = Math.abs(offset);
+          const isPast = i < activeIndex;
+          
+          return (
+            <motion.div 
+              key={i}
+              className="absolute w-[80px] aspect-[3/4] cursor-pointer"
+              initial={false}
+              animate={{ 
+                x: offset * 32,
+                rotateY: isActive ? 0 : (isPast ? 38 : -38),
+                z: isActive ? 50 : -absOffset * 50,
+                scale: isActive ? 1.1 : 1 - (absOffset * 0.08),
+                opacity: absOffset > 2 ? 0 : 1 - (absOffset * 0.25)
+              }}
+              transition={{ type: 'spring', stiffness: 200, damping: 25 }}
+              style={{ zIndex: 100 - absOffset }}
+              onClick={(e) => toSlide(e, i)}
+            >
+              <img 
+                src={item.src} 
+                alt={item.title} 
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover rounded-xl shadow-2xl border border-white/10" 
+              />
+              <motion.div 
+                className="absolute -bottom-6 left-[-20px] right-[-20px] text-center text-[10px] font-semibold text-white/80 whitespace-nowrap overflow-hidden text-ellipsis"
+                animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : -5 }}
+              >
+                {item.title}
+              </motion.div>
+            </motion.div>
+          )
+        })}
+      </div>
+
+      <div className="mt-6 w-fit px-1.5 py-0.5 flex items-center gap-2 justify-center text-zinc-300 rounded-full bg-white/5 backdrop-blur-md border border-white/10 shadow-sm z-20">
+        <button onClick={toPrev} className="p-1 cursor-pointer hover:bg-white/10 rounded-full transition-colors border-0 bg-transparent text-neutral-300 hover:text-white">
+          <ChevronLeft className="w-3.5 h-3.5" />
+        </button>
+        <div className="flex justify-center items-center gap-1">
+          {images.map((_, i) => (
+            <div 
+              key={i} 
+              onClick={(e) => toSlide(e, i)}
+              className={\`rounded-full cursor-pointer h-1 transition-all duration-300 \${activeIndex === i ? 'w-4 bg-white' : 'w-1 bg-white/30 hover:bg-white/50'}\`}>
+            </div>
+          ))}
+        </div>
+        <button onClick={toNext} className="p-1 cursor-pointer hover:bg-white/10 rounded-full transition-colors border-0 bg-transparent text-neutral-300 hover:text-white">
+          <ChevronRight className="w-3.5 h-3.5" />
+        </button>
+      </div>
+    </div>
+  );
+}`;
+
+    case 'card-time-machine':
+      return `import React, { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
+
+const TIMELINE_DATA = [
+  { date: 'Today', src: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80', title: 'Sunset Beach' },
+  { date: '1d ago', src: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=80', title: 'Misty Mountains' },
+  { date: '1w ago', src: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=600&q=80', title: 'Forest Trail' },
+  { date: '1m ago', src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=80', title: 'Sunlight Woods' },
+  { date: '1y ago', src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=600&q=80', title: 'Green Hills' },
+];
+
+interface CardTimeMachineProps {
+  className?: string;
+}
+
+export default function CardTimeMachine({
+  className = ''
+}: CardTimeMachineProps) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const handleTimelineHover = (index: number) => {
+    setHoveredIndex(index);
+    setActiveIndex(Math.round(index));
+  };
+
+  const timelineNodes = useMemo(() => {
+    const nodes: { type: 'main' | 'sub'; index: number; date?: string }[] = [];
+    TIMELINE_DATA.forEach((item, i) => {
+      nodes.push({ type: 'main', index: i, date: item.date });
+      if (i < TIMELINE_DATA.length - 1) {
+        for (let j = 0; j < 2; j++) {
+          nodes.push({ type: 'sub', index: i + (j + 1) * 0.33 });
+        }
+      }
+    });
+    return nodes;
+  }, []);
+
+  return (
+    <div className={\`w-full h-full bg-[#09090b]/80 flex flex-row items-center justify-center gap-6 relative overflow-hidden rounded-2xl border border-white/5 p-4 \${className}\`}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="absolute w-0 h-0"
+        version="1.1"
+      >
+        <defs>
+          <filter id="SkiperSquiCircleFilterLayout">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+            <feColorMatrix
+              in="blur"
+              mode="matrix"
+              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -6"
+              result="goo"
+            />
+            <feBlend in="SourceGraphic" in2="goo" />
+          </filter>
+        </defs>
+      </svg>
+      
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03),transparent_70%)] pointer-events-none" />
+
+      <div 
+        className="relative flex-1 max-w-[290px] aspect-[4/3] flex items-center justify-center"
+        style={{ perspective: '800px' }}
+      >
+        {TIMELINE_DATA.map((item, i) => {
+          const offset = i - activeIndex;
+          const isPast = i < activeIndex;
+
+          return (
+            <motion.div
+              key={i}
+              className="absolute rounded-2xl flex h-[135px] w-[220px] origin-center flex-col overflow-hidden pointer-events-none"
+              initial={false}
+              animate={{
+                z: isPast ? 200 : -offset * 60,
+                y: isPast ? 300 : -offset * 12,
+                rotateX: isPast ? -20 : offset * 2,
+                opacity: isPast ? 0 : 1 - Math.abs(offset) * 0.2,
+                scale: isPast ? 1.3 : 1,
+              }}
+              transition={{ 
+                type: 'spring', 
+                stiffness: 250, 
+                damping: 25, 
+                mass: 0.8 
+              }}
+              style={{
+                zIndex: TIMELINE_DATA.length - i,
+                filter: "url(#SkiperSquiCircleFilterLayout)"
+              }}
+            >
+              <img src={item.src} alt={item.title} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-black/10 pointer-events-none" />
+            </motion.div>
+          );
+        })}
+      </div>
+
+      <div 
+        className="relative flex flex-col items-end z-50 py-2 px-1"
+        onMouseLeave={() => setHoveredIndex(null)}
+      >
+        {timelineNodes.map((node, i) => {
+          if (node.type === 'main') {
+            const index = node.index;
+            const isSelected = activeIndex === index;
+
+            return (
+              <button
+                key={\`main-\${index}\`}
+                className="relative inline-flex items-center justify-end py-[1px] w-20 group cursor-pointer border-0 bg-transparent"
+                onMouseEnter={() => handleTimelineHover(index)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveIndex(index);
+                }}
+              >
+                {hoveredIndex === index ? (
+                  <motion.span
+                    className={\`absolute top-0 right-10 text-[10px] font-semibold whitespace-nowrap \${
+                      isSelected
+                        ? 'text-blue-500'
+                        : 'text-white/90'
+                    }\`}
+                    initial={{ opacity: 0, filter: \`blur(2px)\`, scale: 0.8 }}
+                    animate={{ opacity: 1, filter: \`blur(0px)\`, scale: 1 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    {node.date}
+                  </motion.span>
+                ) : null}
+                <motion.div
+                  className={\`h-[3px] w-[24px] rounded-full origin-right transition-colors \${
+                    isSelected
+                      ? 'bg-blue-500'
+                      : 'bg-white/50 group-hover:bg-white/80'
+                  }\`}
+                  animate={{
+                    scaleX: hoveredIndex === null ? 1 : (isSelected ? 1.4 : (Math.abs(index - hoveredIndex) < 0.5 ? 1.25 : 1)),
+                  }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                />
+              </button>
+            );
+          } else {
+            const isHoveringNear = hoveredIndex !== null && Math.abs(node.index - hoveredIndex) <= 0.5;
+
+            return (
+              <div 
+                key={\`sub-\${node.index}\`} 
+                className="py-[1px] w-20 flex justify-end cursor-pointer"
+                onMouseEnter={() => handleTimelineHover(node.index)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveIndex(Math.round(node.index));
+                }}
+              >
+                <motion.div
+                  className="h-[3px] w-[24px] rounded-full bg-white/20 origin-right"
+                  animate={{
+                    scaleX: hoveredIndex === null ? 1 : (isHoveringNear ? 1.15 : 1),
+                    opacity: hoveredIndex === null ? 0.3 : (isHoveringNear ? 0.5 : 0.3)
+                  }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                />
+              </div>
+            );
+          }
+        })}
+      </div>
+    </div>
+  );
+}`;
+
+    case 'card-carousel-mono':
+      return `import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+const DEFAULT_ASSETS = [
+  {
+    src: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
+    title: 'Sunset Beach',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=80',
+    title: 'Misty Mountains',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=600&q=80',
+    title: 'Forest Trail',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=80',
+    title: 'Sunlight Woods',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=600&q=80',
+    title: 'Green Hills',
+  },
+];
+
+interface CardCarouselProps {
+  className?: string;
+  images?: { src: string; title: string }[];
+  isMonochrome?: boolean;
+}
+
+export default function CardCarousel({
+  className = '',
+  images = DEFAULT_ASSETS,
+  isMonochrome = true
+}: CardCarouselProps) {
+  const [activeIndex, setActiveIndex] = useState(2);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const toPrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveIndex(prev => Math.max(0, prev - 1));
+  };
+
+  const toNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveIndex(prev => Math.min(images.length - 1, prev + 1));
+  };
+
+  const toSlide = (e: React.MouseEvent, index: number) => {
+    e.stopPropagation();
+    setActiveIndex(index);
+  };
+
+  const slideWidth = 160;
+
+  return (
+    <div 
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={\`w-full h-full flex flex-col items-center justify-center relative overflow-hidden select-none \${className}\`}
+    >
+      <div 
+        className="relative h-[180px] flex items-center justify-start overflow-visible"
+        style={{ width: \`\${slideWidth}px\` }}
+      >
+        <motion.div 
+          className="flex w-fit items-center"
+          animate={{ x: -activeIndex * slideWidth }}
+          transition={{ type: 'spring', bounce: 0.1, duration: 0.8 }}
+        >
+          {images.map((item, i) => {
+            const isActive = activeIndex === i;
+            const diff = i - activeIndex;
+
+            const targetRotate = isHovered ? diff * 20 : diff * 5;
+            const targetScale = isActive ? 1.05 : (isHovered ? 0.65 : 0.8);
+            const targetY = isHovered ? diff * 24 : 0;
+
+            return (
+              <motion.div 
+                key={i}
+                className="shrink-0 flex flex-col items-center gap-1.5 will-change-[transform,scale]"
+                style={{ width: \`\${slideWidth}px\` }}
+                animate={{ 
+                  rotate: targetRotate, 
+                  scale: targetScale, 
+                  y: targetY 
+                }}
+                transition={{ type: 'spring', bounce: 0.2, duration: 0.8 }}
+              >
+                <div 
+                  className={\`text-[10px] md:text-xs font-semibold whitespace-nowrap transition-all duration-300 \${isActive ? 'opacity-100 scale-100 text-white' : 'opacity-0 scale-75 text-neutral-400'}\`} 
+                >
+                  {isMonochrome ? \`Card \${i + 1}\` : item.title}
+                </div>
+
+                {isMonochrome ? (
+                  <div 
+                    onClick={(e) => toSlide(e, i)}
+                    className="w-[110px] h-[110px] rounded-xl bg-neutral-400 dark:bg-neutral-800 border border-neutral-200/20 shadow-lg flex items-center justify-center text-neutral-600 dark:text-neutral-400 font-bold text-sm cursor-pointer"
+                  >
+                    {i + 1}
+                  </div>
+                ) : (
+                  <img 
+                    src={item.src} 
+                    alt={item.title} 
+                    referrerPolicy="no-referrer"
+                    className="w-[110px] h-[110px] object-cover rounded-xl shadow-lg border border-white/10 cursor-pointer" 
+                    onClick={(e) => toSlide(e, i)} 
+                  />
+                )}
+              </motion.div>
+            )
+          })}
+        </motion.div>
+      </div>
+
+      <div className="mt-4 px-1.5 py-0.5 flex items-center gap-2 justify-center text-neutral-400 rounded-full bg-neutral-900/60 backdrop-blur-md border border-white/5 shadow-md z-20">
+        <button onClick={toPrev} className="p-1 cursor-pointer hover:bg-white/5 rounded-full transition-colors border-0 bg-transparent text-neutral-400 hover:text-white">
+          <ChevronLeft className="w-3.5 h-3.5" />
+        </button>
+        <div className="flex justify-center items-center gap-1">
+          {images.map((_, i) => (
+            <div 
+              key={i} 
+              onClick={(e) => toSlide(e, i)}
+              className={\`rounded-full cursor-pointer h-1 transition-all duration-300 \${activeIndex === i ? 'w-4 bg-white' : 'w-1 bg-white/30 hover:bg-white/50'}\`}>
+            </div>
+          ))}
+        </div>
+        <button onClick={toNext} className="p-1 cursor-pointer hover:bg-white/5 rounded-full transition-colors border-0 bg-transparent text-neutral-400 hover:text-white">
+          <ChevronRight className="w-3.5 h-3.5" />
+        </button>
+      </div>
+    </div>
+  );
+}`;
+
+    case 'card-cover-flow-mono':
+      return `import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+const DEFAULT_ASSETS = [
+  {
+    src: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
+    title: 'Sunset Beach',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=80',
+    title: 'Misty Mountains',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=600&q=80',
+    title: 'Forest Trail',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=80',
+    title: 'Sunlight Woods',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=600&q=80',
+    title: 'Green Hills',
+  },
+];
+
+interface CardCoverFlowProps {
+  className?: string;
+  images?: { src: string; title: string }[];
+  isMonochrome?: boolean;
+}
+
+export default function CardCoverFlow({
+  className = '',
+  images = DEFAULT_ASSETS,
+  isMonochrome = true
+}: CardCoverFlowProps) {
+  const [activeIndex, setActiveIndex] = useState(2);
+
+  const toPrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveIndex(prev => Math.max(0, prev - 1));
+  };
+
+  const toNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveIndex(prev => Math.min(images.length - 1, prev + 1));
+  };
+
+  const toSlide = (e: React.MouseEvent, index: number) => {
+    e.stopPropagation();
+    setActiveIndex(index);
+  };
+
+  return (
+    <div className={\`w-full h-full flex flex-col items-center justify-center relative overflow-hidden select-none bg-zinc-950/40 rounded-2xl \${className}\`} style={{ perspective: '1000px' }}>
+      <div className="w-full flex justify-center items-center relative h-[140px] [transform-style:preserve-3d]">
+        {images.map((item, i) => {
+          const isActive = activeIndex === i;
+          const offset = i - activeIndex;
+          const absOffset = Math.abs(offset);
+          const isPast = i < activeIndex;
+          
+          return (
+            <motion.div 
+              key={i}
+              className="absolute w-[80px] aspect-[3/4] cursor-pointer"
+              initial={false}
+              animate={{ 
+                x: offset * 32,
+                rotateY: isActive ? 0 : (isPast ? 38 : -38),
+                z: isActive ? 50 : -absOffset * 50,
+                scale: isActive ? 1.1 : 1 - (absOffset * 0.08),
+                opacity: absOffset > 2 ? 0 : 1 - (absOffset * 0.25)
+              }}
+              transition={{ type: 'spring', stiffness: 200, damping: 25 }}
+              style={{ zIndex: 100 - absOffset }}
+              onClick={(e) => toSlide(e, i)}
+            >
+              {isMonochrome ? (
+                <div 
+                  className="w-full h-full rounded-xl bg-neutral-400 dark:bg-neutral-800 border border-neutral-200/20 shadow-2xl flex items-center justify-center text-neutral-600 dark:text-neutral-400 font-bold text-sm"
+                >
+                  {i + 1}
+                </div>
+              ) : (
+                <img 
+                  src={item.src} 
+                  alt={item.title} 
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover rounded-xl shadow-2xl border border-white/10" 
+                />
+              )}
+              <motion.div 
+                className="absolute -bottom-6 left-[-20px] right-[-20px] text-center text-[10px] font-semibold text-white/80 whitespace-nowrap overflow-hidden text-ellipsis"
+                animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : -5 }}
+              >
+                {isMonochrome ? \`Card \${i + 1}\` : item.title}
+              </motion.div>
+            </motion.div>
+          )
+        })}
+      </div>
+
+      <div className="mt-6 w-fit px-1.5 py-0.5 flex items-center gap-2 justify-center text-zinc-300 rounded-full bg-white/5 backdrop-blur-md border border-white/10 shadow-sm z-20">
+        <button onClick={toPrev} className="p-1 cursor-pointer hover:bg-white/10 rounded-full transition-colors border-0 bg-transparent text-neutral-300 hover:text-white">
+          <ChevronLeft className="w-3.5 h-3.5" />
+        </button>
+        <div className="flex justify-center items-center gap-1">
+          {images.map((_, i) => (
+            <div 
+              key={i} 
+              onClick={(e) => toSlide(e, i)}
+              className={\`rounded-full cursor-pointer h-1 transition-all duration-300 \${activeIndex === i ? 'w-4 bg-white' : 'w-1 bg-white/30 hover:bg-white/50'}\`}>
+            </div>
+          ))}
+        </div>
+        <button onClick={toNext} className="p-1 cursor-pointer hover:bg-white/10 rounded-full transition-colors border-0 bg-transparent text-neutral-300 hover:text-white">
+          <ChevronRight className="w-3.5 h-3.5" />
+        </button>
+      </div>
+    </div>
+  );
+}`;
+
+    case 'card-time-machine-mono':
+      return `import React, { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
+
+const TIMELINE_DATA = [
+  { date: 'Today', src: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80', title: 'Sunset Beach' },
+  { date: '1d ago', src: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=600&q=80', title: 'Misty Mountains' },
+  { date: '1w ago', src: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=600&q=80', title: 'Forest Trail' },
+  { date: '1m ago', src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=80', title: 'Sunlight Woods' },
+  { date: '1y ago', src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=600&q=80', title: 'Green Hills' },
+];
+
+interface CardTimeMachineProps {
+  className?: string;
+  isMonochrome?: boolean;
+}
+
+export default function CardTimeMachine({
+  className = '',
+  isMonochrome = true
+}: CardTimeMachineProps) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const handleTimelineHover = (index: number) => {
+    setHoveredIndex(index);
+    setActiveIndex(Math.round(index));
+  };
+
+  const timelineNodes = useMemo(() => {
+    const nodes: { type: 'main' | 'sub'; index: number; date?: string }[] = [];
+    TIMELINE_DATA.forEach((item, i) => {
+      nodes.push({ type: 'main', index: i, date: item.date });
+      if (i < TIMELINE_DATA.length - 1) {
+        for (let j = 0; j < 2; j++) {
+          nodes.push({ type: 'sub', index: i + (j + 1) * 0.33 });
+        }
+      }
+    });
+    return nodes;
+  }, []);
+
+  return (
+    <div className={\`w-full h-full bg-[#09090b]/80 flex flex-row items-center justify-center gap-6 relative overflow-hidden rounded-2xl border border-white/5 p-4 \${className}\`}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="absolute w-0 h-0"
+        version="1.1"
+      >
+        <defs>
+          <filter id="SkiperSquiCircleFilterLayout">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+            <feColorMatrix
+              in="blur"
+              mode="matrix"
+              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -6"
+              result="goo"
+            />
+            <feBlend in="SourceGraphic" in2="goo" />
+          </filter>
+        </defs>
+      </svg>
+      
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03),transparent_70%)] pointer-events-none" />
+
+      <div 
+        className="relative flex-1 max-w-[290px] aspect-[4/3] flex items-center justify-center"
+        style={{ perspective: '800px' }}
+      >
+        {TIMELINE_DATA.map((item, i) => {
+          const offset = i - activeIndex;
+          const isPast = i < activeIndex;
+
+          return (
+            <motion.div
+              key={i}
+              className="absolute rounded-2xl flex h-[135px] w-[220px] origin-center flex-col overflow-hidden pointer-events-none"
+              initial={false}
+              animate={{
+                z: isPast ? 200 : -offset * 60,
+                y: isPast ? 300 : -offset * 12,
+                rotateX: isPast ? -20 : offset * 2,
+                opacity: isPast ? 0 : 1 - Math.abs(offset) * 0.2,
+                scale: isPast ? 1.3 : 1,
+              }}
+              transition={{ 
+                type: 'spring', 
+                stiffness: 250, 
+                damping: 25, 
+                mass: 0.8 
+              }}
+              style={{
+                zIndex: TIMELINE_DATA.length - i,
+                filter: "url(#SkiperSquiCircleFilterLayout)"
+              }}
+            >
+              {isMonochrome ? (
+                <div 
+                  className="w-full h-full rounded-2xl bg-neutral-400 dark:bg-neutral-800 border border-neutral-200/20 shadow-lg flex items-center justify-center text-neutral-600 dark:text-neutral-400 font-bold text-sm"
+                >
+                  {i + 1}
+                </div>
+              ) : (
+                <img src={item.src} alt={item.title} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+              )}
+              <div className="absolute inset-0 bg-black/10 pointer-events-none" />
+            </motion.div>
+          );
+        })}
+      </div>
+
+      <div 
+        className="relative flex flex-col items-end z-50 py-2 px-1"
+        onMouseLeave={() => setHoveredIndex(null)}
+      >
+        {timelineNodes.map((node, i) => {
+          if (node.type === 'main') {
+            const index = node.index;
+            const isSelected = activeIndex === index;
+
+            return (
+              <button
+                key={\`main-\${index}\`}
+                className="relative inline-flex items-center justify-end py-[1px] w-20 group cursor-pointer border-0 bg-transparent"
+                onMouseEnter={() => handleTimelineHover(index)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveIndex(index);
+                }}
+              >
+                {hoveredIndex === index ? (
+                  <motion.span
+                    className={\`absolute top-0 right-10 text-[10px] font-semibold whitespace-nowrap \${
+                      isSelected
+                        ? 'text-blue-500'
+                        : 'text-white/90'
+                    }\`}
+                    initial={{ opacity: 0, filter: \`blur(2px)\`, scale: 0.8 }}
+                    animate={{ opacity: 1, filter: \`blur(0px)\`, scale: 1 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    {node.date}
+                  </motion.span>
+                ) : null}
+                <motion.div
+                  className={\`h-[3px] w-[24px] rounded-full origin-right transition-colors \${
+                    isSelected
+                      ? 'bg-blue-500'
+                      : 'bg-white/50 group-hover:bg-white/80'
+                  }\`}
+                  animate={{
+                    scaleX: hoveredIndex === null ? 1 : (isSelected ? 1.4 : (Math.abs(index - hoveredIndex) < 0.5 ? 1.25 : 1)),
+                  }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                />
+              </button>
+            );
+          } else {
+            const isHoveringNear = hoveredIndex !== null && Math.abs(node.index - hoveredIndex) <= 0.5;
+
+            return (
+              <div 
+                key={\`sub-\${node.index}\`} 
+                className="py-[1px] w-20 flex justify-end cursor-pointer"
+                onMouseEnter={() => handleTimelineHover(node.index)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveIndex(Math.round(node.index));
+                }}
+              >
+                <motion.div
+                  className="h-[3px] w-[24px] rounded-full bg-white/20 origin-right"
+                  animate={{
+                    scaleX: hoveredIndex === null ? 1 : (isHoveringNear ? 1.15 : 1),
+                    opacity: hoveredIndex === null ? 0.3 : (isHoveringNear ? 0.5 : 0.3)
+                  }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                />
+              </div>
+            );
+          }
+        })}
+      </div>
     </div>
   );
 }`;

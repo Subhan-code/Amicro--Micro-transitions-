@@ -153,11 +153,11 @@ export function SkillsPage({ theme, onNavigateHome }: SkillsPageProps) {
           </div>
 
           {/* Pill Switch Controls matching Home Layout Pill */}
-          <div id="skills-grid-anchor" className="flex items-center gap-3 mt-14 scroll-mt-24">
-            <div className={`flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${isDark ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
+          <div id="skills-grid-anchor" className="flex items-center gap-3 mt-14 scroll-mt-24 w-full max-w-[400px] justify-center mx-auto px-4 sm:px-0">
+            <div className={`w-full flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${isDark ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
               <button
                 onClick={() => setActiveTab('install')}
-                className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 ${
+                className={`flex-1 flex items-center justify-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 whitespace-nowrap ${
                   activeTab === 'install' 
                     ? (isDark ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
                     : `${isDark ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
@@ -167,7 +167,7 @@ export function SkillsPage({ theme, onNavigateHome }: SkillsPageProps) {
               </button>
               <button
                 onClick={() => setActiveTab('commands')}
-                className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 ${
+                className={`flex-1 flex items-center justify-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 whitespace-nowrap ${
                   activeTab === 'commands' 
                     ? (isDark ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
                     : `${isDark ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
@@ -181,7 +181,7 @@ export function SkillsPage({ theme, onNavigateHome }: SkillsPageProps) {
         </div>
 
         {/* Display Grid matching Components Grid layout */}
-        <div className="w-full flex justify-center gap-[24px] mb-20 flex-wrap">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 w-full justify-items-center mb-20 max-w-[1060px] mx-auto px-4 sm:px-0">
           <AnimatePresence mode="wait">
             {(activeTab === 'install' ? installCards : commandCards).map((card) => (
               <motion.div 
@@ -190,10 +190,10 @@ export function SkillsPage({ theme, onNavigateHome }: SkillsPageProps) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -15 }}
                 transition={{ duration: 0.2 }}
-                className={`relative w-full max-w-[320px] sm:w-[320px] h-[268px] rounded-[24px] transition-all duration-300 group ${isDark ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] border border-neutral-100/85 hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] text-black'}`}
+                className={`relative w-full max-w-[320px] sm:w-[320px] h-[220px] sm:h-[268px] rounded-[24px] transition-all duration-300 group ${isDark ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] border border-neutral-100/85 hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] text-black'}`}
               >
                 {/* Visual code box area */}
-                <div className={`absolute left-[12px] top-[12px] right-[12px] h-[188px] rounded-[14px] overflow-hidden flex items-center justify-center p-4 transition-colors duration-300 ${isDark ? 'bg-[#131313]' : 'bg-[#f4f4f6]'}`}>
+                <div className={`absolute left-[12px] top-[12px] right-[12px] bottom-[68px] rounded-[14px] overflow-hidden flex items-center justify-center p-4 transition-colors duration-300 ${isDark ? 'bg-[#131313]' : 'bg-[#f4f4f6]'}`}>
                   <div className={`absolute inset-0 rounded-[14px] pointer-events-none z-10 ${isDark ? 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]' : 'shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)]'}`} />
                   <code className={`text-[12px] font-mono select-all leading-[1.6] text-center break-words max-w-full ${isDark ? 'text-neutral-300' : 'text-neutral-800'}`}>
                     {card.command}
@@ -236,12 +236,7 @@ export function SkillsPage({ theme, onNavigateHome }: SkillsPageProps) {
 
       </div>
 
-      <footer className="relative z-10 w-full text-center pb-[24px] text-[13px] leading-[14px]">
-        <span className={isDark ? 'text-[#8f8f8f]' : 'text-black opacity-60'}>Created by</span>
-        <a className={`no-underline ml-[4px] font-medium transition-colors ${isDark ? 'text-[#e9e9e9] hover:text-white' : 'text-black hover:text-black'}`} href="https://x.com/SubhanHQ" target="_blank" rel="noopener noreferrer">Syed Subhan</a>
-        <span className={`mx-1 ${isDark ? 'text-[#8f8f8f]' : 'text-black opacity-60'}`}>·</span>
-        <a className={`no-underline transition-colors ${isDark ? 'text-[#e9e9e9] hover:text-white' : 'text-black hover:text-black'}`} href="https://github.com/Subhan-code/Amicro--Micro-transitions-#readme">Terms & License</a>
-      </footer>
+
 
     </div>
   );

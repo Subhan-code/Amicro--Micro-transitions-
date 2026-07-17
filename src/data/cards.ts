@@ -5,10 +5,15 @@ export type CardInteractionType =
   | 'card-linear-spread' 
   | 'card-corner-fan' 
   | 'card-stamp-arc' 
-  | 'focus-blur'
   | 'card-cascade-stagger'
   | 'card-scatter-spread'
-  | 'card-wheel-fan';
+  | 'card-wheel-fan'
+  | 'card-carousel'
+  | 'card-cover-flow'
+  | 'card-time-machine'
+  | 'card-carousel-mono'
+  | 'card-cover-flow-mono'
+  | 'card-time-machine-mono';
 
 export interface CardConfig {
   id: string;
@@ -16,6 +21,7 @@ export interface CardConfig {
   interactionType: CardInteractionType;
   description: string;
   cliCommand: string;
+  category?: 'spreads' | 'carousels';
 }
 
 export const cardsData: CardConfig[] = [
@@ -62,13 +68,6 @@ export const cardsData: CardConfig[] = [
     cliCommand: 'npx amicro@latest add card-stamp-arc' 
   },
   { 
-    id: 'c7', 
-    label: 'Focus Blur', 
-    interactionType: 'focus-blur', 
-    description: 'Focuses active element while blurring out inactive sibling links.',
-    cliCommand: 'npx amicro@latest add focus-blur' 
-  },
-  { 
     id: 'c8', 
     label: 'Cascade Stagger Fan', 
     interactionType: 'card-cascade-stagger', 
@@ -88,5 +87,53 @@ export const cardsData: CardConfig[] = [
     interactionType: 'card-wheel-fan', 
     description: 'Fans cards outward in a radial semi-circle around a bottom-center anchor.',
     cliCommand: 'npx amicro@latest add card-wheel-fan' 
+  },
+  { 
+    id: 'c11', 
+    label: 'Interactive Carousel', 
+    interactionType: 'card-carousel', 
+    description: 'An interactive arc-based 3D motion carousel with dot indicators and prev/next controls.',
+    cliCommand: 'npx amicro@latest add card-carousel',
+    category: 'carousels'
+  },
+  { 
+    id: 'c12', 
+    label: 'CoverFlow Carousel', 
+    interactionType: 'card-cover-flow', 
+    description: 'A premium 3D CoverFlow carousel displaying cards along a perspective path.',
+    cliCommand: 'npx amicro@latest add card-cover-flow',
+    category: 'carousels'
+  },
+  { 
+    id: 'c13', 
+    label: 'Time Machine Stack', 
+    interactionType: 'card-time-machine', 
+    description: 'Apple-style perspective depth card stack with a scrubber timeline controls.',
+    cliCommand: 'npx amicro@latest add card-time-machine',
+    category: 'carousels'
+  },
+  { 
+    id: 'c11-mono', 
+    label: 'Interactive Carousel (Monochrome)', 
+    interactionType: 'card-carousel-mono', 
+    description: 'An interactive arc-based 3D motion carousel rendering clean monochrome cards.',
+    cliCommand: 'npx amicro@latest add card-carousel-mono',
+    category: 'spreads'
+  },
+  { 
+    id: 'c12-mono', 
+    label: 'CoverFlow Carousel (Monochrome)', 
+    interactionType: 'card-cover-flow-mono', 
+    description: 'A premium 3D CoverFlow carousel rendering clean monochrome cards.',
+    cliCommand: 'npx amicro@latest add card-cover-flow-mono',
+    category: 'spreads'
+  },
+  { 
+    id: 'c13-mono', 
+    label: 'Time Machine Stack (Monochrome)', 
+    interactionType: 'card-time-machine-mono', 
+    description: 'Apple-style perspective depth card stack rendering clean monochrome cards.',
+    cliCommand: 'npx amicro@latest add card-time-machine-mono',
+    category: 'spreads'
   }
 ];

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ButtonConfig } from '../data/buttons';
+import { FocusBlur } from './cards/FocusBlur';
 
 interface AnimatedButtonProps {
   config: ButtonConfig;
@@ -11,6 +12,20 @@ interface AnimatedButtonProps {
 export const AnimatedButton = React.memo(function AnimatedButton({ config, layoutMode, theme = 'dark' }: AnimatedButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
   
+  if (config.interactionType === 'focus-blur') {
+    return (
+      <FocusBlur 
+        items={[
+          { label: '@X', href: '#' },
+          { label: '@Threads', href: '#' },
+          { label: '@GitHub', href: '#' }
+        ]} 
+        showBrackets={true} 
+        className={layoutMode === 'matrix' ? "scale-[0.5] origin-center text-[10px] gap-1 px-1 py-1" : "text-sm gap-4"} 
+      />
+    );
+  }
+
   const Icon1 = config.icon1 as React.ElementType;
   const Icon2 = config.icon2 as React.ElementType;
 
@@ -384,8 +399,8 @@ export const AnimatedButton = React.memo(function AnimatedButton({ config, layou
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       animate={{ 
-        paddingLeft: isMatrix ? 16 : (isHovered ? 28 : 24), 
-        paddingRight: isMatrix ? 16 : (isHovered ? 28 : 24),
+        paddingLeft: isMatrix ? 0 : (isHovered ? 28 : 24), 
+        paddingRight: isMatrix ? 0 : (isHovered ? 28 : 24),
         x: isHovered && config.interactionType === 'magnetic' ? mouseCoords.x : 0,
         y: isHovered && config.interactionType === 'magnetic' ? mouseCoords.y : 0,
         backgroundColor: isLightTheme
@@ -394,9 +409,9 @@ export const AnimatedButton = React.memo(function AnimatedButton({ config, layou
       }}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.96 }}
-      className={`relative flex items-center justify-center h-[36px] rounded-[40px] border-0 cursor-pointer shadow-none transition-colors duration-150 ${isMatrix ? 'w-[36px] px-0' : 'min-w-[75px]'} ${config.interactionType === 'glare' ? 'overflow-hidden' : ''} ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`}
+      className={`relative flex items-center justify-center rounded-[40px] border-0 cursor-pointer shadow-none transition-colors duration-150 ${isMatrix ? 'w-[36px] h-[36px] sm:w-[42px] sm:h-[42px] px-0' : 'h-[36px] min-w-[75px]'} ${config.interactionType === 'glare' ? 'overflow-hidden' : ''} ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`}
     >
-      <motion.div layout transition={{ type: "spring", stiffness: 500, damping: 25 }} className="flex items-center justify-center w-full">
+      <motion.div layout transition={{ type: "spring", stiffness: 500, damping: 25 }} className={`flex items-center justify-center w-full ${isMatrix ? 'scale-100 sm:scale-[1.15] origin-center' : ''}`}>
         {renderIconContent()}
       </motion.div>
     </motion.button>

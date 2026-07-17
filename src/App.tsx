@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   LayoutGrid, List, LayoutTemplate, ArrowDownAZ, Copy, Sun, Moon, Github, 
   Terminal, Check, Cpu, Zap, Code, ShieldCheck, Sparkles, RefreshCw, Smartphone, 
-  ChevronRight, Shield, Layers, HelpCircle, Palette, Activity
+  ChevronRight, Shield, Layers, HelpCircle, Palette, Activity, Menu, X
 } from 'lucide-react';
 import { buttonsData } from './data/buttons';
 import { AnimatedButton } from './components/AnimatedButton';
@@ -19,10 +19,12 @@ import { CardLongArc5 } from './components/cards/CardLongArc5';
 import { CardLinearSpread } from './components/cards/CardLinearSpread';
 import { CardCornerFan } from './components/cards/CardCornerFan';
 import { CardStampArc } from './components/cards/CardStampArc';
-import { FocusBlur } from './components/cards/FocusBlur';
 import { CardCascadeStagger } from './components/cards/CardCascadeStagger';
 import { CardScatterSpread } from './components/cards/CardScatterSpread';
 import { CardWheelFan } from './components/cards/CardWheelFan';
+import { CardCarousel } from './components/cards/CardCarousel';
+import { CardCoverFlow } from './components/cards/CardCoverFlow';
+import { CardTimeMachine } from './components/cards/CardTimeMachine';
 
 type LayoutMode = 'list' | 'grid' | 'matrix';
 type SortMode = 'default' | 'alphabetical';
@@ -35,9 +37,10 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [stars, setStars] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState<PageMode>('home');
-  const [catalogTab, setCatalogTab] = useState<'buttons' | 'cards'>('buttons');
+  const [catalogTab, setCatalogTab] = useState<'buttons' | 'cards' | 'carousels'>('buttons');
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Hash-based router
   useEffect(() => {
@@ -115,23 +118,26 @@ export default function App() {
   }, [sortBy]);
 
   const displayedCards = useMemo(() => {
-    let sorted = [...cardsData];
+    const targetCategory = catalogTab === 'cards' ? 'spreads' : 'carousels';
+    let filtered = cardsData.filter(card => (card.category || 'spreads') === targetCategory);
     if (sortBy === 'alphabetical') {
-      sorted.sort((a, b) => a.label.localeCompare(b.label));
+      filtered.sort((a, b) => a.label.localeCompare(b.label));
     }
-    return sorted;
-  }, [sortBy]);
+    return filtered;
+  }, [catalogTab, sortBy]);
 
   const isLightTheme = theme === 'light';
 
   const navigateTo = (page: PageMode) => {
     if (page === 'cli') {
-      window.location.hash = '#/cli';
+      window.location.hash = '#cli';
     } else if (page === 'skills') {
-      window.location.hash = '#/skills';
+      window.location.hash = '#skills';
     } else {
-      window.location.hash = '#/';
+      window.location.hash = '';
     }
+    setCurrentPage(page);
+    setMobileMenuOpen(false);
   };
 
   return (
@@ -187,14 +193,6 @@ export default function App() {
               >
                 Skills
               </button>
-              <a 
-                href="https://github.com/Subhan-code/Amicro--Micro-transitions-#readme" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className={`inline-flex items-center justify-center h-[36px] px-[14px] rounded-full text-[13px] font-medium leading-[16px] no-underline whitespace-nowrap transition-colors duration-150 ${theme === 'dark' ? 'text-[rgba(202,202,202,0.7)] hover:text-white hover:bg-[rgba(255,255,255,0.04)]' : 'text-neutral-600 hover:text-black hover:bg-neutral-200/40'}`}
-              >
-                Documentation
-              </a>
             </nav>
           </div>
           
@@ -215,7 +213,7 @@ export default function App() {
               href="https://x.com/SubhanHQ" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className={`inline-flex items-center justify-center w-[36px] h-[36px] rounded-full transition-colors duration-150 ${theme === 'dark' ? 'bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(255,255,255,0.1)] text-[rgba(237,237,237,0.6)] hover:text-[#ededed]' : 'bg-neutral-200/80 hover:bg-neutral-300/80 text-black hover:text-black'}`}
+              className={`hidden sm:inline-flex items-center justify-center w-[36px] h-[36px] rounded-full transition-colors duration-150 ${theme === 'dark' ? 'bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(255,255,255,0.1)] text-[rgba(237,237,237,0.6)] hover:text-[#ededed]' : 'bg-neutral-200/80 hover:bg-neutral-300/80 text-black hover:text-black'}`}
             >
               <svg viewBox="0 0 16 17" fill="currentColor" className="w-[16px] h-[17px] block">
                 <path d="M12.4041 1.39726H14.6953L9.69087 7.2591L15.5781 15.2368H10.9696L7.35741 10.3996L3.22921 15.2368H0.934687L6.28641 8.96575L0.642598 1.39726H5.36795L8.62962 5.81859L12.4041 1.39726ZM11.5992 13.8329H12.8682L4.67667 2.72798H3.31359L11.5992 13.8329Z"></path>
@@ -230,8 +228,65 @@ export default function App() {
             >
               {theme === 'dark' ? <Sun className="w-[16px] h-[16px]" /> : <Moon className="w-[16px] h-[16px]" />}
             </button>
+
+            {/* Mobile Menu Toggle */}
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className={`inline-flex sm:hidden items-center justify-center w-[36px] h-[36px] rounded-full transition-colors duration-150 cursor-pointer border-0 bg-transparent ${theme === 'dark' ? 'bg-[rgba(255,255,255,0.07)] hover:bg-[rgba(255,255,255,0.1)] text-[rgba(237,237,237,0.6)] hover:text-[#ededed]' : 'bg-neutral-200/80 hover:bg-neutral-300/80 text-black hover:text-black'}`}
+              aria-label="Toggle mobile menu"
+            >
+              {mobileMenuOpen ? <X className="w-[18px] h-[18px]" /> : <Menu className="w-[18px] h-[18px]" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile menu dropdown */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className={`absolute top-[64px] left-6 right-6 p-4 rounded-2xl border flex flex-col gap-2 z-[999] shadow-2xl sm:hidden backdrop-blur-xl ${
+                theme === 'dark' 
+                  ? 'bg-zinc-950/95 border-white/10 text-white' 
+                  : 'bg-white/95 border-neutral-200 text-black'
+              }`}
+            >
+              <button 
+                onClick={() => navigateTo('home')}
+                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent ${
+                  currentPage === 'home'
+                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
+                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
+                }`}
+              >
+                Components
+              </button>
+              <button 
+                onClick={() => navigateTo('cli')}
+                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent ${
+                  currentPage === 'cli'
+                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
+                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
+                }`}
+              >
+                CLI Install
+              </button>
+              <button 
+                onClick={() => navigateTo('skills')}
+                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent ${
+                  currentPage === 'skills'
+                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
+                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
+                }`}
+              >
+                Skills
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       {/* Render CliPage component or HomePage */}
@@ -270,15 +325,15 @@ export default function App() {
               
               <div className="mt-12 mb-16 text-center w-full flex flex-col items-center">
                 
-                <h1 className={`text-[46px] font-medium leading-[52px] tracking-[-0.01em] mb-3 font-sans transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                <h1 className={`text-[32px] sm:text-[46px] font-medium leading-[38px] sm:leading-[52px] tracking-[-0.01em] mb-3 font-sans transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                   Amicro — Micro-transitions
                 </h1>
-                <p className={`text-[17px] leading-[25px] max-w-[530px] transition-colors duration-300 ${theme === 'dark' ? 'text-[#767676]' : 'text-black'}`}>
+                <p className={`text-[14px] sm:text-[17px] leading-[20px] sm:leading-[25px] max-w-[530px] transition-colors duration-300 ${theme === 'dark' ? 'text-[#767676]' : 'text-black'}`}>
                   A curated library of premium micro-interactions and transition components. Built with React and Motion.
                 </p>
 
                 {/* Hero CTAs */}
-                <div className="flex items-center gap-3 mt-8">
+                <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
                   <motion.a 
                     href="https://github.com/Subhan-code/Amicro--Micro-transitions-" 
                     target="_blank" 
@@ -340,77 +395,97 @@ export default function App() {
                     <span>Browse Components</span>
                   </motion.button>
                 </div>
-
                 {/* Filter and layout controls */}
-                <div className="flex flex-wrap items-center justify-center gap-3 mt-12 w-full">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 w-full max-w-xl mx-auto px-4 sm:px-0">
                   {/* Category Pill Switcher */}
-                  <div className={`flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
-                    <button
-                      onClick={() => setCatalogTab('buttons')}
-                      className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 ${
-                        catalogTab === 'buttons' 
-                          ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                          : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                      }`}
-                    >
-                      Buttons
-                    </button>
-                    <button
-                      onClick={() => setCatalogTab('cards')}
-                      className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 ${
-                        catalogTab === 'cards' 
-                          ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                          : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                      }`}
-                    >
-                      Card Spreads
-                    </button>
+                  <div className={`w-full sm:w-auto flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 overflow-x-auto no-scrollbar ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
+                    <div className="flex w-full items-center justify-between sm:justify-start gap-1">
+                      <button
+                        onClick={() => setCatalogTab('buttons')}
+                        className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 whitespace-nowrap ${
+                          catalogTab === 'buttons' 
+                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
+                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
+                        }`}
+                      >
+                        Buttons
+                      </button>
+                      <button
+                        onClick={() => setCatalogTab('cards')}
+                        className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 whitespace-nowrap ${
+                          catalogTab === 'cards' 
+                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
+                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
+                        }`}
+                      >
+                        Card Spreads
+                      </button>
+                      <button
+                        onClick={() => setCatalogTab('carousels')}
+                        className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 whitespace-nowrap ${
+                          catalogTab === 'carousels' 
+                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
+                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
+                        }`}
+                      >
+                        3D Carousels
+                      </button>
+                    </div>
                   </div>
 
-                  <div className={`flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
-                    <button
-                      onClick={() => setSortBy(sortBy === 'default' ? 'alphabetical' : 'default')}
-                      className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 ${
-                        sortBy === 'alphabetical' 
-                          ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                          : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                      }`}
-                    >
-                      <ArrowDownAZ className="w-3.5 h-3.5" />
-                      <span>A-Z</span>
-                    </button>
-                  </div>
-                  <div className={`flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
-                    <button
-                      onClick={() => setLayout('list')}
-                      className={`p-1.5 rounded-full transition-colors cursor-pointer border-0 ${
-                        layout === 'list' 
-                          ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                          : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                      }`}
-                    >
-                      <List className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => setLayout('grid')}
-                      className={`p-1.5 rounded-full transition-colors cursor-pointer border-0 ${
-                        layout === 'grid' 
-                          ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                          : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                      }`}
-                    >
-                      <LayoutGrid className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => setLayout('matrix')}
-                      className={`p-1.5 rounded-full transition-colors cursor-pointer border-0 ${
-                        layout === 'matrix' 
-                          ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                          : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                      }`}
-                    >
-                      <LayoutTemplate className="w-4 h-4" />
-                    </button>
+                  {/* Secondary controls row on mobile */}
+                  <div className="w-full sm:w-auto flex items-center justify-between sm:justify-start gap-3 shrink-0">
+                    {/* Sort */}
+                    <div className={`flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
+                      <button
+                        onClick={() => setSortBy(sortBy === 'default' ? 'alphabetical' : 'default')}
+                        className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 ${
+                          sortBy === 'alphabetical' 
+                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
+                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
+                        }`}
+                      >
+                        <ArrowDownAZ className="w-3.5 h-3.5" />
+                        <span>A-Z</span>
+                      </button>
+                    </div>
+
+                    {/* Layout */}
+                    <div className={`flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
+                      <button
+                        onClick={() => setLayout('list')}
+                        className={`p-1.5 rounded-full transition-colors cursor-pointer border-0 ${
+                          layout === 'list' 
+                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
+                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
+                        }`}
+                        aria-label="List layout"
+                      >
+                        <List className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setLayout('grid')}
+                        className={`p-1.5 rounded-full transition-colors cursor-pointer border-0 ${
+                          layout === 'grid' 
+                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
+                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
+                        }`}
+                        aria-label="Grid layout"
+                      >
+                        <LayoutGrid className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setLayout('matrix')}
+                        className={`p-1.5 rounded-full transition-colors cursor-pointer border-0 ${
+                          layout === 'matrix' 
+                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
+                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
+                        }`}
+                        aria-label="Matrix layout"
+                      >
+                        <LayoutTemplate className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -419,10 +494,18 @@ export default function App() {
               <div 
                 id="component-grid"
                 className={`
-                  w-full flex justify-center gap-[24px] scroll-mt-24 mb-16 mx-auto
-                  ${layout === 'list' ? 'flex-col items-center max-w-md' : ''}
-                  ${layout === 'grid' ? `flex-wrap ${catalogTab === 'cards' ? 'max-w-6xl' : ''}` : ''}
-                  ${layout === 'matrix' ? `flex-wrap gap-4 ${catalogTab === 'cards' ? 'max-w-6xl' : 'max-w-4xl'}` : ''}
+                  w-full mb-16 mx-auto scroll-mt-24 px-4 sm:px-0
+                  ${layout === 'list' ? 'flex flex-col items-center gap-4 max-w-md' : ''}
+                  ${layout === 'grid' ? (
+                    catalogTab === 'buttons' 
+                      ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 max-w-[1060px] justify-items-center' 
+                      : 'flex flex-wrap justify-center gap-6 max-w-6xl'
+                  ) : ''}
+                  ${layout === 'matrix' ? (
+                    catalogTab === 'buttons'
+                      ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 max-w-[1400px] justify-items-center'
+                      : 'flex flex-wrap justify-center gap-4 max-w-6xl'
+                  ) : ''}
                 `}
               >
                 <AnimatePresence mode="popLayout">
@@ -435,8 +518,8 @@ export default function App() {
                         className={`${layout === 'list' ? 'w-full' : ''}`}
                       >
                         {layout === 'grid' ? (
-                          <div className={`relative w-full max-w-[320px] sm:w-[320px] h-[268px] rounded-[24px] transition-all duration-300 group ${theme === 'dark' ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] border border-neutral-100/85 hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] text-black'}`}>
-                            <div className={`absolute left-[12px] top-[12px] right-[12px] h-[188px] rounded-[14px] overflow-hidden flex items-center justify-center transition-colors duration-300 ${theme === 'dark' ? 'bg-[#131313]' : 'bg-[#f4f4f6]'}`}>
+                          <div className={`relative w-full max-w-[320px] sm:w-[320px] h-[220px] sm:h-[268px] rounded-[24px] transition-all duration-300 group ${theme === 'dark' ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] border border-neutral-100/85 hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] text-black'}`}>
+                            <div className={`absolute left-[12px] top-[12px] right-[12px] bottom-[68px] rounded-[14px] overflow-hidden flex items-center justify-center transition-colors duration-300 ${theme === 'dark' ? 'bg-[#131313]' : 'bg-[#f4f4f6]'}`}>
                               <div className={`absolute inset-0 rounded-[14px] pointer-events-none z-10 ${theme === 'dark' ? 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]' : 'shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)]'}`} />
                               <AnimatedButton config={button} layoutMode={layout} theme={theme} />
                             </div>
@@ -474,26 +557,21 @@ export default function App() {
                           >
                             <div className={`absolute left-[12px] top-[12px] right-[12px] h-[300px] rounded-[14px] flex items-center justify-center transition-colors duration-300 ${theme === 'dark' ? 'bg-[#131313]' : 'bg-[#f4f4f6]'}`}>
                               <div className={`absolute inset-0 rounded-[14px] pointer-events-none z-10 ${theme === 'dark' ? 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]' : 'shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)]'}`} />
-                                                            {card.interactionType === 'card-arc-5' && <CardArc5 hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-arc-7' && <CardArc7 hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-long-arc-5' && <CardLongArc5 hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-linear-spread' && <CardLinearSpread hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-corner-fan' && <CardCornerFan hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-stamp-arc' && <CardStampArc hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'focus-blur' && (
-                                <FocusBlur 
-                                  items={[
-                                    { label: '@X', href: '#' },
-                                    { label: '@Threads', href: '#' },
-                                    { label: '@GitHub', href: '#' }
-                                  ]} 
-                                  showBrackets={true} 
-                                  className="scale-[1.2] origin-center text-sm" 
-                                />
-                              )}
-                              {card.interactionType === 'card-cascade-stagger' && <CardCascadeStagger hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-scatter-spread' && <CardScatterSpread hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-wheel-fan' && <CardWheelFan hovered={hoveredCardId === card.id} className="scale-[1.2] origin-center" />}
+                                                            {card.interactionType === 'card-arc-5' && <CardArc5 hovered={hoveredCardId === card.id} className="scale-[0.7] sm:scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-arc-7' && <CardArc7 hovered={hoveredCardId === card.id} className="scale-[0.7] sm:scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-long-arc-5' && <CardLongArc5 hovered={hoveredCardId === card.id} className="scale-[0.7] sm:scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-linear-spread' && <CardLinearSpread hovered={hoveredCardId === card.id} className="scale-[0.7] sm:scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-corner-fan' && <CardCornerFan hovered={hoveredCardId === card.id} className="scale-[0.7] sm:scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-stamp-arc' && <CardStampArc hovered={hoveredCardId === card.id} className="scale-[0.7] sm:scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-cascade-stagger' && <CardCascadeStagger hovered={hoveredCardId === card.id} className="scale-[0.7] sm:scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-scatter-spread' && <CardScatterSpread hovered={hoveredCardId === card.id} className="scale-[0.7] sm:scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-wheel-fan' && <CardWheelFan hovered={hoveredCardId === card.id} className="scale-[0.7] sm:scale-[1.2] origin-center" />}
+                              {card.interactionType === 'card-carousel' && <CardCarousel hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[1.0] origin-center" />}
+                              {card.interactionType === 'card-cover-flow' && <CardCoverFlow hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[1.0] origin-center" />}
+                              {card.interactionType === 'card-time-machine' && <CardTimeMachine hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[1.0] origin-center" />}
+                              {card.interactionType === 'card-carousel-mono' && <CardCarousel hovered={hoveredCardId === card.id} isMonochrome={true} className="scale-[0.6] sm:scale-[1.0] origin-center" />}
+                              {card.interactionType === 'card-cover-flow-mono' && <CardCoverFlow hovered={hoveredCardId === card.id} isMonochrome={true} className="scale-[0.6] sm:scale-[1.0] origin-center" />}
+                              {card.interactionType === 'card-time-machine-mono' && <CardTimeMachine hovered={hoveredCardId === card.id} isMonochrome={true} className="scale-[0.6] sm:scale-[1.0] origin-center" />}
                             </div>
                             <div className="absolute left-[20px] bottom-[14px] w-[calc(100%-80px)] flex flex-col gap-[2px]">
                               <div className={`text-[13px] font-semibold leading-[18px] transition-colors ${theme === 'dark' ? 'text-[#ededed]' : 'text-black'}`}>{card.label}</div>
@@ -510,7 +588,7 @@ export default function App() {
                           </div>
                         ) : (
                           // List view for cards
-                          <div className={`w-[320px] sm:w-[500px] flex items-center justify-between p-4 rounded-xl border transition-colors ${theme === 'dark' ? 'bg-[#181818] border-neutral-850 text-white' : 'bg-white border-neutral-200 shadow-sm text-black'}`}>
+                          <div className={`w-full max-w-[500px] flex items-center justify-between p-4 rounded-xl border transition-colors ${theme === 'dark' ? 'bg-[#181818] border-neutral-850 text-white' : 'bg-white border-neutral-200 shadow-sm text-black'}`}>
                             <div className="flex items-center gap-4">
                               <div className={`w-12 h-12 rounded-lg flex items-center justify-center shrink-0 ${theme === 'dark' ? 'bg-[#131313]' : 'bg-neutral-100'}`}>
                                 <LayoutTemplate className="w-5 h-5 text-neutral-400" />
