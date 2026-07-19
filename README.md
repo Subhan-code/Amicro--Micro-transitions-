@@ -9,7 +9,22 @@
     <a href="https://github.com/Subhan-code/Amicro--Micro-transitions-/blob/main/LICENSE">
       <img src="https://img.shields.io/github/license/Subhan-code/Amicro--Micro-transitions-?style=flat&color=50E3C2" alt="License" />
     </a>
+    <a href="https://www.npmjs.com/package/amicro-micro-transitions">
+      <img src="https://img.shields.io/npm/v/amicro-micro-transitions?style=flat&color=CB3837" alt="npm version" />
+    </a>
+    <a href="https://www.npmjs.com/package/amicro-micro-transitions">
+      <img src="https://img.shields.io/npm/dm/amicro-micro-transitions?style=flat&color=4285f4" alt="downloads" />
+    </a>
+    <a href="https://github.com/Subhan-code/Amicro--Micro-transitions-/actions/workflows/ci.yml">
+      <img src="https://github.com/Subhan-code/Amicro--Micro-transitions-/actions/workflows/ci.yml/badge.svg" alt="CI Build Status" />
+    </a>
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="PRs Welcome" />
+  </p>
+  
+  <p>
+    <a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FSubhan-code%2FAmicro--Micro-transitions-">
+      <img src="https://vercel.com/button" alt="Deploy with Vercel" />
+    </a>
   </p>
 </div>
 
@@ -74,10 +89,12 @@ To add a new micro-transition to the sandbox list:
 
 ---
 
-## 🤝 Credits
+## 🤝 Credits & Support
 
-- **Creator**: [Syed Subhan](https://x.com/SubhanHQ)
+- **Creator**: [Syed Subhan](https://x.com/SubhanHQ) (Email: [su2491251@gmail.com](mailto:su2491251@gmail.com))
 - **Design Inspiration**: [Oxygen UI](https://oxygen-ui.vercel.app)
+
+If you have questions, feedback, or need support, feel free to reach out via email or Twitter.
 
 ---
 

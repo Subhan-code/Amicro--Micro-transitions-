@@ -49,7 +49,7 @@ export function CliPage({ theme, onNavigateHome }: CliPageProps) {
   const isDark = theme === 'dark';
 
   return (
-    <div className={`w-full min-h-screen transition-colors duration-300 pb-20 ${isDark ? 'bg-[#121212] text-white' : 'bg-[#f8f9fa] text-black'}`}>
+    <div className={`w-full min-h-dvh transition-colors duration-300 pb-20 ${isDark ? 'bg-[#121212] text-white' : 'bg-[#f8f9fa] text-black'}`}>
       
       {/* Mini Breadcrumb Navbar */}
       <div className="w-full max-w-[1240px] mx-auto px-6 pt-6">

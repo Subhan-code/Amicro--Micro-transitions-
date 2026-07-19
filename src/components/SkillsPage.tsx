@@ -99,7 +99,7 @@ export function SkillsPage({ theme, onNavigateHome }: SkillsPageProps) {
   ];
 
   return (
-    <div className={`relative w-full min-h-screen flex flex-col font-sans antialiased transition-colors duration-300 ${isDark ? 'bg-[#121212] text-[#ffffff] selection:bg-neutral-850' : 'bg-[#f8f9fa] text-black selection:bg-neutral-200'}`}>
+    <div className={`relative w-full min-h-dvh flex flex-col font-sans antialiased transition-colors duration-300 ${isDark ? 'bg-[#121212] text-[#ffffff] selection:bg-neutral-850' : 'bg-[#f8f9fa] text-black selection:bg-neutral-200'}`}>
       
       {/* Breadcrumb Navbar */}
       <div className="w-full max-w-[1240px] mx-auto px-6 pt-6">
@@ -181,7 +181,7 @@ export function SkillsPage({ theme, onNavigateHome }: SkillsPageProps) {
         </div>
 
         {/* Display Grid matching Components Grid layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 w-full justify-items-center mb-20 max-w-[1060px] mx-auto px-4 sm:px-0">
+        <div className="flex flex-col items-center gap-6 w-full sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-10 lg:gap-12 mb-20 max-w-[1060px] mx-auto px-4 sm:px-0">
           <AnimatePresence mode="wait">
             {(activeTab === 'install' ? installCards : commandCards).map((card) => (
               <motion.div 
