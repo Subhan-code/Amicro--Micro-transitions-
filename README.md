@@ -2,18 +2,20 @@
   <h1>Amicro — Micro-transitions</h1>
   <p>A curated library of premium React micro-interactions and transition components powered by Motion.</p>
 
- <p>
+ <p align="left">
   <a href="https://github.com/Subhan-code/Amicro--Micro-transitions-/stargazers">
-    <img src="https://img.shields.io/github/stars/Subhan-code/Amicro--Micro-transitions-?style=flat&color=F5A623" alt="GitHub Stars" />
+    <img src="https://img.shields.io/github/stars/Subhan-code/Amicro--Micro-transitions-?style=for-the-badge&color=F5A623&logo=github&logoColor=white" alt="GitHub Stars" />
   </a>
   <a href="https://github.com/Subhan-code/Amicro--Micro-transitions-/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/Subhan-code/Amicro--Micro-transitions-?style=flat&color=50E3C2" alt="License: MIT" />
+    <img src="https://img.shields.io/github/license/Subhan-code/Amicro--Micro-transitions-?style=for-the-badge&color=50E3C2&logo=opensourceinitiative&logoColor=white" alt="License: MIT" />
   </a>
-  <a href="https://github.com/Subhan-code/Amicro--Micro-transitions-/actions/workflows/ci.yml">
-    <img src="https://github.com/Subhan-code/Amicro--Micro-transitions-/actions/workflows/ci.yml/badge.svg" alt="CI Build Status" />
+  <a href="https://github.com/Subhan-code/Amicro--Micro-transitions-/actions">
+    <img src="https://img.shields.io/github/actions/workflow/status/Subhan-code/Amicro--Micro-transitions-/ci.yml?style=for-the-badge&logo=github&logoColor=white" alt="CI Status" />
+  </a>
+  <a href="https://amicro.vercel.app">
+    <img src="https://img.shields.io/badge/Live%20Demo-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
   </a>
 </p>
-</div>
 
 ---
 
