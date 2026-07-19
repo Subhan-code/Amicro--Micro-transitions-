@@ -2,20 +2,29 @@
   <h1>Amicro — Micro-transitions</h1>
   <p>A curated library of premium React micro-interactions and transition components powered by Motion.</p>
 
- <p align="left">
+<div align="center">
   <a href="https://github.com/Subhan-code/Amicro--Micro-transitions-/stargazers">
-    <img src="https://img.shields.io/github/stars/Subhan-code/Amicro--Micro-transitions-?style=for-the-badge&color=F5A623&logo=github&logoColor=white" alt="GitHub Stars" />
+    <img src="https://img.shields.io/github/stars/Subhan-code/Amicro--Micro-transitions-?style=for-the-badge&color=000000&logo=github&logoColor=white" alt="GitHub Stars" />
   </a>
+  
   <a href="https://github.com/Subhan-code/Amicro--Micro-transitions-/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/Subhan-code/Amicro--Micro-transitions-?style=for-the-badge&color=50E3C2&logo=opensourceinitiative&logoColor=white" alt="License: MIT" />
+    <img src="https://img.shields.io/github/license/Subhan-code/Amicro--Micro-transitions-?style=for-the-badge&color=000000&logo=opensourceinitiative&logoColor=white" alt="MIT License" />
   </a>
-  <a href="https://github.com/Subhan-code/Amicro--Micro-transitions-/actions">
-    <img src="https://img.shields.io/github/actions/workflow/status/Subhan-code/Amicro--Micro-transitions-/ci.yml?style=for-the-badge&logo=github&logoColor=white" alt="CI Status" />
+  
+  <a href="https://github.com/Subhan-code/Amicro--Micro-transitions-/pulls">
+    <img src="https://img.shields.io/badge/PRs%20Welcome-000000?style=for-the-badge&logo=github&logoColor=white" alt="PRs Welcome" />
   </a>
-  <a href="https://amicro.vercel.app">
-    <img src="https://img.shields.io/badge/Live%20Demo-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
+</div>
+
+<!-- Sponsor -->
+<div align="center" style="margin-top: 16px;">
+  <a href="https://github.com/sponsors/Subhan-code">
+    <img src="https://img.shields.io/badge/Sponsor%20%E2%9D%A4%EF%B8%8F-000000?style=for-the-badge&logo=github&logoColor=white" alt="Sponsor" />
   </a>
-</p>
+  <a href="https://ko-fi.com/subhanuddin">
+    <img src="https://img.shields.io/badge/Support%20on%20Ko--fi-000000?style=for-the-badge&logo=ko-fi&logoColor=white" alt="Ko-fi" />
+  </a>
+</div>
 
 ---
 
