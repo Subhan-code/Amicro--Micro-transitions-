@@ -9,16 +9,9 @@
     <a href="https://github.com/Subhan-code/Amicro--Micro-transitions-/blob/main/LICENSE">
       <img src="https://img.shields.io/github/license/Subhan-code/Amicro--Micro-transitions-?style=flat&color=50E3C2" alt="License" />
     </a>
-    <a href="https://www.npmjs.com/package/amicro-micro-transitions">
-      <img src="https://img.shields.io/npm/v/amicro-micro-transitions?style=flat&color=CB3837" alt="npm version" />
-    </a>
-    <a href="https://www.npmjs.com/package/amicro-micro-transitions">
-      <img src="https://img.shields.io/npm/dm/amicro-micro-transitions?style=flat&color=4285f4" alt="downloads" />
-    </a>
     <a href="https://github.com/Subhan-code/Amicro--Micro-transitions-/actions/workflows/ci.yml">
       <img src="https://github.com/Subhan-code/Amicro--Micro-transitions-/actions/workflows/ci.yml/badge.svg" alt="CI Build Status" />
     </a>
-    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="PRs Welcome" />
   </p>
   
   <p>
