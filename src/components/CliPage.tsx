@@ -80,10 +80,10 @@ export function CliPage({ theme, onNavigateHome }: CliPageProps) {
         }`}>
           <div className="flex items-center gap-2.5 min-w-0">
             <span className={isDark ? 'text-neutral-500' : 'text-neutral-400'}>$</span>
-            <code className="text-[14px] font-mono select-all truncate font-medium">npx amicro@latest add</code>
+            <code className="text-[14px] font-mono select-all truncate font-medium">npx @subhanhq/amicro@latest add</code>
           </div>
           <button 
-            onClick={() => copyToClipboard('npx amicro@latest add', 'hero-cli')}
+            onClick={() => copyToClipboard('npx @subhanhq/amicro@latest add', 'hero-cli')}
             className={`p-2 rounded-lg cursor-pointer shrink-0 transition-colors border-0 ${
               isDark ? 'bg-neutral-800/80 hover:bg-neutral-700 text-neutral-300' : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-700'
             }`}
@@ -108,9 +108,9 @@ export function CliPage({ theme, onNavigateHome }: CliPageProps) {
             <div className={`relative flex items-center justify-between gap-4 p-4 pl-5 rounded-xl border font-mono ${
               isDark ? 'bg-[#181818] border-neutral-800 text-white' : 'bg-white border-neutral-200 text-black'
             }`}>
-              <code className="text-[13.5px] font-mono">npx amicro@latest init</code>
+              <code className="text-[13.5px] font-mono">npx @subhanhq/amicro@latest init</code>
               <button 
-                onClick={() => copyToClipboard('npx amicro@latest init', 'init-cli')}
+                onClick={() => copyToClipboard('npx @subhanhq/amicro@latest init', 'init-cli')}
                 className={`p-1.5 rounded-lg cursor-pointer border-0 transition-colors ${
                   isDark ? 'bg-neutral-800/80 hover:bg-neutral-700 text-neutral-350' : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-650'
                 }`}
@@ -129,9 +129,9 @@ export function CliPage({ theme, onNavigateHome }: CliPageProps) {
             <div className={`relative flex items-center justify-between gap-4 p-4 pl-5 rounded-xl border font-mono ${
               isDark ? 'bg-[#181818] border-neutral-800 text-white' : 'bg-white border-neutral-200 text-black'
             }`}>
-              <code className="text-[13.5px] font-mono">npx amicro@latest add download-button</code>
+              <code className="text-[13.5px] font-mono">npx @subhanhq/amicro@latest add download-button</code>
               <button 
-                onClick={() => copyToClipboard('npx amicro@latest add download-button', 'add-cli')}
+                onClick={() => copyToClipboard('npx @subhanhq/amicro@latest add download-button', 'add-cli')}
                 className={`p-1.5 rounded-lg cursor-pointer border-0 transition-colors ${
                   isDark ? 'bg-neutral-800/80 hover:bg-neutral-700 text-neutral-350' : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-650'
                 }`}
