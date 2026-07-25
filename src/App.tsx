@@ -5,6 +5,7 @@ import {
   Terminal, Check, Cpu, Zap, Code, ShieldCheck, Sparkles, RefreshCw, Smartphone, 
   ChevronRight, ChevronDown, Shield, Layers, HelpCircle, Palette, Activity, Menu, X
 } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
 import { buttonsData } from './data/buttons';
 import { AnimatedButton } from './components/AnimatedButton';
 import { getComponentCode, ThemeToggleCode, getCardComponentCode } from './utils/codeGenerator';
@@ -929,6 +930,7 @@ export default function App() {
         </AnimatePresence>
       </div>
 
+      <Analytics />
     </div>
   );
 }
