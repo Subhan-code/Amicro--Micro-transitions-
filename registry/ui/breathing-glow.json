@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "breathing-glow",
+  "type": "registry:ui",
+  "title": "Breathing Glow",
+  "description": "Breathing Glow loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/breathing-glow.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/breathing-glow.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const BreathingGlow = () => {\r\n  return (\r\n    <div className=\"relative flex items-center justify-center w-12 h-12\">\r\n      <motion.div\r\n        className=\"absolute w-8 h-8 bg-blue-500 rounded-full blur-md\"\r\n        animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.8, 0.5] }}\r\n        transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n      />\r\n      <div className=\"relative w-6 h-6 bg-white rounded-full shadow-sm\" />\r\n    </div>\r\n  );\r\n};\n"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-stagger",
+  "type": "registry:hook",
+  "title": "Use Stagger",
+  "description": "Calculates custom delays for child stagger layouts.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/hooks/use-stagger.ts",
+      "type": "registry:hook",
+      "target": "@hooks/use-stagger.ts",
+      "content": "import { useMemo } from 'react';\n\ninterface StaggerOptions {\n  baseDelay?: number;\n  staggerDelay?: number;\n  from?: 'first' | 'last' | 'center' | number;\n}\n\nexport function useStagger(count: number, options: StaggerOptions = {}) {\n  const { baseDelay = 0, staggerDelay = 0.05, from = 'first' } = options;\n\n  const delays = useMemo(() => {\n    const list = Array.from({ length: count });\n    \n    let centerIndex = 0;\n    if (from === 'center') {\n      centerIndex = (count - 1) / 2;\n    } else if (from === 'last') {\n      centerIndex = count - 1;\n    } else if (typeof from === 'number') {\n      centerIndex = from;\n    }\n\n    return list.map((_, index) => {\n      let distance = 0;\n      if (from === 'first') {\n        distance = index;\n      } else if (from === 'last') {\n        distance = count - 1 - index;\n      } else {\n        distance = Math.abs(index - centerIndex);\n      }\n      return baseDelay + distance * staggerDelay;\n    });\n  }, [count, baseDelay, staggerDelay, from]);\n\n  return delays;\n}\n"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "presets",
+  "type": "registry:lib",
+  "title": "Presets",
+  "description": "A set of spring configuration presets for Motion.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/lib/presets.ts",
+      "type": "registry:lib",
+      "target": "@lib/presets.ts",
+      "content": "// Motion spring configuration presets for premium micro-interactions\nexport const presets = {\n  // Ultra-responsive, crisp snappy feel\n  snappy: {\n    type: \"spring\",\n    stiffness: 400,\n    damping: 28,\n    mass: 0.8\n  },\n  // Bouncy, playful bounce transition\n  bouncy: {\n    type: \"spring\",\n    stiffness: 300,\n    damping: 15,\n    mass: 1\n  },\n  // Smooth, elegant default easing transition\n  smooth: {\n    type: \"spring\",\n    stiffness: 220,\n    damping: 24,\n    mass: 1\n  },\n  // Gentle, low-speed movement\n  gentle: {\n    type: \"spring\",\n    stiffness: 120,\n    damping: 14,\n    mass: 1\n  },\n  // Stiff, high tension movement\n  stiff: {\n    type: \"spring\",\n    stiffness: 500,\n    damping: 40,\n    mass: 0.5\n  }\n} as const;\n"
+    }
+  ]
+}

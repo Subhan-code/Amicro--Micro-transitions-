@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress-indicator",
+  "type": "registry:ui",
+  "title": "Progress Indicator",
+  "description": "Horizontal page scroll progress indicator bar.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/scroll/progress-indicator.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/progress-indicator.tsx",
+      "content": "import React from 'react';\nimport { motion, useScroll, useSpring } from 'framer-motion';\n\ninterface ProgressIndicatorProps {\n  color?: string;\n  height?: number;\n  className?: string;\n}\n\nexport function ProgressIndicator({\n  color = 'bg-blue-500',\n  height = 4,\n  className = '',\n}: ProgressIndicatorProps) {\n  const { scrollYProgress } = useScroll();\n  const scaleX = useSpring(scrollYProgress, {\n    stiffness: 100,\n    damping: 30,\n    restDelta: 0.001,\n  });\n\n  return (\n    <motion.div\n      style={{ scaleX }}\n      className={`fixed top-0 left-0 right-0 origin-left z-[9999] ${color} ${className}`}\n      style={{\n        scaleX,\n        height,\n        position: 'fixed',\n        top: 0,\n        left: 0,\n        right: 0,\n        originX: 0,\n        zIndex: 9999,\n      }}\n    />\n  );\n}\n"
+    }
+  ]
+}

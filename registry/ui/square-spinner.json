@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "square-spinner",
+  "type": "registry:ui",
+  "title": "Square Spinner",
+  "description": "Square Spinner loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/square-spinner.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/square-spinner.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const SquareSpinner = () => {\r\n  return (\r\n    <motion.div\r\n      className=\"w-8 h-8 border-2 border-zinc-800 dark:border-zinc-700 flex items-center justify-center\"\r\n      animate={{ rotate: 90 }}\r\n      transition={{ duration: 0.6, repeat: Infinity, ease: \"easeInOut\" }}\r\n    >\r\n      <div className=\"w-2 h-2 bg-zinc-800 dark:bg-white\" />\r\n    </motion.div>\r\n  );\r\n};\n"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sticky-reveal",
+  "type": "registry:ui",
+  "title": "Sticky Reveal",
+  "description": "Apple-style scroll-linked side sticky content reveal.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/scroll/sticky-reveal.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/sticky-reveal.tsx",
+      "content": "import React, { useRef, useState } from 'react';\nimport { motion, useMotionValueEvent, useScroll } from 'framer-motion';\n\ninterface StickyRevealProps {\n  content: {\n    title: string;\n    description: string;\n    content?: React.ReactNode;\n  }[];\n  className?: string;\n}\n\nexport function StickyReveal({\n  content,\n  className = '',\n}: StickyRevealProps) {\n  const [activeCard, setActiveCard] = useState(0);\n  const ref = useRef<HTMLDivElement>(null);\n  const { scrollYProgress } = useScroll({\n    target: ref,\n    offset: ['start start', 'end end'],\n  });\n  \n  const cardLength = content.length;\n\n  useMotionValueEvent(scrollYProgress, \"change\", (latest) => {\n    const cardsBreakpoints = content.map((_, index) => index / cardLength);\n    const closestIndex = cardsBreakpoints.reduce((acc, val, index) => {\n      if (latest >= val) {\n        return index;\n      }\n      return acc;\n    }, 0);\n    setActiveCard(closestIndex);\n  });\n\n  return (\n    <div\n      ref={ref}\n      className={`relative flex justify-between gap-10 max-w-5xl mx-auto py-10 px-4 ${className}`}\n    >\n      <div className=\"w-1/2 flex flex-col gap-32 py-10\">\n        {content.map((item, index) => (\n          <div key={index} className=\"min-h-[50vh] flex flex-col justify-center\">\n            <motion.h2\n              animate={{\n                opacity: activeCard === index ? 1 : 0.3,\n              }}\n              className=\"text-2xl font-bold mb-4\"\n            >\n              {item.title}\n            </motion.h2>\n            <motion.p\n              animate={{\n                opacity: activeCard === index ? 1 : 0.3,\n              }}\n              className=\"text-neutral-500 dark:text-neutral-450 leading-relaxed\"\n            >\n              {item.description}\n            </motion.p>\n          </div>\n        ))}\n      </div>\n      \n      <div className=\"sticky top-20 h-[60vh] w-1/2 rounded-2xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/10 overflow-hidden flex items-center justify-center\">\n        {content.map((item, index) => (\n          <motion.div\n            key={index}\n            initial={{ opacity: 0, scale: 0.9 }}\n            animate={{\n              opacity: activeCard === index ? 1 : 0,\n              scale: activeCard === index ? 1 : 0.9,\n            }}\n            transition={{ duration: 0.4 }}\n            className=\"absolute inset-0 p-6 flex items-center justify-center\"\n          >\n            {item.content || (\n              <div className=\"text-lg font-semibold text-neutral-400\">\n                Card {index + 1} Visual\n              </div>\n            )}\n          </motion.div>\n        ))}\n      </div>\n    </div>\n  );\n}\n"
+    }
+  ]
+}

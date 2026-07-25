@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "bobbing-dots",
+  "type": "registry:ui",
+  "title": "Bobbing Dots",
+  "description": "Bobbing Dots loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/bobbing-dots.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/bobbing-dots.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const BobbingDots = () => {\r\n  return (\r\n    <div className=\"flex space-x-2\">\r\n      {[0, 1, 2].map((i) => (\r\n        <motion.div\r\n          key={i}\r\n          className=\"w-3 h-3 bg-zinc-800 dark:bg-white rounded-full\"\r\n          animate={{ y: [0, -10, 0] }}\r\n          transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.15, ease: \"easeInOut\" }}\r\n        />\r\n      ))}\r\n    </div>\r\n  );\r\n};\n"
+    }
+  ]
+}

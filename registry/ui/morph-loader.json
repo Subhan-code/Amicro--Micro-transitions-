@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "morph-loader",
+  "type": "registry:ui",
+  "title": "Morph Loader",
+  "description": "Gooey/morphing shape loader.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/morph-loader.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/morph-loader.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\ninterface MorphLoaderProps {\n  size?: number;\n  color?: string;\n  className?: string;\n}\n\nexport function MorphLoader({\n  size = 40,\n  color = 'bg-blue-500',\n  className = '',\n}: MorphLoaderProps) {\n  return (\n    <div className={`relative flex items-center justify-center ${className}`} style={{ width: size, height: size }}>\n      <motion.div\n        animate={{\n          borderRadius: ['25%', '50%', '50%', '25%', '25%'],\n          rotate: [0, 90, 180, 270, 360],\n          scale: [1, 0.8, 1.1, 0.8, 1],\n        }}\n        transition={{\n          duration: 2.2,\n          ease: 'easeInOut',\n          repeat: Infinity,\n        }}\n        style={{ width: size, height: size }}\n        className={`rounded-2xl ${color} shadow-lg`}\n      />\n    </div>\n  );\n}\n"
+    }
+  ]
+}

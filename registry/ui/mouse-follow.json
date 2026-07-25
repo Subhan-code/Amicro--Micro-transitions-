@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "mouse-follow",
+  "type": "registry:ui",
+  "title": "Mouse Follow",
+  "description": "Smooth spring physics element trailing mouse cursor.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/cursor/mouse-follow.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/mouse-follow.tsx",
+      "content": "import React, { useEffect, useState } from 'react';\nimport { motion, useSpring } from 'framer-motion';\n\ninterface MouseFollowProps {\n  children?: React.ReactNode;\n  stiffness?: number;\n  damping?: number;\n  className?: string;\n}\n\nexport function MouseFollow({\n  children,\n  stiffness = 180,\n  damping = 20,\n  className = '',\n}: MouseFollowProps) {\n  const [isVisible, setIsVisible] = useState(false);\n  const x = useSpring(0, { stiffness, damping });\n  const y = useSpring(0, { stiffness, damping });\n\n  useEffect(() => {\n    const handleMouseMove = (e: MouseEvent) => {\n      x.set(e.clientX);\n      y.set(e.clientY);\n      if (!isVisible) setIsVisible(true);\n    };\n\n    const handleMouseLeave = () => {\n      setIsVisible(false);\n    };\n\n    window.addEventListener('mousemove', handleMouseMove, { passive: true });\n    document.addEventListener('mouseleave', handleMouseLeave);\n    \n    return () => {\n      window.removeEventListener('mousemove', handleMouseMove);\n      document.removeEventListener('mouseleave', handleMouseLeave);\n    };\n  }, [x, y, isVisible]);\n\n  if (!isVisible) return null;\n\n  return (\n    <motion.div\n      style={{\n        x,\n        y,\n        translateX: '-50%',\n        translateY: '-50%',\n      }}\n      className={`fixed top-0 left-0 pointer-events-none z-[9998] ${className}`}\n    >\n      {children || (\n        <div className=\"w-6 h-6 rounded-full border border-blue-500/50 bg-blue-500/10\" />\n      )}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

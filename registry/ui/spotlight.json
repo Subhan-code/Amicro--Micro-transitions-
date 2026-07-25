@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spotlight",
+  "type": "registry:ui",
+  "title": "Spotlight",
+  "description": "Masked spotlight highlighting container content on hover.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/cursor/spotlight.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/spotlight.tsx",
+      "content": "import React, { useRef, useState } from 'react';\nimport { motion } from 'framer-motion';\n\ninterface SpotlightProps {\n  children: React.ReactNode;\n  className?: string;\n  glowColor?: string;\n  glowSize?: number;\n}\n\nexport function Spotlight({\n  children,\n  className = '',\n  glowColor = 'rgba(255, 255, 255, 0.08)',\n  glowSize = 250,\n}: SpotlightProps) {\n  const containerRef = useRef<HTMLDivElement>(null);\n  const [coords, setCoords] = useState({ x: 0, y: 0 });\n  const [opacity, setOpacity] = useState(0);\n\n  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {\n    if (!containerRef.current) return;\n    const rect = containerRef.current.getBoundingClientRect();\n    setCoords({\n      x: e.clientX - rect.left,\n      y: e.clientY - rect.top,\n    });\n  };\n\n  return (\n    <div\n      ref={containerRef}\n      onMouseMove={handleMouseMove}\n      onMouseEnter={() => setOpacity(1)}\n      onMouseLeave={() => setOpacity(0)}\n      className={`relative overflow-hidden bg-neutral-950 border border-neutral-900 rounded-2xl p-6 ${className}`}\n    >\n      {/* Dynamic Cursor Spotlight Layer */}\n      <motion.div\n        className=\"pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300\"\n        style={{\n          opacity,\n          background: `radial-gradient(${glowSize}px circle at ${coords.x}px ${coords.y}px, ${glowColor}, transparent 80%)`,\n        }}\n      />\n      \n      {/* Content wrapper */}\n      <div className=\"relative z-10\">{children}</div>\n    </div>\n  );\n}\n"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton-loader",
+  "type": "registry:ui",
+  "title": "Skeleton Loader",
+  "description": "Skeleton Loader loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/skeleton-loader.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/skeleton-loader.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const SkeletonLoader = () => {\r\n  return (\r\n    <div className=\"w-full max-w-[120px] space-y-2\">\r\n      <div className=\"flex items-center space-x-2\">\r\n        <motion.div\r\n          className=\"w-8 h-8 bg-zinc-200 dark:bg-zinc-800 rounded-full shrink-0\"\r\n          animate={{ opacity: [0.5, 1, 0.5] }}\r\n          transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\" }}\r\n        />\r\n        <motion.div\r\n          className=\"h-3 bg-zinc-200 dark:bg-zinc-800 rounded-full w-full\"\r\n          animate={{ opacity: [0.5, 1, 0.5] }}\r\n          transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\", delay: 0.2 }}\r\n        />\r\n      </div>\r\n      <motion.div\r\n        className=\"h-2 bg-zinc-200 dark:bg-zinc-800 rounded-full w-full\"\r\n        animate={{ opacity: [0.5, 1, 0.5] }}\r\n        transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\", delay: 0.4 }}\r\n      />\r\n      <motion.div\r\n        className=\"h-2 bg-zinc-200 dark:bg-zinc-800 rounded-full w-4/5\"\r\n        animate={{ opacity: [0.5, 1, 0.5] }}\r\n        transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\", delay: 0.6 }}\r\n      />\r\n    </div>\r\n  );\r\n};\n"
+    }
+  ]
+}

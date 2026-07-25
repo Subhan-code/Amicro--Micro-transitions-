@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "twin-orbit",
+  "type": "registry:ui",
+  "title": "Twin Orbit",
+  "description": "Twin Orbit loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/twin-orbit.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/twin-orbit.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const TwinOrbit = () => {\r\n  return (\r\n    <div className=\"relative w-12 h-12\">\r\n      <motion.div\r\n        className=\"absolute inset-0 border-2 border-zinc-800 dark:border-zinc-700 rounded-full border-b-transparent border-r-transparent\"\r\n        animate={{ rotate: 360 }}\r\n        transition={{ duration: 1.5, repeat: Infinity, ease: \"linear\" }}\r\n      />\r\n      <motion.div\r\n        className=\"absolute inset-2 border-2 border-zinc-400 rounded-full border-t-transparent border-l-transparent\"\r\n        animate={{ rotate: -360 }}\r\n        transition={{ duration: 1.5, repeat: Infinity, ease: \"linear\" }}\r\n      />\r\n    </div>\r\n  );\r\n};\n"
+    }
+  ]
+}

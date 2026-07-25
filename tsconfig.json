@@ -22,5 +22,9 @@
     },
     "allowImportingTsExtensions": true,
     "noEmit": true
-  }
+  },
+  "exclude": [
+    "registry",
+    "temp-vibrant-dot-loader"
+  ]
 }

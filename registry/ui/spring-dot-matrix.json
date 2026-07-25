@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spring-dot-matrix",
+  "type": "registry:ui",
+  "title": "Spring Dot Matrix",
+  "description": "Spring Dot Matrix loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/spring-dot-matrix.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/spring-dot-matrix.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const SpringDotMatrix = () => {\n  return (\n    <div className=\"grid grid-cols-3 gap-2.5\">\n      {Array.from({ length: 9 }).map((_, i) => (\n        <motion.div\n          key={i}\n          className=\"w-2 h-2 bg-zinc-800 dark:bg-white rounded-full\"\n          animate={{ scale: [1, 0.4, 1] }}\n          transition={{\n            duration: 1.5,\n            repeat: Infinity,\n            ease: \"easeInOut\",\n            delay: (Math.floor(i / 3) + (i % 3)) * 0.15\n          }}\n        />\n      ))}\n    </div>\n  );\n};\n"
+    }
+  ]
+}

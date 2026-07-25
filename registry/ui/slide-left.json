@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slide-left",
+  "type": "registry:ui",
+  "title": "Slide Left",
+  "description": "Slide in from right to left.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/entrance/slide-left.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/slide-left.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\ninterface SlideLeftProps {\n  children: React.ReactNode;\n  duration?: number;\n  delay?: number;\n  xOffset?: number;\n  className?: string;\n}\n\nexport function SlideLeft({\n  children,\n  duration = 0.6,\n  delay = 0,\n  xOffset = 40,\n  className = '',\n}: SlideLeftProps) {\n  return (\n    <motion.div\n      initial={{ opacity: 0, x: xOffset }}\n      animate={{ opacity: 1, x: 0 }}\n      transition={{\n        duration,\n        delay,\n        ease: [0.16, 1, 0.3, 1], // easeOutExpo\n      }}\n      className={className}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

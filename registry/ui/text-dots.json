@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text-dots",
+  "type": "registry:ui",
+  "title": "Text Dots",
+  "description": "Text Dots loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/text-dots.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/text-dots.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const TextDots = () => {\r\n  return (\r\n    <div className=\"font-medium text-lg text-zinc-900 dark:text-white flex w-24\">\r\n      <span>Thinking</span>\r\n      <span className=\"flex w-6 pl-0.5\">\r\n        <motion.span animate={{ opacity: [0, 1, 1, 0] }} transition={{ duration: 2, repeat: Infinity, times: [0, 0.2, 0.8, 1] }}>.</motion.span>\r\n        <motion.span animate={{ opacity: [0, 0, 1, 0] }} transition={{ duration: 2, repeat: Infinity, times: [0, 0.4, 0.8, 1] }}>.</motion.span>\r\n        <motion.span animate={{ opacity: [0, 0, 1, 0] }} transition={{ duration: 2, repeat: Infinity, times: [0, 0.6, 0.8, 1] }}>.</motion.span>\r\n      </span>\r\n    </div>\r\n  );\r\n};\n"
+    }
+  ]
+}

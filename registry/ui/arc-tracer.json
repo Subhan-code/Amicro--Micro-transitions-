@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "arc-tracer",
+  "type": "registry:ui",
+  "title": "Arc Tracer",
+  "description": "Arc Tracer loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/arc-tracer.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/arc-tracer.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const ArcTracer = () => {\r\n  return (\r\n    <svg className=\"w-10 h-10\" viewBox=\"0 0 50 50\">\r\n      <circle cx=\"25\" cy=\"25\" r=\"20\" className=\"stroke-zinc-200 dark:stroke-zinc-800 fill-none\" strokeWidth=\"4\" />\r\n      <motion.circle\r\n        cx=\"25\"\r\n        cy=\"25\"\r\n        r=\"20\"\r\n        className=\"stroke-zinc-800 dark:stroke-white fill-none\"\r\n        strokeWidth=\"4\"\r\n        strokeLinecap=\"round\"\r\n        strokeDasharray=\"125\"\r\n        animate={{ strokeDashoffset: [125, 0, -125] }}\r\n        transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n      />\r\n    </svg>\r\n  );\r\n};\n"
+    }
+  ]
+}

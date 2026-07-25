@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "apple-sound-wave",
+  "type": "registry:ui",
+  "title": "Apple Sound Wave",
+  "description": "Apple Sound Wave loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/apple-sound-wave.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/apple-sound-wave.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const AppleSoundWave = () => (\r\n  <div className=\"flex space-x-1 h-8 items-center\">\r\n    {[1, 2, 3, 2, 1].map((val, i) => (\r\n      <motion.div\r\n        key={i}\r\n        className=\"w-1 bg-zinc-800 dark:bg-white rounded-full\"\r\n        animate={{ height: [4, val * 8, 4] }}\r\n        transition={{ duration: 1, repeat: Infinity, delay: i * 0.1, ease: \"easeInOut\" }}\r\n      />\r\n    ))}\r\n  </div>\r\n);\n"
+    }
+  ]
+}

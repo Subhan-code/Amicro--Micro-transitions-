@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "swirling-spinner",
+  "type": "registry:ui",
+  "title": "Swirling Spinner",
+  "description": "Swirling Spinner loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/swirling-spinner.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/swirling-spinner.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const SwirlingSpinner = () => {\n  return (\n    <div className=\"relative w-10 h-10 flex items-center justify-center\">\n      {/* Outer ring */}\n      <motion.div\n        className=\"absolute inset-0 border-[2.5px] border-t-zinc-800 dark:border-t-white border-r-zinc-800/30 dark:border-r-white/30 border-b-zinc-800/10 dark:border-b-white/10 border-l-transparent rounded-full\"\n        animate={{ rotate: 360 }}\n        transition={{ duration: 1.3, repeat: Infinity, ease: \"linear\" }}\n      />\n      {/* Inner ring spinning backwards */}\n      <motion.div\n        className=\"absolute w-6 h-6 border-[2.5px] border-b-zinc-800 dark:border-b-white border-t-zinc-800/30 dark:border-t-white/30 border-r-zinc-800/10 dark:border-r-white/10 border-l-transparent rounded-full\"\n        animate={{ rotate: -360 }}\n        transition={{ duration: 0.9, repeat: Infinity, ease: \"linear\" }}\n      />\n    </div>\n  );\n};\n"
+    }
+  ]
+}

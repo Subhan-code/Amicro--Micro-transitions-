@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "glow-button",
+  "type": "registry:ui",
+  "title": "Glow Button",
+  "description": "Glow/border animation following the cursor.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/hover/glow-button.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/glow-button.tsx",
+      "content": "import React, { useRef, useState } from 'react';\nimport { motion } from 'framer-motion';\n\ninterface GlowButtonProps {\n  children: React.ReactNode;\n  className?: string;\n  glowColor?: string;\n  onClick?: () => void;\n}\n\nexport function GlowButton({\n  children,\n  className = '',\n  glowColor = 'rgba(59, 130, 246, 0.15)', // Light blue default\n  onClick,\n}: GlowButtonProps) {\n  const containerRef = useRef<HTMLButtonElement>(null);\n  const [coords, setCoords] = useState({ x: 0, y: 0 });\n  const [opacity, setOpacity] = useState(0);\n\n  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {\n    if (!containerRef.current) return;\n    const rect = containerRef.current.getBoundingClientRect();\n    setCoords({\n      x: e.clientX - rect.left,\n      y: e.clientY - rect.top,\n    });\n  };\n\n  return (\n    <button\n      ref={containerRef}\n      onMouseMove={handleMouseMove}\n      onMouseEnter={() => setOpacity(1)}\n      onMouseLeave={() => setOpacity(0)}\n      onClick={onClick}\n      className={`relative overflow-hidden inline-flex items-center justify-center rounded-xl bg-neutral-900 border border-neutral-800 text-white font-medium text-sm h-11 px-6 shadow-md transition-colors hover:border-neutral-700 cursor-pointer ${className}`}\n    >\n      {/* Dynamic Cursor Glow Layer */}\n      <motion.div\n        className=\"pointer-events-none absolute -inset-px rounded-xl opacity-0 transition-opacity duration-300\"\n        style={{\n          opacity,\n          background: `radial-gradient(120px circle at ${coords.x}px ${coords.y}px, ${glowColor}, transparent 80%)`,\n        }}\n      />\n      \n      {/* Content wrapper */}\n      <span className=\"relative z-10\">{children}</span>\n    </button>\n  );\n}\n"
+    }
+  ]
+}

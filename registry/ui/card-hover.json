@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "card-hover",
+  "type": "registry:ui",
+  "title": "Card Hover",
+  "description": "Dynamic floating card effect on hover.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/hover/card-hover.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/card-hover.tsx",
+      "content": "import React, { useState } from 'react';\nimport { motion, AnimatePresence } from 'framer-motion';\n\ninterface CardHoverProps {\n  items: {\n    id: string;\n    title: string;\n    description: string;\n    link?: string;\n  }[];\n  className?: string;\n  cardClassName?: string;\n}\n\nexport function CardHover({\n  items,\n  className = '',\n  cardClassName = '',\n}: CardHoverProps) {\n  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);\n\n  return (\n    <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 w-full ${className}`}>\n      {items.map((item, idx) => (\n        <a\n          key={item.id}\n          href={item.link || '#'}\n          className=\"relative group block p-2 h-full w-full no-underline\"\n          onMouseEnter={() => setHoveredIndex(idx)}\n          onMouseLeave={() => setHoveredIndex(null)}\n        >\n          <AnimatePresence>\n            {hoveredIndex === idx && (\n              <motion.span\n                className=\"absolute inset-0 h-full w-full bg-neutral-200 dark:bg-zinc-800/[0.8] block rounded-3xl -z-10\"\n                layoutId=\"hoverBackground\"\n                initial={{ opacity: 0 }}\n                animate={{\n                  opacity: 1,\n                  transition: { duration: 0.15 },\n                }}\n                exit={{\n                  opacity: 0,\n                  transition: { duration: 0.15, delay: 0.1 },\n                }}\n              />\n            )}\n          </AnimatePresence>\n          <div\n            className={`rounded-2xl h-full w-full p-5 overflow-hidden bg-white dark:bg-black border border-neutral-200 dark:border-zinc-800 group-hover:border-slate-350 dark:group-hover:border-zinc-700 relative z-20 transition-colors duration-200 ${cardClassName}`}\n          >\n            <div className=\"relative z-50\">\n              <h4 className=\"text-zinc-900 dark:text-zinc-100 font-bold tracking-wide mt-2\">\n                {item.title}\n              </h4>\n              <p className=\"mt-2 text-zinc-500 dark:text-zinc-400 tracking-wide leading-relaxed text-sm\">\n                {item.description}\n              </p>\n            </div>\n          </div>\n        </a>\n      ))}\n    </div>\n  );\n}\n"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-mouse-position",
+  "type": "registry:hook",
+  "title": "Use Mouse Position",
+  "description": "Tracks target element mouse coordinate offsets.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/hooks/use-mouse-position.ts",
+      "type": "registry:hook",
+      "target": "@hooks/use-mouse-position.ts",
+      "content": "import { useEffect, useState, RefObject } from 'react';\n\nexport interface MousePosition {\n  x: number;\n  y: number;\n  elementX: number;\n  elementY: number;\n}\n\nexport function useMousePosition(ref?: RefObject<HTMLElement | null>) {\n  const [position, setPosition] = useState<MousePosition>({\n    x: 0,\n    y: 0,\n    elementX: 0,\n    elementY: 0,\n  });\n\n  useEffect(() => {\n    const handleMouseMove = (event: MouseEvent) => {\n      let elementX = 0;\n      let elementY = 0;\n\n      if (ref && ref.current) {\n        const rect = ref.current.getBoundingClientRect();\n        elementX = event.clientX - rect.left;\n        elementY = event.clientY - rect.top;\n      }\n\n      setPosition({\n        x: event.clientX,\n        y: event.clientY,\n        elementX,\n        elementY,\n      });\n    };\n\n    window.addEventListener('mousemove', handleMouseMove, { passive: true });\n    return () => {\n      window.removeEventListener('mousemove', handleMouseMove);\n    };\n  }, [ref]);\n\n  return position;\n}\n"
+    }
+  ]
+}

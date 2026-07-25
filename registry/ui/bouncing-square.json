@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "bouncing-square",
+  "type": "registry:ui",
+  "title": "Bouncing Square",
+  "description": "Bouncing Square loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/bouncing-square.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/bouncing-square.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const BouncingSquare = () => {\r\n  return (\r\n    <div className=\"relative w-10 h-12 flex items-end justify-center\">\r\n      <div className=\"absolute bottom-0 w-8 h-1 bg-zinc-200 dark:bg-zinc-800 rounded-full blur-sm\" />\r\n      <motion.div\r\n        className=\"w-6 h-6 bg-zinc-800 dark:bg-white rounded-sm origin-bottom\"\r\n        animate={{ y: [0, -24, 0], scaleY: [0.8, 1.1, 0.8], scaleX: [1.2, 0.9, 1.2] }}\r\n        transition={{ duration: 0.6, repeat: Infinity, ease: \"easeInOut\" }}\r\n      />\r\n    </div>\r\n  );\r\n};\n"
+    }
+  ]
+}

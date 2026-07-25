@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "morphing-ring",
+  "type": "registry:ui",
+  "title": "Morphing Ring",
+  "description": "Morphing Ring loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/morphing-ring.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/morphing-ring.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const MorphingRing = () => (\r\n  <motion.div\r\n    className=\"w-10 h-10 border-[3px] border-zinc-800 dark:border-zinc-700\"\r\n    animate={{\r\n      rotate: 180,\r\n      borderRadius: [\"10%\", \"50%\", \"10%\"]\r\n    }}\r\n    transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n  />\r\n);\n"
+    }
+  ]
+}

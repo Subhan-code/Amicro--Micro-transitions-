@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slide-right",
+  "type": "registry:ui",
+  "title": "Slide Right",
+  "description": "Slide in from left to right.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/entrance/slide-right.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/slide-right.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\ninterface SlideRightProps {\n  children: React.ReactNode;\n  duration?: number;\n  delay?: number;\n  xOffset?: number;\n  className?: string;\n}\n\nexport function SlideRight({\n  children,\n  duration = 0.6,\n  delay = 0,\n  xOffset = -40,\n  className = '',\n}: SlideRightProps) {\n  return (\n    <motion.div\n      initial={{ opacity: 0, x: xOffset }}\n      animate={{ opacity: 1, x: 0 }}\n      transition={{\n        duration,\n        delay,\n        ease: [0.16, 1, 0.3, 1], // easeOutExpo\n      }}\n      className={className}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

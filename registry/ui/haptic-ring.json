@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "haptic-ring",
+  "type": "registry:ui",
+  "title": "Haptic Ring",
+  "description": "Haptic Ring loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/haptic-ring.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/haptic-ring.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const HapticRing = () => (\r\n  <motion.div\r\n    className=\"w-10 h-10 border-[3px] border-zinc-200 dark:border-zinc-800 rounded-full border-t-zinc-800 dark:border-t-white\"\r\n    animate={{ rotate: [0, 90, 180, 270, 360] }}\r\n    transition={{ duration: 2, repeat: Infinity, type: \"spring\", bounce: 0.4 }}\r\n  />\r\n);\n"
+    }
+  ]
+}

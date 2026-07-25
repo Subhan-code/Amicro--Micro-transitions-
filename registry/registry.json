@@ -1,0 +1,2735 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "amicro",
+  "homepage": "https://github.com/Subhan-code/Amicro--Micro-transitions-",
+  "items": [
+    {
+      "name": "fade-in",
+      "type": "registry:ui",
+      "title": "Fade In",
+      "description": "Basic fade entrance animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/entrance/fade-in.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/fade-in.tsx"
+        }
+      ]
+    },
+    {
+      "name": "fade-up",
+      "type": "registry:ui",
+      "title": "Fade Up",
+      "description": "Fade with upward translation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/entrance/fade-up.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/fade-up.tsx"
+        }
+      ]
+    },
+    {
+      "name": "fade-down",
+      "type": "registry:ui",
+      "title": "Fade Down",
+      "description": "Fade with downward translation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/entrance/fade-down.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/fade-down.tsx"
+        }
+      ]
+    },
+    {
+      "name": "slide-left",
+      "type": "registry:ui",
+      "title": "Slide Left",
+      "description": "Slide in from right to left.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/entrance/slide-left.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/slide-left.tsx"
+        }
+      ]
+    },
+    {
+      "name": "slide-right",
+      "type": "registry:ui",
+      "title": "Slide Right",
+      "description": "Slide in from left to right.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/entrance/slide-right.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/slide-right.tsx"
+        }
+      ]
+    },
+    {
+      "name": "scale-in",
+      "type": "registry:ui",
+      "title": "Scale In",
+      "description": "Scale transition from small to actual size.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/entrance/scale-in.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/scale-in.tsx"
+        }
+      ]
+    },
+    {
+      "name": "zoom-in",
+      "type": "registry:ui",
+      "title": "Zoom In",
+      "description": "Scale transition combined with deep blur/depth effect.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/entrance/zoom-in.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/zoom-in.tsx"
+        }
+      ]
+    },
+    {
+      "name": "text-reveal",
+      "type": "registry:ui",
+      "title": "Text Reveal",
+      "description": "Line-by-line slide/reveal text effect.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/text/text-reveal.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/text-reveal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "word-reveal",
+      "type": "registry:ui",
+      "title": "Word Reveal",
+      "description": "Word-by-word fade and scale stagger reveal effect.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/text/word-reveal.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/word-reveal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "blur-text",
+      "type": "registry:ui",
+      "title": "Blur Text",
+      "description": "Blur transition for text container/headings.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/text/blur-text.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/blur-text.tsx"
+        }
+      ]
+    },
+    {
+      "name": "character-stagger",
+      "type": "registry:ui",
+      "title": "Character Stagger",
+      "description": "Character-by-character radial or linear stagger animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/text/character-stagger.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/character-stagger.tsx"
+        }
+      ]
+    },
+    {
+      "name": "card-hover",
+      "type": "registry:ui",
+      "title": "Card Hover",
+      "description": "Dynamic floating card effect on hover.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/hover/card-hover.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/card-hover.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tilt-card",
+      "type": "registry:ui",
+      "title": "Tilt Card",
+      "description": "3D parallax tilt effect following mouse cursor.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/hover/tilt-card.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/tilt-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "magnetic-button",
+      "type": "registry:ui",
+      "title": "Magnetic Button",
+      "description": "A button that pulls slightly towards the user's cursor.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/hover/magnetic-button.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/magnetic-button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "glow-button",
+      "type": "registry:ui",
+      "title": "Glow Button",
+      "description": "Glow/border animation following the cursor.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/hover/glow-button.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/glow-button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "cursor-trail",
+      "type": "registry:ui",
+      "title": "Cursor Trail",
+      "description": "Custom cursor with particle/dots trail.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/cursor/cursor-trail.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/cursor-trail.tsx"
+        }
+      ]
+    },
+    {
+      "name": "spotlight",
+      "type": "registry:ui",
+      "title": "Spotlight",
+      "description": "Masked spotlight highlighting container content on hover.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/cursor/spotlight.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/spotlight.tsx"
+        }
+      ]
+    },
+    {
+      "name": "mouse-follow",
+      "type": "registry:ui",
+      "title": "Mouse Follow",
+      "description": "Smooth spring physics element trailing mouse cursor.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/cursor/mouse-follow.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/mouse-follow.tsx"
+        }
+      ]
+    },
+    {
+      "name": "scroll-reveal",
+      "type": "registry:ui",
+      "title": "Scroll Reveal",
+      "description": "Reveal content block as it scrolls into viewport.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/scroll/scroll-reveal.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/scroll-reveal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "progress-indicator",
+      "type": "registry:ui",
+      "title": "Progress Indicator",
+      "description": "Horizontal page scroll progress indicator bar.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/scroll/progress-indicator.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/progress-indicator.tsx"
+        }
+      ]
+    },
+    {
+      "name": "sticky-reveal",
+      "type": "registry:ui",
+      "title": "Sticky Reveal",
+      "description": "Apple-style scroll-linked side sticky content reveal.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/scroll/sticky-reveal.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/sticky-reveal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "Loading skeleton with smooth shimmer sweep.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/skeleton.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/skeleton.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pulse",
+      "type": "registry:ui",
+      "title": "Pulse",
+      "description": "Pulsing scaling animation for loading elements.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/pulse.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/pulse.tsx"
+        }
+      ]
+    },
+    {
+      "name": "morph-loader",
+      "type": "registry:ui",
+      "title": "Morph Loader",
+      "description": "Gooey/morphing shape loader.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/morph-loader.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/morph-loader.tsx"
+        }
+      ]
+    },
+    {
+      "name": "use-scroll-progress",
+      "type": "registry:hook",
+      "title": "Use Scroll Progress",
+      "description": "Calculates current page/container scroll progress percentage.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/hooks/use-scroll-progress.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-scroll-progress.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-mouse-position",
+      "type": "registry:hook",
+      "title": "Use Mouse Position",
+      "description": "Tracks target element mouse coordinate offsets.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/hooks/use-mouse-position.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-mouse-position.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-stagger",
+      "type": "registry:hook",
+      "title": "Use Stagger",
+      "description": "Calculates custom delays for child stagger layouts.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/hooks/use-stagger.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-stagger.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-reduced-motion",
+      "type": "registry:hook",
+      "title": "Use Reduced Motion",
+      "description": "Detects client system reduced motion media query standard.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/hooks/use-reduced-motion.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-reduced-motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "presets",
+      "type": "registry:lib",
+      "title": "Presets",
+      "description": "A set of spring configuration presets for Motion.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/lib/presets.ts",
+          "type": "registry:lib",
+          "target": "@lib/presets.ts"
+        }
+      ]
+    },
+    {
+      "name": "utils",
+      "type": "registry:lib",
+      "title": "Utils",
+      "description": "Motion utility functions (cn helper, mapRange).",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ]
+    },
+    {
+      "name": "accordion-loader",
+      "type": "registry:ui",
+      "title": "Accordion Loader",
+      "description": "Accordion Loader loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/accordion-loader.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/accordion-loader.tsx"
+        }
+      ]
+    },
+    {
+      "name": "app-icon-load",
+      "type": "registry:ui",
+      "title": "App Icon Load",
+      "description": "App Icon Load loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/app-icon-load.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/app-icon-load.tsx"
+        }
+      ]
+    },
+    {
+      "name": "apple-breathe",
+      "type": "registry:ui",
+      "title": "Apple Breathe",
+      "description": "Apple Breathe loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/apple-breathe.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/apple-breathe.tsx"
+        }
+      ]
+    },
+    {
+      "name": "apple-equalizer",
+      "type": "registry:ui",
+      "title": "Apple Equalizer",
+      "description": "Apple Equalizer loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/apple-equalizer.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/apple-equalizer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "apple-icon-morph",
+      "type": "registry:ui",
+      "title": "Apple Icon Morph",
+      "description": "Apple Icon Morph loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/apple-icon-morph.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/apple-icon-morph.tsx"
+        }
+      ]
+    },
+    {
+      "name": "apple-pulse-dots",
+      "type": "registry:ui",
+      "title": "Apple Pulse Dots",
+      "description": "Apple Pulse Dots loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/apple-pulse-dots.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/apple-pulse-dots.tsx"
+        }
+      ]
+    },
+    {
+      "name": "apple-scale-pulse",
+      "type": "registry:ui",
+      "title": "Apple Scale Pulse",
+      "description": "Apple Scale Pulse loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/apple-scale-pulse.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/apple-scale-pulse.tsx"
+        }
+      ]
+    },
+    {
+      "name": "apple-sound-wave",
+      "type": "registry:ui",
+      "title": "Apple Sound Wave",
+      "description": "Apple Sound Wave loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/apple-sound-wave.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/apple-sound-wave.tsx"
+        }
+      ]
+    },
+    {
+      "name": "apple-text-reveal",
+      "type": "registry:ui",
+      "title": "Apple Text Reveal",
+      "description": "Apple Text Reveal loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/apple-text-reveal.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/apple-text-reveal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "apple-unlock",
+      "type": "registry:ui",
+      "title": "Apple Unlock",
+      "description": "Apple Unlock loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/apple-unlock.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/apple-unlock.tsx"
+        }
+      ]
+    },
+    {
+      "name": "arc-tracer",
+      "type": "registry:ui",
+      "title": "Arc Tracer",
+      "description": "Arc Tracer loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/arc-tracer.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/arc-tracer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "bar-cascade",
+      "type": "registry:ui",
+      "title": "Bar Cascade",
+      "description": "Bar Cascade loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/bar-cascade.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/bar-cascade.tsx"
+        }
+      ]
+    },
+    {
+      "name": "bar-sweep",
+      "type": "registry:ui",
+      "title": "Bar Sweep",
+      "description": "Bar Sweep loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/bar-sweep.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/bar-sweep.tsx"
+        }
+      ]
+    },
+    {
+      "name": "bobbing-dots",
+      "type": "registry:ui",
+      "title": "Bobbing Dots",
+      "description": "Bobbing Dots loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/bobbing-dots.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/bobbing-dots.tsx"
+        }
+      ]
+    },
+    {
+      "name": "bounce-dots",
+      "type": "registry:ui",
+      "title": "Bounce Dots",
+      "description": "Bounce Dots loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/bounce-dots.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/bounce-dots.tsx"
+        }
+      ]
+    },
+    {
+      "name": "bouncing-bars",
+      "type": "registry:ui",
+      "title": "Bouncing Bars",
+      "description": "Bouncing Bars loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/bouncing-bars.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/bouncing-bars.tsx"
+        }
+      ]
+    },
+    {
+      "name": "bouncing-dots",
+      "type": "registry:ui",
+      "title": "Bouncing Dots",
+      "description": "Bouncing Dots loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/bouncing-dots.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/bouncing-dots.tsx"
+        }
+      ]
+    },
+    {
+      "name": "bouncing-lines",
+      "type": "registry:ui",
+      "title": "Bouncing Lines",
+      "description": "Bouncing Lines loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/bouncing-lines.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/bouncing-lines.tsx"
+        }
+      ]
+    },
+    {
+      "name": "bouncing-square",
+      "type": "registry:ui",
+      "title": "Bouncing Square",
+      "description": "Bouncing Square loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/bouncing-square.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/bouncing-square.tsx"
+        }
+      ]
+    },
+    {
+      "name": "breathe-ring",
+      "type": "registry:ui",
+      "title": "Breathe Ring",
+      "description": "Breathe Ring loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/breathe-ring.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/breathe-ring.tsx"
+        }
+      ]
+    },
+    {
+      "name": "breathing-glow",
+      "type": "registry:ui",
+      "title": "Breathing Glow",
+      "description": "Breathing Glow loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/breathing-glow.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/breathing-glow.tsx"
+        }
+      ]
+    },
+    {
+      "name": "breathing-square",
+      "type": "registry:ui",
+      "title": "Breathing Square",
+      "description": "Breathing Square loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/breathing-square.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/breathing-square.tsx"
+        }
+      ]
+    },
+    {
+      "name": "circular-bars",
+      "type": "registry:ui",
+      "title": "Circular Bars",
+      "description": "Circular Bars loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/circular-bars.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/circular-bars.tsx"
+        }
+      ]
+    },
+    {
+      "name": "classic-spinner",
+      "type": "registry:ui",
+      "title": "Classic Spinner",
+      "description": "Classic Spinner loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/classic-spinner.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/classic-spinner.tsx"
+        }
+      ]
+    },
+    {
+      "name": "clock-spinner",
+      "type": "registry:ui",
+      "title": "Clock Spinner",
+      "description": "Clock Spinner loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/clock-spinner.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/clock-spinner.tsx"
+        }
+      ]
+    },
+    {
+      "name": "comet-spinner",
+      "type": "registry:ui",
+      "title": "Comet Spinner",
+      "description": "Comet Spinner loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/comet-spinner.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/comet-spinner.tsx"
+        }
+      ]
+    },
+    {
+      "name": "concentric-pulse",
+      "type": "registry:ui",
+      "title": "Concentric Pulse",
+      "description": "Concentric Pulse loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/concentric-pulse.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/concentric-pulse.tsx"
+        }
+      ]
+    },
+    {
+      "name": "concentric-ring",
+      "type": "registry:ui",
+      "title": "Concentric Ring",
+      "description": "Concentric Ring loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/concentric-ring.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/concentric-ring.tsx"
+        }
+      ]
+    },
+    {
+      "name": "concentric-squares",
+      "type": "registry:ui",
+      "title": "Concentric Squares",
+      "description": "Concentric Squares loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/concentric-squares.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/concentric-squares.tsx"
+        }
+      ]
+    },
+    {
+      "name": "conveyor-loop",
+      "type": "registry:ui",
+      "title": "Conveyor Loop",
+      "description": "Conveyor Loop loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/conveyor-loop.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/conveyor-loop.tsx"
+        }
+      ]
+    },
+    {
+      "name": "cross-spinner",
+      "type": "registry:ui",
+      "title": "Cross Spinner",
+      "description": "Cross Spinner loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/cross-spinner.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/cross-spinner.tsx"
+        }
+      ]
+    },
+    {
+      "name": "cube-flip-spring",
+      "type": "registry:ui",
+      "title": "Cube Flip Spring",
+      "description": "Cube Flip Spring loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/cube-flip-spring.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/cube-flip-spring.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dash-ring",
+      "type": "registry:ui",
+      "title": "Dash Ring",
+      "description": "Dash Ring loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/dash-ring.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/dash-ring.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dashed-spiral",
+      "type": "registry:ui",
+      "title": "Dashed Spiral",
+      "description": "Dashed Spiral loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/dashed-spiral.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/dashed-spiral.tsx"
+        }
+      ]
+    },
+    {
+      "name": "diamond-grid",
+      "type": "registry:ui",
+      "title": "Diamond Grid",
+      "description": "Diamond Grid loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/diamond-grid.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/diamond-grid.tsx"
+        }
+      ]
+    },
+    {
+      "name": "diamond-rotate-spring",
+      "type": "registry:ui",
+      "title": "Diamond Rotate Spring",
+      "description": "Diamond Rotate Spring loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/diamond-rotate-spring.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/diamond-rotate-spring.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dot-spinner",
+      "type": "registry:ui",
+      "title": "Dot Spinner",
+      "description": "Dot Spinner loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/dot-spinner.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/dot-spinner.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dots-ring",
+      "type": "registry:ui",
+      "title": "Dots Ring",
+      "description": "Dots Ring loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/dots-ring.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/dots-ring.tsx"
+        }
+      ]
+    },
+    {
+      "name": "double-ring",
+      "type": "registry:ui",
+      "title": "Double Ring",
+      "description": "Double Ring loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/double-ring.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/double-ring.tsx"
+        }
+      ]
+    },
+    {
+      "name": "drop-dot",
+      "type": "registry:ui",
+      "title": "Drop Dot",
+      "description": "Drop Dot loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/drop-dot.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/drop-dot.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dual-arc",
+      "type": "registry:ui",
+      "title": "Dual Arc",
+      "description": "Dual Arc loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/dual-arc.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/dual-arc.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dynamic-island",
+      "type": "registry:ui",
+      "title": "Dynamic Island",
+      "description": "Dynamic Island loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/dynamic-island.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/dynamic-island.tsx"
+        }
+      ]
+    },
+    {
+      "name": "elastic-bars",
+      "type": "registry:ui",
+      "title": "Elastic Bars",
+      "description": "Elastic Bars loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/elastic-bars.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/elastic-bars.tsx"
+        }
+      ]
+    },
+    {
+      "name": "elastic-square",
+      "type": "registry:ui",
+      "title": "Elastic Square",
+      "description": "Elastic Square loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/elastic-square.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/elastic-square.tsx"
+        }
+      ]
+    },
+    {
+      "name": "expanding-cross",
+      "type": "registry:ui",
+      "title": "Expanding Cross",
+      "description": "Expanding Cross loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/expanding-cross.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/expanding-cross.tsx"
+        }
+      ]
+    },
+    {
+      "name": "face-id-scan",
+      "type": "registry:ui",
+      "title": "Face Id Scan",
+      "description": "Face Id Scan loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/face-id-scan.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/face-id-scan.tsx"
+        }
+      ]
+    },
+    {
+      "name": "fade-arc",
+      "type": "registry:ui",
+      "title": "Fade Arc",
+      "description": "Fade Arc loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/fade-arc.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/fade-arc.tsx"
+        }
+      ]
+    },
+    {
+      "name": "fade-dots",
+      "type": "registry:ui",
+      "title": "Fade Dots",
+      "description": "Fade Dots loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/fade-dots.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/fade-dots.tsx"
+        }
+      ]
+    },
+    {
+      "name": "flip-square",
+      "type": "registry:ui",
+      "title": "Flip Square",
+      "description": "Flip Square loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/flip-square.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/flip-square.tsx"
+        }
+      ]
+    },
+    {
+      "name": "floating-diamonds",
+      "type": "registry:ui",
+      "title": "Floating Diamonds",
+      "description": "Floating Diamonds loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/floating-diamonds.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/floating-diamonds.tsx"
+        }
+      ]
+    },
+    {
+      "name": "fluid-bars",
+      "type": "registry:ui",
+      "title": "Fluid Bars",
+      "description": "Fluid Bars loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/fluid-bars.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/fluid-bars.tsx"
+        }
+      ]
+    },
+    {
+      "name": "fluid-diamond",
+      "type": "registry:ui",
+      "title": "Fluid Diamond",
+      "description": "Fluid Diamond loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/fluid-diamond.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/fluid-diamond.tsx"
+        }
+      ]
+    },
+    {
+      "name": "fluid-dot-orbit",
+      "type": "registry:ui",
+      "title": "Fluid Dot Orbit",
+      "description": "Fluid Dot Orbit loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/fluid-dot-orbit.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/fluid-dot-orbit.tsx"
+        }
+      ]
+    },
+    {
+      "name": "fluid-skeleton",
+      "type": "registry:ui",
+      "title": "Fluid Skeleton",
+      "description": "Fluid Skeleton loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/fluid-skeleton.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/fluid-skeleton.tsx"
+        }
+      ]
+    },
+    {
+      "name": "gears",
+      "type": "registry:ui",
+      "title": "Gears",
+      "description": "Gears loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/gears.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/gears.tsx"
+        }
+      ]
+    },
+    {
+      "name": "glassmorphic-card",
+      "type": "registry:ui",
+      "title": "Glassmorphic Card",
+      "description": "Glassmorphic Card loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/glassmorphic-card.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/glassmorphic-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "gradient-arc",
+      "type": "registry:ui",
+      "title": "Gradient Arc",
+      "description": "Gradient Arc loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/gradient-arc.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/gradient-arc.tsx"
+        }
+      ]
+    },
+    {
+      "name": "grid-dots",
+      "type": "registry:ui",
+      "title": "Grid Dots",
+      "description": "Grid Dots loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/grid-dots.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/grid-dots.tsx"
+        }
+      ]
+    },
+    {
+      "name": "haptic-ring",
+      "type": "registry:ui",
+      "title": "Haptic Ring",
+      "description": "Haptic Ring loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/haptic-ring.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/haptic-ring.tsx"
+        }
+      ]
+    },
+    {
+      "name": "heartbeat",
+      "type": "registry:ui",
+      "title": "Heartbeat",
+      "description": "Heartbeat loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/heartbeat.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/heartbeat.tsx"
+        }
+      ]
+    },
+    {
+      "name": "hexagon-spinner",
+      "type": "registry:ui",
+      "title": "Hexagon Spinner",
+      "description": "Hexagon Spinner loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/hexagon-spinner.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/hexagon-spinner.tsx"
+        }
+      ]
+    },
+    {
+      "name": "hourglass",
+      "type": "registry:ui",
+      "title": "Hourglass",
+      "description": "Hourglass loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/hourglass.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/hourglass.tsx"
+        }
+      ]
+    },
+    {
+      "name": "infinity-path",
+      "type": "registry:ui",
+      "title": "Infinity Path",
+      "description": "Infinity Path loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/infinity-path.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/infinity-path.tsx"
+        }
+      ]
+    },
+    {
+      "name": "intersecting-rings",
+      "type": "registry:ui",
+      "title": "Intersecting Rings",
+      "description": "Intersecting Rings loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/intersecting-rings.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/intersecting-rings.tsx"
+        }
+      ]
+    },
+    {
+      "name": "ios-spinner",
+      "type": "registry:ui",
+      "title": "Ios Spinner",
+      "description": "Ios Spinner loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/ios-spinner.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/ios-spinner.tsx"
+        }
+      ]
+    },
+    {
+      "name": "line-spinner",
+      "type": "registry:ui",
+      "title": "Line Spinner",
+      "description": "Line Spinner loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/line-spinner.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/line-spinner.tsx"
+        }
+      ]
+    },
+    {
+      "name": "liquid-dots",
+      "type": "registry:ui",
+      "title": "Liquid Dots",
+      "description": "Liquid Dots loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/liquid-dots.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/liquid-dots.tsx"
+        }
+      ]
+    },
+    {
+      "name": "mac-terminal",
+      "type": "registry:ui",
+      "title": "Mac Terminal",
+      "description": "Mac Terminal loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/mac-terminal.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/mac-terminal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "magnetic-dots",
+      "type": "registry:ui",
+      "title": "Magnetic Dots",
+      "description": "Magnetic Dots loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/magnetic-dots.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/magnetic-dots.tsx"
+        }
+      ]
+    },
+    {
+      "name": "minimal-triangle",
+      "type": "registry:ui",
+      "title": "Minimal Triangle",
+      "description": "Minimal Triangle loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/minimal-triangle.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/minimal-triangle.tsx"
+        }
+      ]
+    },
+    {
+      "name": "morph-dot-ring",
+      "type": "registry:ui",
+      "title": "Morph Dot Ring",
+      "description": "Morph Dot Ring loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/morph-dot-ring.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/morph-dot-ring.tsx"
+        }
+      ]
+    },
+    {
+      "name": "morphing-bars",
+      "type": "registry:ui",
+      "title": "Morphing Bars",
+      "description": "Morphing Bars loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/morphing-bars.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/morphing-bars.tsx"
+        }
+      ]
+    },
+    {
+      "name": "morphing-infinity",
+      "type": "registry:ui",
+      "title": "Morphing Infinity",
+      "description": "Morphing Infinity loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/morphing-infinity.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/morphing-infinity.tsx"
+        }
+      ]
+    },
+    {
+      "name": "morphing-ring",
+      "type": "registry:ui",
+      "title": "Morphing Ring",
+      "description": "Morphing Ring loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/morphing-ring.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/morphing-ring.tsx"
+        }
+      ]
+    },
+    {
+      "name": "morphing-shape",
+      "type": "registry:ui",
+      "title": "Morphing Shape",
+      "description": "Morphing Shape loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/morphing-shape.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/morphing-shape.tsx"
+        }
+      ]
+    },
+    {
+      "name": "newtons-cradle",
+      "type": "registry:ui",
+      "title": "Newtons Cradle",
+      "description": "Newtons Cradle loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/newtons-cradle.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/newtons-cradle.tsx"
+        }
+      ]
+    },
+    {
+      "name": "offset-rings",
+      "type": "registry:ui",
+      "title": "Offset Rings",
+      "description": "Offset Rings loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/offset-rings.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/offset-rings.tsx"
+        }
+      ]
+    },
+    {
+      "name": "orbiting-circles",
+      "type": "registry:ui",
+      "title": "Orbiting Circles",
+      "description": "Orbiting Circles loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/orbiting-circles.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/orbiting-circles.tsx"
+        }
+      ]
+    },
+    {
+      "name": "orbiting-dot",
+      "type": "registry:ui",
+      "title": "Orbiting Dot",
+      "description": "Orbiting Dot loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/orbiting-dot.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/orbiting-dot.tsx"
+        }
+      ]
+    },
+    {
+      "name": "origami-shape",
+      "type": "registry:ui",
+      "title": "Origami Shape",
+      "description": "Origami Shape loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/origami-shape.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/origami-shape.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pendulum",
+      "type": "registry:ui",
+      "title": "Pendulum",
+      "description": "Pendulum loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/pendulum.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/pendulum.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pulsating-dots",
+      "type": "registry:ui",
+      "title": "Pulsating Dots",
+      "description": "Pulsating Dots loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/pulsating-dots.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/pulsating-dots.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pulse-dot",
+      "type": "registry:ui",
+      "title": "Pulse Dot",
+      "description": "Pulse Dot loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/pulse-dot.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/pulse-dot.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pulse-dots",
+      "type": "registry:ui",
+      "title": "Pulse Dots",
+      "description": "Pulse Dots loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/pulse-dots.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/pulse-dots.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pulse-square",
+      "type": "registry:ui",
+      "title": "Pulse Square",
+      "description": "Pulse Square loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/pulse-square.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/pulse-square.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pumping-heart",
+      "type": "registry:ui",
+      "title": "Pumping Heart",
+      "description": "Pumping Heart loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/pumping-heart.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/pumping-heart.tsx"
+        }
+      ]
+    },
+    {
+      "name": "radar-sweep",
+      "type": "registry:ui",
+      "title": "Radar Sweep",
+      "description": "Radar Sweep loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/radar-sweep.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/radar-sweep.tsx"
+        }
+      ]
+    },
+    {
+      "name": "ring-sweep",
+      "type": "registry:ui",
+      "title": "Ring Sweep",
+      "description": "Ring Sweep loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/ring-sweep.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/ring-sweep.tsx"
+        }
+      ]
+    },
+    {
+      "name": "ripple-effect",
+      "type": "registry:ui",
+      "title": "Ripple Effect",
+      "description": "Ripple Effect loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/ripple-effect.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/ripple-effect.tsx"
+        }
+      ]
+    },
+    {
+      "name": "rotating-cross",
+      "type": "registry:ui",
+      "title": "Rotating Cross",
+      "description": "Rotating Cross loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/rotating-cross.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/rotating-cross.tsx"
+        }
+      ]
+    },
+    {
+      "name": "rotating-triangle",
+      "type": "registry:ui",
+      "title": "Rotating Triangle",
+      "description": "Rotating Triangle loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/rotating-triangle.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/rotating-triangle.tsx"
+        }
+      ]
+    },
+    {
+      "name": "shape-shift-grid",
+      "type": "registry:ui",
+      "title": "Shape Shift Grid",
+      "description": "Shape Shift Grid loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/shape-shift-grid.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/shape-shift-grid.tsx"
+        }
+      ]
+    },
+    {
+      "name": "shimmer-line",
+      "type": "registry:ui",
+      "title": "Shimmer Line",
+      "description": "Shimmer Line loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/shimmer-line.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/shimmer-line.tsx"
+        }
+      ]
+    },
+    {
+      "name": "siri-wave",
+      "type": "registry:ui",
+      "title": "Siri Wave",
+      "description": "Siri Wave loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/siri-wave.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/siri-wave.tsx"
+        }
+      ]
+    },
+    {
+      "name": "skeleton-loader",
+      "type": "registry:ui",
+      "title": "Skeleton Loader",
+      "description": "Skeleton Loader loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/skeleton-loader.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/skeleton-loader.tsx"
+        }
+      ]
+    },
+    {
+      "name": "sliding-bars",
+      "type": "registry:ui",
+      "title": "Sliding Bars",
+      "description": "Sliding Bars loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/sliding-bars.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/sliding-bars.tsx"
+        }
+      ]
+    },
+    {
+      "name": "smooth-dot-shift",
+      "type": "registry:ui",
+      "title": "Smooth Dot Shift",
+      "description": "Smooth Dot Shift loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/smooth-dot-shift.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/smooth-dot-shift.tsx"
+        }
+      ]
+    },
+    {
+      "name": "smooth-ring",
+      "type": "registry:ui",
+      "title": "Smooth Ring",
+      "description": "Smooth Ring loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/smooth-ring.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/smooth-ring.tsx"
+        }
+      ]
+    },
+    {
+      "name": "smooth-rounded-square",
+      "type": "registry:ui",
+      "title": "Smooth Rounded Square",
+      "description": "Smooth Rounded Square loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/smooth-rounded-square.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/smooth-rounded-square.tsx"
+        }
+      ]
+    },
+    {
+      "name": "spinning-squares",
+      "type": "registry:ui",
+      "title": "Spinning Squares",
+      "description": "Spinning Squares loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/spinning-squares.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/spinning-squares.tsx"
+        }
+      ]
+    },
+    {
+      "name": "spiral-spinner",
+      "type": "registry:ui",
+      "title": "Spiral Spinner",
+      "description": "Spiral Spinner loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/spiral-spinner.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/spiral-spinner.tsx"
+        }
+      ]
+    },
+    {
+      "name": "spring-bars",
+      "type": "registry:ui",
+      "title": "Spring Bars",
+      "description": "Spring Bars loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/spring-bars.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/spring-bars.tsx"
+        }
+      ]
+    },
+    {
+      "name": "spring-dot-matrix",
+      "type": "registry:ui",
+      "title": "Spring Dot Matrix",
+      "description": "Spring Dot Matrix loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/spring-dot-matrix.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/spring-dot-matrix.tsx"
+        }
+      ]
+    },
+    {
+      "name": "spring-hexagon",
+      "type": "registry:ui",
+      "title": "Spring Hexagon",
+      "description": "Spring Hexagon loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/spring-hexagon.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/spring-hexagon.tsx"
+        }
+      ]
+    },
+    {
+      "name": "spring-ring-expand",
+      "type": "registry:ui",
+      "title": "Spring Ring Expand",
+      "description": "Spring Ring Expand loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/spring-ring-expand.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/spring-ring-expand.tsx"
+        }
+      ]
+    },
+    {
+      "name": "spring-text-pop",
+      "type": "registry:ui",
+      "title": "Spring Text Pop",
+      "description": "Spring Text Pop loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/spring-text-pop.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/spring-text-pop.tsx"
+        }
+      ]
+    },
+    {
+      "name": "square-accordion",
+      "type": "registry:ui",
+      "title": "Square Accordion",
+      "description": "Square Accordion loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/square-accordion.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/square-accordion.tsx"
+        }
+      ]
+    },
+    {
+      "name": "square-grid",
+      "type": "registry:ui",
+      "title": "Square Grid",
+      "description": "Square Grid loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/square-grid.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/square-grid.tsx"
+        }
+      ]
+    },
+    {
+      "name": "square-snake",
+      "type": "registry:ui",
+      "title": "Square Snake",
+      "description": "Square Snake loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/square-snake.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/square-snake.tsx"
+        }
+      ]
+    },
+    {
+      "name": "square-spinner",
+      "type": "registry:ui",
+      "title": "Square Spinner",
+      "description": "Square Spinner loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/square-spinner.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/square-spinner.tsx"
+        }
+      ]
+    },
+    {
+      "name": "stacked-bar-pulse",
+      "type": "registry:ui",
+      "title": "Stacked Bar Pulse",
+      "description": "Stacked Bar Pulse loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/stacked-bar-pulse.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/stacked-bar-pulse.tsx"
+        }
+      ]
+    },
+    {
+      "name": "swapping-dots",
+      "type": "registry:ui",
+      "title": "Swapping Dots",
+      "description": "Swapping Dots loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/swapping-dots.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/swapping-dots.tsx"
+        }
+      ]
+    },
+    {
+      "name": "swirling-spinner",
+      "type": "registry:ui",
+      "title": "Swirling Spinner",
+      "description": "Swirling Spinner loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/swirling-spinner.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/swirling-spinner.tsx"
+        }
+      ]
+    },
+    {
+      "name": "symmetric-wave",
+      "type": "registry:ui",
+      "title": "Symmetric Wave",
+      "description": "Symmetric Wave loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/symmetric-wave.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/symmetric-wave.tsx"
+        }
+      ]
+    },
+    {
+      "name": "terminal-loader",
+      "type": "registry:ui",
+      "title": "Terminal Loader",
+      "description": "Terminal Loader loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/terminal-loader.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/terminal-loader.tsx"
+        }
+      ]
+    },
+    {
+      "name": "text-blink",
+      "type": "registry:ui",
+      "title": "Text Blink",
+      "description": "Text Blink loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/text-blink.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/text-blink.tsx"
+        }
+      ]
+    },
+    {
+      "name": "text-dots",
+      "type": "registry:ui",
+      "title": "Text Dots",
+      "description": "Text Dots loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/text-dots.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/text-dots.tsx"
+        }
+      ]
+    },
+    {
+      "name": "text-morph",
+      "type": "registry:ui",
+      "title": "Text Morph",
+      "description": "Text Morph loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/text-morph.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/text-morph.tsx"
+        }
+      ]
+    },
+    {
+      "name": "text-shimmer-wave",
+      "type": "registry:ui",
+      "title": "Text Shimmer Wave",
+      "description": "Text Shimmer Wave loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/text-shimmer-wave.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/text-shimmer-wave.tsx"
+        }
+      ]
+    },
+    {
+      "name": "text-shimmer",
+      "type": "registry:ui",
+      "title": "Text Shimmer",
+      "description": "Text Shimmer loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/text-shimmer.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/text-shimmer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "trailing-dots",
+      "type": "registry:ui",
+      "title": "Trailing Dots",
+      "description": "Trailing Dots loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/trailing-dots.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/trailing-dots.tsx"
+        }
+      ]
+    },
+    {
+      "name": "triple-dot-spinner",
+      "type": "registry:ui",
+      "title": "Triple Dot Spinner",
+      "description": "Triple Dot Spinner loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/triple-dot-spinner.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/triple-dot-spinner.tsx"
+        }
+      ]
+    },
+    {
+      "name": "twin-orbit",
+      "type": "registry:ui",
+      "title": "Twin Orbit",
+      "description": "Twin Orbit loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/twin-orbit.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/twin-orbit.tsx"
+        }
+      ]
+    },
+    {
+      "name": "typing-indicator",
+      "type": "registry:ui",
+      "title": "Typing Indicator",
+      "description": "Typing Indicator loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/typing-indicator.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/typing-indicator.tsx"
+        }
+      ]
+    },
+    {
+      "name": "typing",
+      "type": "registry:ui",
+      "title": "Typing",
+      "description": "Typing loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/typing.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/typing.tsx"
+        }
+      ]
+    },
+    {
+      "name": "wandering-cube",
+      "type": "registry:ui",
+      "title": "Wandering Cube",
+      "description": "Wandering Cube loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/wandering-cube.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/wandering-cube.tsx"
+        }
+      ]
+    },
+    {
+      "name": "watch-spinner",
+      "type": "registry:ui",
+      "title": "Watch Spinner",
+      "description": "Watch Spinner loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/watch-spinner.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/watch-spinner.tsx"
+        }
+      ]
+    },
+    {
+      "name": "wave-dots",
+      "type": "registry:ui",
+      "title": "Wave Dots",
+      "description": "Wave Dots loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/wave-dots.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/wave-dots.tsx"
+        }
+      ]
+    },
+    {
+      "name": "wave-physics-loader",
+      "type": "registry:ui",
+      "title": "Wave Physics Loader",
+      "description": "Wave Physics Loader loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/wave-physics-loader.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/wave-physics-loader.tsx"
+        }
+      ]
+    },
+    {
+      "name": "waveform-loader",
+      "type": "registry:ui",
+      "title": "Waveform Loader",
+      "description": "Waveform Loader loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/waveform-loader.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/waveform-loader.tsx"
+        }
+      ]
+    },
+    {
+      "name": "zig-zag-pulse",
+      "type": "registry:ui",
+      "title": "Zig Zag Pulse",
+      "description": "Zig Zag Pulse loading animation.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/loading/zig-zag-pulse.tsx",
+          "type": "registry:ui",
+          "target": "@components/amicro/zig-zag-pulse.tsx"
+        }
+      ]
+    }
+  ]
+}

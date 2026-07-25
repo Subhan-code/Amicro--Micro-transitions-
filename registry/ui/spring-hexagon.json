@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spring-hexagon",
+  "type": "registry:ui",
+  "title": "Spring Hexagon",
+  "description": "Spring Hexagon loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/spring-hexagon.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/spring-hexagon.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const SpringHexagon = () => (\r\n  <motion.svg className=\"w-10 h-10\" viewBox=\"0 0 50 50\"\r\n    animate={{ scale: [1, 1.15, 1], rotate: [0, 60, 60] }}\r\n    transition={{ duration: 2, repeat: Infinity, type: \"spring\", bounce: 0.3 }}\r\n  >\r\n    <polygon points=\"25,5 45,15 45,35 25,45 5,35 5,15\" className=\"fill-zinc-800 dark:fill-white\" />\r\n  </motion.svg>\r\n);\n"
+    }
+  ]
+}

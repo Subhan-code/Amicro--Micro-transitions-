@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dual-arc",
+  "type": "registry:ui",
+  "title": "Dual Arc",
+  "description": "Dual Arc loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/dual-arc.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/dual-arc.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const DualArc = () => {\n  return (\n    <div className=\"relative w-8 h-8 flex items-center justify-center\">\n      <motion.div\n        className=\"absolute inset-0 border-2 border-t-zinc-800 dark:border-t-white border-b-zinc-800 dark:border-b-white border-l-transparent border-r-transparent rounded-full\"\n        animate={{ rotate: 360, scale: [1, 0.82, 1] }}\n        transition={{\n          rotate: { duration: 1.2, repeat: Infinity, ease: \"linear\" },\n          scale: { duration: 1.2, repeat: Infinity, ease: \"easeInOut\" }\n        }}\n      />\n    </div>\n  );\n};\n"
+    }
+  ]
+}

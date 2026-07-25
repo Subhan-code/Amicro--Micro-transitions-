@@ -3,13 +3,18 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   LayoutGrid, List, LayoutTemplate, ArrowDownAZ, Copy, Sun, Moon, Github, 
   Terminal, Check, Cpu, Zap, Code, ShieldCheck, Sparkles, RefreshCw, Smartphone, 
-  ChevronRight, Shield, Layers, HelpCircle, Palette, Activity, Menu, X
+  ChevronRight, ChevronDown, Shield, Layers, HelpCircle, Palette, Activity, Menu, X
 } from 'lucide-react';
 import { buttonsData } from './data/buttons';
 import { AnimatedButton } from './components/AnimatedButton';
 import { getComponentCode, ThemeToggleCode, getCardComponentCode } from './utils/codeGenerator';
 import { CliPage } from './components/CliPage';
 import { SkillsPage } from './components/SkillsPage';
+
+// Loaders imports
+import { loaderGroups } from './data/loaders';
+import { loadersCode } from './utils/loadersCode';
+import { InViewRender } from './components/InViewRender';
 
 // Card layouts imports
 import { cardsData, CardConfig } from './data/cards';
@@ -29,6 +34,14 @@ import { CardTimeMachine } from './components/cards/CardTimeMachine';
 type LayoutMode = 'list' | 'grid' | 'matrix';
 type SortMode = 'default' | 'alphabetical';
 type PageMode = 'home' | 'cli' | 'skills';
+type CatalogTabType = 'buttons' | 'cards' | 'carousels' | 'loaders';
+
+const tabLabels: Record<CatalogTabType, string> = {
+  buttons: 'Buttons',
+  cards: 'Card Spreads',
+  carousels: '3D Carousels',
+  loaders: 'Loaders',
+};
 
 export default function App() {
   const [layout, setLayout] = useState<LayoutMode>('grid');
@@ -37,10 +50,12 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [stars, setStars] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState<PageMode>('home');
-  const [catalogTab, setCatalogTab] = useState<'buttons' | 'cards' | 'carousels'>('buttons');
+  const [catalogTab, setCatalogTab] = useState<CatalogTabType>('buttons');
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
 
   // Hash-based router
   useEffect(() => {
@@ -89,6 +104,13 @@ export default function App() {
     const code = getCardComponentCode(card);
     navigator.clipboard.writeText(code)
       .then(() => showToast(`Copied ${card.label} component code!`))
+      .catch(() => showToast("Failed to copy code."));
+  }, [showToast]);
+
+  const handleCopyLoaderCode = useCallback((name: string) => {
+    const code = loadersCode[name] || `// Loader ${name} code not found`;
+    navigator.clipboard.writeText(code)
+      .then(() => showToast(`Copied ${name} loader code!`))
       .catch(() => showToast("Failed to copy code."));
   }, [showToast]);
 
@@ -141,7 +163,7 @@ export default function App() {
   };
 
   return (
-    <div className={`relative w-full min-h-dvh flex flex-col font-sans antialiased transition-colors duration-300 ${theme === 'dark' ? 'bg-[#121212] text-[#ffffff] selection:bg-neutral-850' : 'bg-[#f8f9fa] text-black selection:bg-neutral-200'}`}>
+    <div className={`relative w-full min-h-dvh flex flex-col font-sans antialiased transition-colors duration-300 ${theme === 'dark' ? 'dark bg-[#121212] text-[#ffffff] selection:bg-neutral-850' : 'bg-[#f8f9fa] text-black selection:bg-neutral-200'}`}>
       
       {/* Site Navbar */}
       <header className="relative z-50 w-full pt-4 pb-4 px-6 border-b border-transparent">
@@ -396,10 +418,82 @@ export default function App() {
                   </motion.button>
                 </div>
                 {/* Filter and layout controls */}
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 w-full max-w-xl mx-auto px-4 sm:px-0">
-                  {/* Category Pill Switcher */}
-                  <div className={`flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 max-w-full overflow-x-auto no-scrollbar ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
-                    <div className="flex items-center gap-1.5">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 w-full max-w-xl mx-auto px-4 sm:px-0">                  {/* Category Switcher: Dropdown on Mobile, Pills on Desktop */}
+                  <div className="relative block sm:hidden w-full max-w-[260px] mx-auto z-40">
+                    <button
+                      onClick={() => setDropdownOpen(!dropdownOpen)}
+                      className={`w-full flex items-center justify-between px-5 py-2.5 rounded-full border text-[13px] font-semibold cursor-pointer transition-all duration-300 shadow-sm border-0 focus-visible:outline-none ${
+                        theme === 'dark' 
+                          ? 'bg-[#181818] border-white/5 text-white hover:bg-[#222]' 
+                          : 'bg-white border-neutral-200 text-black hover:bg-neutral-50'
+                      }`}
+                    >
+                      <span>
+                        {tabLabels[catalogTab]}
+                      </span>
+                      <ChevronRight className={`w-4 h-4 transition-transform duration-300 ${dropdownOpen ? 'rotate-90 text-white' : 'text-neutral-400'}`} />
+                    </button>
+
+                    <AnimatePresence>
+                      {dropdownOpen && (
+                        <>
+                          <div 
+                            className="fixed inset-0 z-40 bg-transparent" 
+                            onClick={() => setDropdownOpen(false)} 
+                          />
+                          <motion.div
+                            initial={{ opacity: 0, y: -8, scale: 0.96 }}
+                            animate={{ opacity: 1, y: 6, scale: 1 }}
+                            exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                            transition={{ duration: 0.15, ease: "easeOut" }}
+                            className={`absolute top-full left-0 right-0 z-50 rounded-[20px] border p-1.5 shadow-xl flex flex-col gap-0.5 max-h-[300px] overflow-y-auto backdrop-blur-xl ${
+                              theme === 'dark' 
+                                ? 'bg-[#181818]/95 border-white/5 text-[#ededed] shadow-black/50' 
+                                : 'bg-white/95 border-neutral-200 text-black shadow-neutral-200/50'
+                            }`}
+                          >
+                            {[
+                              { id: 'buttons', label: 'Buttons' },
+                              { id: 'cards', label: 'Card Spreads' },
+                              { id: 'carousels', label: '3D Carousels' },
+                              { id: 'loaders', label: 'Loaders' }
+                            ].map((tab) => (
+                              <button
+                                key={tab.id}
+                                onClick={() => {
+                                  setCatalogTab(tab.id as any);
+                                  setDropdownOpen(false);
+                                }}
+                                className={`w-full text-left px-4 py-2 rounded-xl text-[13px] font-medium cursor-pointer border-0 transition-colors ${
+                                  catalogTab === tab.id
+                                    ? (theme === 'dark' ? 'bg-white/10 text-white font-semibold' : 'bg-neutral-100 text-black font-semibold')
+                                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white hover:bg-white/[0.04]' : 'text-neutral-600 hover:text-black hover:bg-neutral-50')
+                                }`}
+                              >
+                                {tab.label}
+                              </button>
+                            ))}
+                            <div className={`mt-2 pt-3 border-t px-4 py-2 flex flex-col gap-1 text-center select-none ${theme === 'dark' ? 'border-white/5' : 'border-neutral-100'}`}>
+                              <span className={`text-[10px] font-bold uppercase tracking-widest ${
+                                theme === 'dark' ? 'text-[#ededed]' : 'text-black'
+                              }`}>
+                                More Coming Soon
+                              </span>
+                              <span className={`text-[10.5px] leading-normal italic ${
+                                theme === 'dark' ? 'text-[#767676]' : 'text-black opacity-70'
+                              }`}>
+                                "Motion is the brush stroke of digital art. More premium transitions are crafting behind the scenes."
+                              </span>
+                            </div>
+                          </motion.div>
+                        </>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Desktop Category Switcher (Pills) */}
+                  <div className={`hidden sm:flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 max-w-full overflow-x-visible ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
+                    <div className="flex items-center gap-1.5 pr-1">
                       <button
                         onClick={() => setCatalogTab('buttons')}
                         className={`flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 whitespace-nowrap ${
@@ -430,82 +524,141 @@ export default function App() {
                       >
                         3D Carousels
                       </button>
+                      <button
+                        onClick={() => setCatalogTab('loaders')}
+                        className={`flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 whitespace-nowrap ${
+                          catalogTab === 'loaders' 
+                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
+                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
+                        }`}
+                      >
+                        Loaders
+                      </button>
+
+                      {/* More Filters Dropdown */}
+                      <div className="relative animate-none">
+                        <button
+                          onClick={() => setMoreDropdownOpen(!moreDropdownOpen)}
+                          className={`flex-none flex items-center justify-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 whitespace-nowrap ${
+                            theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'
+                          }`}
+                        >
+                          <span>More</span>
+                          <ChevronDown className="w-3.5 h-3.5" />
+                        </button>
+
+                        <AnimatePresence>
+                          {moreDropdownOpen && (
+                            <>
+                              <div 
+                                className="fixed inset-0 z-40 bg-transparent" 
+                                onClick={() => setMoreDropdownOpen(false)} 
+                              />
+                              <motion.div
+                                initial={{ opacity: 0, y: -8, scale: 0.96 }}
+                                animate={{ opacity: 1, y: 6, scale: 1 }}
+                                exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                                transition={{ duration: 0.15, ease: "easeOut" }}
+                                className={`absolute top-full right-0 z-50 rounded-[20px] border p-4 shadow-xl flex flex-col gap-2 min-w-[260px] text-center select-none backdrop-blur-xl ${
+                                  theme === 'dark' 
+                                    ? 'bg-[#181818]/95 border-white/5 text-[#ededed] shadow-black/40' 
+                                    : 'bg-white/95 border-neutral-200 text-black shadow-neutral-200/30'
+                                }`}
+                              >
+                                <div className={`font-bold text-[11px] uppercase tracking-widest mb-0.5 ${
+                                  theme === 'dark' ? 'text-[#ededed]' : 'text-black'
+                                }`}>
+                                  More Coming Soon
+                                </div>
+                                <p className={`text-[11px] leading-[15px] italic m-0 transition-colors ${
+                                  theme === 'dark' ? 'text-[#767676]' : 'text-black opacity-70'
+                                }`}>
+                                  "Motion is the brush stroke of digital art. More premium transitions are crafting behind the scenes."
+                                </p>
+                              </motion.div>
+                            </>
+                          )}
+                        </AnimatePresence>
+                      </div>
                     </div>
                   </div>
 
                   {/* Secondary controls row on mobile */}
-                  <div className="flex items-center justify-center gap-3 shrink-0">
-                    {/* Sort */}
-                    <div className={`flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
-                      <button
-                        onClick={() => setSortBy(sortBy === 'default' ? 'alphabetical' : 'default')}
-                        className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 ${
-                          sortBy === 'alphabetical' 
-                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                        }`}
-                      >
-                        <ArrowDownAZ className="w-3.5 h-3.5" />
-                        <span>A-Z</span>
-                      </button>
-                    </div>
+                  {catalogTab !== 'loaders' && (
+                    <div className="flex items-center justify-center gap-3 shrink-0">
+                      {/* Sort */}
+                      <div className={`flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
+                        <button
+                          onClick={() => setSortBy(sortBy === 'default' ? 'alphabetical' : 'default')}
+                          className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 ${
+                            sortBy === 'alphabetical' 
+                              ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
+                              : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
+                          }`}
+                        >
+                          <ArrowDownAZ className="w-3.5 h-3.5" />
+                          <span>A-Z</span>
+                        </button>
+                      </div>
 
-                    {/* Layout */}
-                    <div className={`hidden sm:flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
-                      <button
-                        onClick={() => setLayout('list')}
-                        className={`p-1.5 rounded-full transition-colors cursor-pointer border-0 ${
-                          layout === 'list' 
-                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                        }`}
-                        aria-label="List layout"
-                      >
-                        <List className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => setLayout('grid')}
-                        className={`p-1.5 rounded-full transition-colors cursor-pointer border-0 ${
-                          layout === 'grid' 
-                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                        }`}
-                        aria-label="Grid layout"
-                      >
-                        <LayoutGrid className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => setLayout('matrix')}
-                        className={`p-1.5 rounded-full transition-colors cursor-pointer border-0 ${
-                          layout === 'matrix' 
-                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                        }`}
-                        aria-label="Matrix layout"
-                      >
-                        <LayoutTemplate className="w-4 h-4" />
-                      </button>
+                      {/* Layout */}
+                      <div className={`hidden sm:flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
+                        <button
+                          onClick={() => setLayout('list')}
+                          className={`p-1.5 rounded-full transition-colors cursor-pointer border-0 ${
+                            layout === 'list' 
+                              ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
+                              : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
+                          }`}
+                          aria-label="List layout"
+                        >
+                          <List className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => setLayout('grid')}
+                          className={`p-1.5 rounded-full transition-colors cursor-pointer border-0 ${
+                            layout === 'grid' 
+                              ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
+                              : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
+                          }`}
+                          aria-label="Grid layout"
+                        >
+                          <LayoutGrid className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => setLayout('matrix')}
+                          className={`p-1.5 rounded-full transition-colors cursor-pointer border-0 ${
+                            layout === 'matrix' 
+                              ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
+                              : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
+                          }`}
+                          aria-label="Matrix layout"
+                        >
+                          <LayoutTemplate className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
 
-              {/* Components Display */}
               <div 
                 id="component-grid"
                 className={`
                   w-full mb-16 mx-auto scroll-mt-24 px-4 sm:px-0
-                  ${layout === 'list' ? 'flex flex-col items-center gap-4 max-w-md' : ''}
-                  ${layout === 'grid' ? (
-                    catalogTab === 'buttons' 
-                      ? 'flex flex-col items-center gap-6 w-full sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-10 lg:gap-12 max-w-[1060px] sm:justify-items-center' 
-                      : 'flex flex-col items-center gap-6 w-full sm:flex-row sm:flex-wrap sm:justify-center sm:gap-6 sm:max-w-6xl'
-                  ) : ''}
-                  ${layout === 'matrix' ? (
-                    catalogTab === 'buttons'
-                      ? 'flex flex-wrap justify-center gap-3 w-full max-w-[1400px] sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 sm:gap-2 sm:justify-items-center'
-                      : 'flex flex-col items-center gap-4 w-full sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4 sm:max-w-6xl'
-                  ) : ''}
+                  ${catalogTab === 'loaders' ? 'flex flex-col items-center w-full max-w-[1060px]' : `
+                    ${layout === 'list' ? 'flex flex-col items-center gap-4 max-w-md' : ''}
+                    ${layout === 'grid' ? (
+                      catalogTab === 'buttons' 
+                        ? 'flex flex-col items-center gap-6 w-full sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-10 lg:gap-12 max-w-[1060px] sm:justify-items-center' 
+                        : 'flex flex-col items-center gap-6 w-full sm:flex-row sm:flex-wrap sm:justify-center sm:gap-6 sm:max-w-6xl'
+                    ) : ''}
+                    ${layout === 'matrix' ? (
+                      catalogTab === 'buttons'
+                        ? 'flex flex-wrap justify-center gap-3 w-full max-w-[1400px] sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 sm:gap-2 sm:justify-items-center'
+                        : 'flex flex-col items-center gap-4 w-full sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4 sm:max-w-6xl'
+                    ) : ''}
+                  `}
                 `}
               >
                 <AnimatePresence mode="popLayout">
@@ -541,6 +694,108 @@ export default function App() {
                         )}
                       </motion.div>
                     ))
+                  ) : catalogTab === 'loaders' ? (
+                    <div className="w-full flex flex-col gap-16 max-w-[1060px] mx-auto text-left">
+                      {loaderGroups.map((group, groupIdx) => {
+                        const isPhysicsGroup = group.title === 'Physics & Simulation';
+                        return (
+                          <div key={groupIdx} className="flex flex-col gap-6 w-full">
+                            <div className="flex items-center gap-3 px-2">
+                              <h2 className={`text-[17px] font-semibold tracking-tight transition-colors ${theme === 'dark' ? 'text-[#ededed]' : 'text-black'}`}>
+                                {group.title}
+                              </h2>
+                              <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium transition-colors ${theme === 'dark' ? 'bg-white/[0.06] text-neutral-400' : 'bg-neutral-200/60 text-neutral-600'}`}>
+                                {group.loaders.length} items
+                              </span>
+                            </div>
+                            
+                            {isPhysicsGroup ? (
+                              <div className="w-full">
+                                {group.loaders.map((loader, loaderIdx) => {
+                                  const LoaderComponent = loader.component;
+                                  return (
+                                    <div 
+                                      key={loaderIdx} 
+                                      className={`relative group rounded-[24px] flex flex-col items-center justify-center p-6 md:p-8 transition-all duration-300 border h-64 md:h-80 w-full overflow-hidden ${
+                                        theme === 'dark' 
+                                          ? 'bg-[#181818] border-white/5 hover:bg-[#1f1f1f] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]' 
+                                          : 'bg-white border-neutral-100 hover:shadow-[0_4px_20px_rgba(0,0,0,0.03)]'
+                                      }`}
+                                    >
+                                      {/* Container for Loader Component */}
+                                      <div className="flex-1 flex items-center justify-center w-full">
+                                        <InViewRender>
+                                          <LoaderComponent theme={theme} />
+                                        </InViewRender>
+                                      </div>
+
+                                      {/* Details row at the bottom of full-width card */}
+                                      <div className="w-full flex items-center justify-between mt-4 px-2">
+                                        <span className={`text-[13px] font-semibold transition-colors ${
+                                          theme === 'dark' ? 'text-neutral-350' : 'text-neutral-700'
+                                        }`}>
+                                          {loader.name}
+                                        </span>
+                                        
+                                        <button
+                                          onClick={() => handleCopyLoaderCode(loader.component.name || loader.component.displayName || loader.name)}
+                                          className={`p-2 rounded-xl transition-all cursor-pointer border-0 ${
+                                            theme === 'dark' ? 'bg-white/[0.08] hover:bg-white/[0.12] text-neutral-300 hover:text-white' : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-650 hover:text-black'
+                                          }`}
+                                          title="Copy loader code"
+                                        >
+                                          <Copy className="w-4 h-4" />
+                                        </button>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            ) : (
+                              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 w-full">
+                                {group.loaders.map((loader, loaderIdx) => {
+                                  const LoaderComponent = loader.component;
+                                  return (
+                                    <div 
+                                      key={loaderIdx} 
+                                      className={`relative group aspect-square rounded-2xl flex flex-col items-center justify-center p-4 transition-all duration-300 border ${
+                                        theme === 'dark' 
+                                          ? 'bg-[#181818] border-white/5 hover:bg-[#1f1f1f] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]' 
+                                          : 'bg-white border-neutral-100 hover:shadow-[0_4px_12px_rgba(0,0,0,0.03)] hover:border-neutral-200/50'
+                                      }`}
+                                    >
+                                      <div className="flex-1 flex items-center justify-center w-full min-h-[64px]">
+                                        <InViewRender>
+                                          <LoaderComponent theme={theme} />
+                                        </InViewRender>
+                                      </div>
+
+                                      <div className="w-full flex items-center justify-between mt-3 px-1 gap-1">
+                                        <span className={`text-[12px] font-medium truncate transition-colors ${
+                                          theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
+                                        }`} title={loader.name}>
+                                          {loader.name}
+                                        </span>
+                                        
+                                        <button
+                                          onClick={() => handleCopyLoaderCode(loader.component.name || loader.component.displayName || loader.name)}
+                                          className={`p-1.5 rounded-lg opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity cursor-pointer border-0 ${
+                                            theme === 'dark' ? 'bg-white/[0.06] text-neutral-400 hover:text-white' : 'bg-neutral-100 text-neutral-600 hover:text-black'
+                                          }`}
+                                          title="Copy loader code"
+                                        >
+                                          <Copy className="w-3 h-3" />
+                                        </button>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
                   ) : (
                     displayedCards.map((card) => (
                       <motion.div 

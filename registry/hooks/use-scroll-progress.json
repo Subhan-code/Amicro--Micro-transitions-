@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-scroll-progress",
+  "type": "registry:hook",
+  "title": "Use Scroll Progress",
+  "description": "Calculates current page/container scroll progress percentage.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/hooks/use-scroll-progress.ts",
+      "type": "registry:hook",
+      "target": "@hooks/use-scroll-progress.ts",
+      "content": "import { useEffect, useState, RefObject } from 'react';\n\nexport function useScrollProgress(ref?: RefObject<HTMLElement | null>) {\n  const [progress, setProgress] = useState(0);\n\n  useEffect(() => {\n    const handleScroll = () => {\n      if (ref && ref.current) {\n        const element = ref.current;\n        const totalHeight = element.scrollHeight - element.clientHeight;\n        if (totalHeight === 0) {\n          setProgress(0);\n        } else {\n          setProgress(element.scrollTop / totalHeight);\n        }\n      } else {\n        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;\n        if (totalHeight === 0) {\n          setProgress(0);\n        } else {\n          setProgress(window.scrollY / totalHeight);\n        }\n      }\n    };\n\n    const target = ref && ref.current ? ref.current : window;\n    target.addEventListener('scroll', handleScroll, { passive: true });\n    handleScroll();\n\n    return () => {\n      target.removeEventListener('scroll', handleScroll);\n    };\n  }, [ref]);\n\n  return progress;\n}\n"
+    }
+  ]
+}

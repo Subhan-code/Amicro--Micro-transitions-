@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "infinity-path",
+  "type": "registry:ui",
+  "title": "Infinity Path",
+  "description": "Infinity Path loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/infinity-path.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/infinity-path.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const InfinityPath = () => {\r\n  return (\r\n    <svg className=\"w-12 h-6 overflow-visible\" viewBox=\"0 0 60 30\">\r\n      <path\r\n        d=\"M 15 15 C 15 5, 25 5, 30 15 C 35 25, 45 25, 45 15 C 45 5, 35 5, 30 15 C 25 25, 15 25, 15 15\"\r\n        className=\"stroke-zinc-200 dark:stroke-zinc-800 fill-none\"\r\n        strokeWidth=\"4\"\r\n        strokeLinecap=\"round\"\r\n      />\r\n      <motion.path\r\n        d=\"M 15 15 C 15 5, 25 5, 30 15 C 35 25, 45 25, 45 15 C 45 5, 35 5, 30 15 C 25 25, 15 25, 15 15\"\r\n        className=\"stroke-zinc-800 dark:stroke-white fill-none\"\r\n        strokeWidth=\"4\"\r\n        strokeLinecap=\"round\"\r\n        strokeDasharray=\"100\"\r\n        animate={{ strokeDashoffset: [100, -100] }}\r\n        transition={{ duration: 2, repeat: Infinity, ease: \"linear\" }}\r\n      />\r\n    </svg>\r\n  );\r\n};\n"
+    }
+  ]
+}

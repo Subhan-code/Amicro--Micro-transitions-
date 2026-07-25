@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "magnetic-dots",
+  "type": "registry:ui",
+  "title": "Magnetic Dots",
+  "description": "Magnetic Dots loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/magnetic-dots.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/magnetic-dots.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const MagneticDots = () => (\r\n  <div className=\"flex space-x-1.5\" style={{ filter: \"url(#goo)\" }}>\r\n    <svg width=\"0\" height=\"0\" className=\"absolute hidden\">\r\n      <defs>\r\n        <filter id=\"goo\">\r\n          <feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"2\" result=\"blur\" />\r\n          <feColorMatrix in=\"blur\" mode=\"matrix\" values=\"1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 15 -7\" result=\"goo\" />\r\n          <feComposite in=\"SourceGraphic\" in2=\"goo\" operator=\"atop\"/>\r\n        </filter>\r\n      </defs>\r\n    </svg>\r\n    <motion.div\r\n      className=\"w-4 h-4 bg-zinc-800 dark:bg-white rounded-full\"\r\n      animate={{ x: [0, 8, 0] }}\r\n      transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n    <motion.div\r\n      className=\"w-4 h-4 bg-zinc-800 dark:bg-white rounded-full\"\r\n      animate={{ x: [0, -8, 0] }}\r\n      transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n  </div>\r\n);\n"
+    }
+  ]
+}

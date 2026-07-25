@@ -45,6 +45,44 @@ npx @subhanhq/amicro@latest add card-arc-5
 
 ---
 
+## 🎨 shadcn/ui Registry Integration
+
+You can add **Amicro** motion primitives, custom hooks, and spring presets directly to your project using the shadcn CLI!
+
+### 1. Direct URL Installation
+You can install any component directly by referencing its public raw URL:
+```bash
+npx shadcn add https://raw.githubusercontent.com/Subhan-code/Amicro--Micro-transitions-/main/registry/ui/fade-in.json
+```
+
+### 2. Namespaced Registry Mapping (Recommended)
+Add the `@amicro` namespace to the `registries` field in your project's `components.json`:
+```json
+{
+  "registries": {
+    "@amicro": "https://raw.githubusercontent.com/Subhan-code/Amicro--Micro-transitions-/main/registry/{name}.json"
+  }
+}
+```
+Now, you can install any component, hook, or utility directly by name:
+```bash
+# Install entrance transition components (placed under components/amicro/)
+npx shadcn add @amicro/fade-in
+npx shadcn add @amicro/fade-up
+npx shadcn add @amicro/zoom-in
+
+# Install hover & text components
+npx shadcn add @amicro/tilt-card
+npx shadcn add @amicro/magnetic-button
+npx shadcn add @amicro/text-reveal
+
+# Install hooks & utilities
+npx shadcn add @amicro/use-scroll-progress
+npx shadcn add @amicro/presets
+```
+
+---
+
 ## 💻 Card Components & CLI Commands
 
 | Component | Description | CLI Command |

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radar-sweep",
+  "type": "registry:ui",
+  "title": "Radar Sweep",
+  "description": "Radar Sweep loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/radar-sweep.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/radar-sweep.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const RadarSweep = ({ theme = 'light' }: { theme?: 'light' | 'dark' }) => {\n  const isDark = theme === 'dark';\n  return (\n    <div className=\"relative w-12 h-12 rounded-full border border-zinc-800/10 dark:border-white/10 flex items-center justify-center overflow-hidden\">\n      {/* Concentric rings */}\n      <div className=\"absolute w-8 h-8 rounded-full border border-zinc-800/5 dark:border-white/5\" />\n      <div className=\"absolute w-4 h-4 rounded-full border border-zinc-800/5 dark:border-white/5\" />\n      \n      {/* Center dot */}\n      <div className=\"absolute w-1.5 h-1.5 rounded-full bg-zinc-800/80 dark:bg-white/80\" />\n\n      {/* Sweep hand */}\n      <motion.div\n        className=\"absolute inset-0 origin-center\"\n        style={{\n          background: isDark\n            ? \"conic-gradient(from 0deg, transparent 50%, rgba(255,255,255,0.02) 65%, rgba(255,255,255,0.15) 85%, rgba(255,255,255,0.55) 100%)\"\n            : \"conic-gradient(from 0deg, transparent 50%, rgba(39,39,42,0.02) 65%, rgba(39,39,42,0.1) 85%, rgba(39,39,42,0.45) 100%)\",\n        }}\n        animate={{ rotate: 360 }}\n        transition={{ duration: 1.8, repeat: Infinity, ease: \"linear\" }}\n      />\n    </div>\n  );\n};\n"
+    }
+  ]
+}

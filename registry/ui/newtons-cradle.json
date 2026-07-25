@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "newtons-cradle",
+  "type": "registry:ui",
+  "title": "Newtons Cradle",
+  "description": "Newtons Cradle loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/newtons-cradle.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/newtons-cradle.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const NewtonsCradle = () => {\r\n  return (\r\n    <div className=\"flex items-center justify-center space-x-0.5\">\r\n      <motion.div\r\n        className=\"w-3 h-3 bg-zinc-800 dark:bg-white rounded-full origin-top\"\r\n        animate={{ rotate: [25, 0, 0, 0, 0, 25] }}\r\n        transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\" }}\r\n      />\r\n      <div className=\"w-3 h-3 bg-zinc-800 dark:bg-white rounded-full\" />\r\n      <div className=\"w-3 h-3 bg-zinc-800 dark:bg-white rounded-full\" />\r\n      <motion.div\r\n        className=\"w-3 h-3 bg-zinc-800 dark:bg-white rounded-full origin-top\"\r\n        animate={{ rotate: [0, 0, 0, -25, 0, 0] }}\r\n        transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\" }}\r\n      />\r\n    </div>\r\n  );\r\n};\n"
+    }
+  ]
+}

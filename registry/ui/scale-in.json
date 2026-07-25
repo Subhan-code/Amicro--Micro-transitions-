@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scale-in",
+  "type": "registry:ui",
+  "title": "Scale In",
+  "description": "Scale transition from small to actual size.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/entrance/scale-in.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/scale-in.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\ninterface ScaleInProps {\n  children: React.ReactNode;\n  duration?: number;\n  delay?: number;\n  initialScale?: number;\n  className?: string;\n}\n\nexport function ScaleIn({\n  children,\n  duration = 0.5,\n  delay = 0,\n  initialScale = 0.92,\n  className = '',\n}: ScaleInProps) {\n  return (\n    <motion.div\n      initial={{ opacity: 0, scale: initialScale }}\n      animate={{ opacity: 1, scale: 1 }}\n      transition={{\n        duration,\n        delay,\n        ease: [0.34, 1.56, 0.64, 1], // Custom springy cubic bezier\n      }}\n      className={className}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

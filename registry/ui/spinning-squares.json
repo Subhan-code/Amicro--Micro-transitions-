@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spinning-squares",
+  "type": "registry:ui",
+  "title": "Spinning Squares",
+  "description": "Spinning Squares loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/spinning-squares.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/spinning-squares.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const SpinningSquares = () => {\r\n  return (\r\n    <div className=\"relative w-10 h-10\">\r\n      <motion.div\r\n        className=\"absolute top-0 left-0 w-4 h-4 bg-zinc-800 dark:bg-white rounded-sm\"\r\n        animate={{ x: [0, 24, 24, 0, 0], y: [0, 0, 24, 24, 0] }}\r\n        transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n      />\r\n      <motion.div\r\n        className=\"absolute bottom-0 right-0 w-4 h-4 bg-zinc-300 dark:bg-zinc-700 rounded-sm\"\r\n        animate={{ x: [0, -24, -24, 0, 0], y: [0, 0, -24, -24, 0] }}\r\n        transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n      />\r\n    </div>\r\n  );\r\n};\n"
+    }
+  ]
+}

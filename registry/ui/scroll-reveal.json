@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scroll-reveal",
+  "type": "registry:ui",
+  "title": "Scroll Reveal",
+  "description": "Reveal content block as it scrolls into viewport.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/scroll/scroll-reveal.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/scroll-reveal.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\ninterface ScrollRevealProps {\n  children: React.ReactNode;\n  duration?: number;\n  yOffset?: number;\n  xOffset?: number;\n  scale?: number;\n  className?: string;\n}\n\nexport function ScrollReveal({\n  children,\n  duration = 0.6,\n  yOffset = 30,\n  xOffset = 0,\n  scale = 0.95,\n  className = '',\n}: ScrollRevealProps) {\n  return (\n    <motion.div\n      initial={{ opacity: 0, y: yOffset, x: xOffset, scale }}\n      whileInView={{ opacity: 1, y: 0, x: 0, scale: 1 }}\n      viewport={{ once: true, margin: '-15%' }}\n      transition={{\n        duration,\n        ease: [0.16, 1, 0.3, 1], // easeOutExpo\n      }}\n      className={className}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

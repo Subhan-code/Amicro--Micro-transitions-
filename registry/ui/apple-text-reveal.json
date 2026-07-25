@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "apple-text-reveal",
+  "type": "registry:ui",
+  "title": "Apple Text Reveal",
+  "description": "Apple Text Reveal loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/apple-text-reveal.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/apple-text-reveal.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const AppleTextReveal = () => (\r\n  <div className=\"font-medium text-lg text-zinc-900 dark:text-white overflow-hidden h-6 relative\">\r\n    <motion.div\r\n      animate={{ y: [\"100%\", \"0%\", \"-100%\"] }}\r\n      transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n    >\r\n      Loading\r\n    </motion.div>\r\n  </div>\r\n);\n"
+    }
+  ]
+}

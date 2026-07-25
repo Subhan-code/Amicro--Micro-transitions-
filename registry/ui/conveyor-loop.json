@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "conveyor-loop",
+  "type": "registry:ui",
+  "title": "Conveyor Loop",
+  "description": "Conveyor Loop loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/conveyor-loop.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/conveyor-loop.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const ConveyorLoop = () => {\r\n  return (\r\n    <div className=\"w-16 h-3 overflow-hidden relative rounded-full bg-zinc-200 dark:bg-zinc-800\">\r\n      <motion.div\r\n        className=\"flex h-full space-x-2 absolute top-0 items-center\"\r\n        animate={{ x: [0, -32] }}\r\n        transition={{ duration: 1, repeat: Infinity, ease: \"linear\" }}\r\n      >\r\n        {Array.from({ length: 8 }).map((_, i) => (\r\n          <div key={i} className=\"w-1.5 h-1.5 bg-zinc-800 dark:bg-white rounded-full shrink-0\" />\r\n        ))}\r\n      </motion.div>\r\n    </div>\r\n  );\r\n};\n"
+    }
+  ]
+}

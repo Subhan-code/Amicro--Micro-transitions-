@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "utils",
+  "type": "registry:lib",
+  "title": "Utils",
+  "description": "Motion utility functions (cn helper, mapRange).",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/lib/utils.ts",
+      "type": "registry:lib",
+      "target": "@lib/utils.ts",
+      "content": "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}\n\n// Utility to map a value from one range to another (helpful for mouse following animations)\nexport function mapRange(\n  value: number,\n  inMin: number,\n  inMax: number,\n  outMin: number,\n  outMax: number\n): number {\n  return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;\n}\n"
+    }
+  ]
+}

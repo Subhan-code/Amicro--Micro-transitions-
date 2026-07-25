@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tilt-card",
+  "type": "registry:ui",
+  "title": "Tilt Card",
+  "description": "3D parallax tilt effect following mouse cursor.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/hover/tilt-card.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/tilt-card.tsx",
+      "content": "import React, { useRef, useState } from 'react';\nimport { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';\n\ninterface TiltCardProps {\n  children: React.ReactNode;\n  maxTilt?: number;\n  className?: string;\n  cardClassName?: string;\n}\n\nexport function TiltCard({\n  children,\n  maxTilt = 15,\n  className = '',\n  cardClassName = '',\n}: TiltCardProps) {\n  const cardRef = useRef<HTMLDivElement>(null);\n  const [isHovered, setIsHovered] = useState(false);\n\n  // Motion values for x/y mouse offset relative to card center (-0.5 to 0.5)\n  const x = useMotionValue(0);\n  const y = useMotionValue(0);\n\n  // Springs for smooth movement\n  const springConfig = { damping: 20, stiffness: 200, mass: 0.5 };\n  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [maxTilt, -maxTilt]), springConfig);\n  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-maxTilt, maxTilt]), springConfig);\n\n  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {\n    if (!cardRef.current) return;\n    const rect = cardRef.current.getBoundingClientRect();\n    \n    // Calculate normalized position relative to center (-0.5 to 0.5)\n    const relativeX = (event.clientX - rect.left) / rect.width - 0.5;\n    const relativeY = (event.clientY - rect.top) / rect.height - 0.5;\n\n    x.set(relativeX);\n    y.set(relativeY);\n  };\n\n  const handleMouseLeave = () => {\n    setIsHovered(false);\n    x.set(0);\n    y.set(0);\n  };\n\n  return (\n    <div\n      ref={cardRef}\n      onMouseMove={handleMouseMove}\n      onMouseEnter={() => setIsHovered(true)}\n      onMouseLeave={handleMouseLeave}\n      className={`relative w-full aspect-[4/3] max-w-[320px] cursor-pointer ${className}`}\n      style={{ perspective: '800px' }}\n    >\n      <motion.div\n        style={{\n          rotateX,\n          rotateY,\n          transformStyle: 'preserve-3d',\n        }}\n        className={`w-full h-full rounded-2xl bg-gradient-to-br from-neutral-100 to-neutral-250 dark:from-neutral-850 dark:to-neutral-900 border border-neutral-200/20 shadow-lg flex items-center justify-center p-6 select-none ${cardClassName}`}\n      >\n        <div style={{ transform: 'translateZ(40px)', transformStyle: 'preserve-3d' }} className=\"w-full h-full flex flex-col justify-center items-center\">\n          {children}\n        </div>\n      </motion.div>\n    </div>\n  );\n}\n"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "trailing-dots",
+  "type": "registry:ui",
+  "title": "Trailing Dots",
+  "description": "Trailing Dots loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/trailing-dots.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/trailing-dots.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const TrailingDots = () => (\r\n  <div className=\"relative w-10 h-10\">\r\n    {[0,1,2,3,4].map((i) => (\r\n      <motion.div\r\n        key={i}\r\n        className=\"absolute inset-0\"\r\n        animate={{ rotate: 360 }}\r\n        transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1, ease: \"easeInOut\" }}\r\n      >\r\n        <div className={`w-2 h-2 rounded-full absolute top-0 left-1/2 -ml-1 ${i === 0 ? 'bg-zinc-800 dark:bg-white' : 'bg-zinc-400 dark:bg-zinc-200'}`} style={{ opacity: 1 - i * 0.2 }} />\r\n      </motion.div>\r\n    ))}\r\n  </div>\r\n);\n"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "wandering-cube",
+  "type": "registry:ui",
+  "title": "Wandering Cube",
+  "description": "Wandering Cube loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/wandering-cube.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/wandering-cube.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const WanderingCube = () => {\r\n  return (\r\n    <div className=\"relative w-10 h-10\">\r\n      <motion.div\r\n        className=\"absolute top-0 left-0 w-4 h-4 bg-zinc-800 dark:bg-white rounded-sm\"\r\n        animate={{ \r\n          x: [0, 24, 24, 0, 0],\r\n          y: [0, 0, 24, 24, 0],\r\n          rotate: [0, -90, -180, -270, -360]\r\n        }}\r\n        transition={{ duration: 2.5, repeat: Infinity, ease: \"easeInOut\" }}\r\n      />\r\n    </div>\r\n  );\r\n};\n"
+    }
+  ]
+}

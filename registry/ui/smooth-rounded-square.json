@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "smooth-rounded-square",
+  "type": "registry:ui",
+  "title": "Smooth Rounded Square",
+  "description": "Smooth Rounded Square loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/smooth-rounded-square.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/smooth-rounded-square.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const SmoothRoundedSquare = () => (\r\n  <motion.div\r\n    className=\"w-10 h-10 border-[3px] border-zinc-800 dark:border-zinc-700\"\r\n    animate={{ borderRadius: [\"10%\", \"50%\", \"10%\"] }}\r\n    transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n  />\r\n);\n"
+    }
+  ]
+}

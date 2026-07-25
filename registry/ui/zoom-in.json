@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "zoom-in",
+  "type": "registry:ui",
+  "title": "Zoom In",
+  "description": "Scale transition combined with deep blur/depth effect.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/entrance/zoom-in.tsx",
+      "type": "registry:ui",
+      "target": "@components/amicro/zoom-in.tsx",
+      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\ninterface ZoomInProps {\n  children: React.ReactNode;\n  duration?: number;\n  delay?: number;\n  initialScale?: number;\n  initialBlur?: string;\n  className?: string;\n}\n\nexport function ZoomIn({\n  children,\n  duration = 0.7,\n  delay = 0,\n  initialScale = 0.85,\n  initialBlur = '12px',\n  className = '',\n}: ZoomInProps) {\n  return (\n    <motion.div\n      initial={{ opacity: 0, scale: initialScale, filter: `blur(${initialBlur})` }}\n      animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}\n      transition={{\n        duration,\n        delay,\n        ease: [0.16, 1, 0.3, 1], // easeOutExpo\n      }}\n      className={className}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}
