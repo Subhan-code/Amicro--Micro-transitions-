@@ -147,7 +147,7 @@ export default function App() {
     }, 3000);
   }, []);
 
-  // Listen for Stripe redirect parameters to confirm slot updates
+  // Listen for Polar redirect parameters to confirm slot updates
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const paymentSuccess = params.get('payment_success');
@@ -1198,7 +1198,7 @@ export default function App() {
                     <h2 className="text-[20px] font-bold tracking-tight">Sponsor Amicro</h2>
                   </div>
                   <p className={`text-[13px] leading-relaxed mb-5 ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
-                    Promote your brand to 50k+ developers. Secure checkout is managed globally by **Stripe**.
+                    Promote your brand to 50k+ developers. Secure checkout is managed globally by **Polar**.
                   </p>
 
                   {/* Form inputs */}
@@ -1256,14 +1256,14 @@ export default function App() {
                     </div>
                   </div>
 
-                        {/* Stripe Payments Trigger */}
+                        {/* Polar Payments Trigger */}
                         <button
                           disabled={!adForm.companyName || !adForm.description || !adForm.siteUrl || isProcessingPayment}
                           onClick={() => {
                             triggerHaptic('medium');
                             setIsProcessingPayment(true);
                             
-                            // Call Stripe serverless API
+                            // Call Polar serverless API
                             fetch('/api/checkout', {
                               method: 'POST',
                               headers: {
@@ -1280,7 +1280,7 @@ export default function App() {
                                 if (res.ok) {
                                   const data = await res.json();
                                   if (data.url) {
-                                    window.location.href = data.url; // Redirect to Stripe checkout page
+                                    window.location.href = data.url; // Redirect to Polar checkout page
                                   } else {
                                     throw new Error('No checkout URL returned');
                                   }
@@ -1289,7 +1289,7 @@ export default function App() {
                                 }
                               })
                               .catch((err) => {
-                                console.warn('Stripe backend not available locally, running local checkout simulator instead.', err);
+                                console.warn('Polar backend not available locally, running local checkout simulator instead.', err);
                                 // Fallback to simulated checkout flow
                                 setTimeout(() => {
                                   triggerHaptic('success');
@@ -1321,20 +1321,20 @@ export default function App() {
                           className={`w-full h-[44px] rounded-full text-[13px] font-semibold cursor-pointer border-0 flex items-center justify-center gap-2 transition-all ${
                             !adForm.companyName || !adForm.description || !adForm.siteUrl
                               ? 'bg-neutral-400/20 text-neutral-400 cursor-not-allowed'
-                              : 'bg-[#635bff] text-white hover:bg-[#5244e0] shadow-md shadow-indigo-500/10 active:scale-98'
+                              : 'bg-[#0062ff] text-white hover:bg-[#0052d4] shadow-md shadow-blue-500/10 active:scale-98'
                           }`}
                         >
                           {isProcessingPayment ? (
                             <>
                               <RefreshCw className="w-4 h-4 animate-spin" />
-                              <span>Processing payment via Stripe...</span>
+                              <span>Processing payment via Polar...</span>
                             </>
                           ) : (
                             <>
-                              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm5 0h-4v-4h4v4zm0-6H4V8h16v4z" />
+                              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                               </svg>
-                              <span>Pay with Stripe ($49.00)</span>
+                              <span>Pay with Polar ($49.00)</span>
                             </>
                           )}
                         </button>

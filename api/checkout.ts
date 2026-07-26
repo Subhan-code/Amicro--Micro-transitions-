@@ -1,9 +1,4 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import Stripe from 'stripe';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2025-01-27.acacia' as any,
-});
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS Headers
@@ -34,30 +29,41 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Determine the base origin URL for callbacks
     const origin = req.headers.origin || 'http://localhost:5173';
 
-    // Create Stripe Checkout Session
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: `Amicro Sponsor Slot #${slotId}`,
-              description: `${companyName} — ${description}`,
-            },
-            unit_amount: 4900, // $49.00 USD
-          },
-          quantity: 1,
+    const polarToken = process.env.POLAR_ACCESS_TOKEN;
+    const polarPriceId = process.env.POLAR_PRICE_ID;
+
+    if (!polarToken || !polarPriceId) {
+      throw new Error('Polar environment variables POLAR_ACCESS_TOKEN or POLAR_PRICE_ID are not configured.');
+    }
+
+    // Create Polar Checkout Session
+    const response = await fetch('https://api.polar.sh/v1/checkouts/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${polarToken}`,
+      },
+      body: JSON.stringify({
+        product_price_id: polarPriceId,
+        success_url: `${origin}/?payment_success=true&slot_id=${slotId}&company_name=${encodeURIComponent(companyName)}&description=${encodeURIComponent(description)}&site_url=${encodeURIComponent(siteUrl)}`,
+        metadata: {
+          slotId: String(slotId),
+          companyName,
+          description,
+          siteUrl,
         },
-      ],
-      mode: 'payment',
-      success_url: `${origin}/?payment_success=true&slot_id=${slotId}&company_name=${encodeURIComponent(companyName)}&description=${encodeURIComponent(description)}&site_url=${encodeURIComponent(siteUrl)}`,
-      cancel_url: `${origin}/`,
+      }),
     });
 
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Polar API Error: ${errorText}`);
+    }
+
+    const session = await response.json();
     return res.status(200).json({ url: session.url });
   } catch (error: any) {
-    console.error('Stripe Checkout Error:', error);
+    console.error('Polar Checkout Error:', error);
     return res.status(500).json({ error: error.message || 'Internal server error' });
   }
 }
