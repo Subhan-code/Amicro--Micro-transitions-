@@ -90,19 +90,46 @@ export default function App() {
 
   const isOssiumActive = new Date() < new Date('2026-07-30T13:20:00Z');
 
-  const [sponsors, setSponsors] = useState<SponsorSlot[]>([
-    {
-      id: 1,
-      companyName: isOssiumActive ? 'Ossium' : 'Available Slot',
-      description: isOssiumActive ? 'Design systems, UI kits, and templates for indie builders and developers.' : 'Advertise your product here.',
-      logoType: isOssiumActive ? 'ossium' : undefined,
-      siteUrl: isOssiumActive ? 'https://ossium.live/' : undefined,
-      isAvailable: !isOssiumActive,
-    },
-    { id: 2, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
-    { id: 3, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
-    { id: 4, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
-  ]);
+  const [sponsors, setSponsors] = useState<SponsorSlot[]>(() => {
+    const cached = localStorage.getItem('amicro_sponsors');
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        // Sync active state of first slot (Ossium) based on live expiration
+        if (parsed.length > 0) {
+          parsed[0] = {
+            id: 1,
+            companyName: isOssiumActive ? 'Ossium' : 'Available Slot',
+            description: isOssiumActive ? 'Design systems, UI kits, and templates for indie builders and developers.' : 'Advertise your product here.',
+            logoType: isOssiumActive ? 'ossium' : undefined,
+            siteUrl: isOssiumActive ? 'https://ossium.live/' : undefined,
+            isAvailable: !isOssiumActive,
+          };
+        }
+        return parsed;
+      } catch (e) {
+        console.error('Error parsing cached sponsors:', e);
+      }
+    }
+    return [
+      {
+        id: 1,
+        companyName: isOssiumActive ? 'Ossium' : 'Available Slot',
+        description: isOssiumActive ? 'Design systems, UI kits, and templates for indie builders and developers.' : 'Advertise your product here.',
+        logoType: isOssiumActive ? 'ossium' : undefined,
+        siteUrl: isOssiumActive ? 'https://ossium.live/' : undefined,
+        isAvailable: !isOssiumActive,
+      },
+      { id: 2, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
+      { id: 3, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
+      { id: 4, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
+    ];
+  });
+
+  // Sync sponsors list to localStorage whenever state updates
+  useEffect(() => {
+    localStorage.setItem('amicro_sponsors', JSON.stringify(sponsors));
+  }, [sponsors]);
 
   // Hash-based router
   useEffect(() => {
@@ -141,6 +168,50 @@ export default function App() {
       setToastMessage(null);
     }, 3000);
   }, []);
+
+  // Listen for Polar checkout redirect parameter to dynamically fetch and apply paid sponsor slots
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const paymentSuccess = params.get('payment_success');
+    const checkoutId = params.get('checkout_id');
+
+    if (paymentSuccess === 'true' && checkoutId) {
+      // Fetch checkout details from our Vercel serverless API
+      fetch(`/api/checkout-status?checkout_id=${checkoutId}`)
+        .then(async (res) => {
+          if (res.ok) {
+            const data = await res.json();
+            if (data.payment_success) {
+              setSponsors(prev => {
+                const firstAvailableIdx = prev.findIndex(s => s.isAvailable);
+                if (firstAvailableIdx !== -1) {
+                  const nextSponsors = [...prev];
+                  nextSponsors[firstAvailableIdx] = {
+                    id: prev[firstAvailableIdx].id,
+                    companyName: data.companyName,
+                    description: data.description,
+                    siteUrl: data.siteUrl.startsWith('http://') || data.siteUrl.startsWith('https://')
+                      ? data.siteUrl
+                      : `https://${data.siteUrl}`,
+                    isAvailable: false
+                  };
+                  return nextSponsors;
+                }
+                return prev;
+              });
+              showToast(`Sponsorship confirmed for ${data.companyName}!`);
+            }
+          } else {
+            console.error('Failed to retrieve checkout details from API');
+          }
+        })
+        .catch(err => console.error('Error fetching checkout status:', err))
+        .finally(() => {
+          // Clean up URL parameters from browser bar
+          window.history.replaceState({}, document.title, window.location.pathname);
+        });
+    }
+  }, [showToast]);
 
 
 
