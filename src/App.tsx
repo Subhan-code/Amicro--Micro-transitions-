@@ -15,9 +15,10 @@ import { useWebHaptics } from './hooks/useWebHaptics';
 import { Analytics } from '@vercel/analytics/react';
 
 // Loaders imports
-import { loaderGroups } from './data/loaders';
+import { loaderGroups, LoaderConfig } from './data/loaders';
 import { loadersCode } from './utils/loadersCode';
 import { InViewRender } from './components/InViewRender';
+import { IconSwap, IconSwapItem } from './components/IconSwap';
 
 // Card layouts imports
 import { cardsData, CardConfig } from './data/cards';
@@ -241,11 +242,36 @@ export default function App() {
       });
   }, [showToast, triggerHaptic]);
 
-  const handleCopyLoaderCode = useCallback((name: string) => {
-    const code = loadersCode[name] || `// Loader ${name} code not found`;
+  const handleCopyLoaderCode = useCallback((loader: LoaderConfig | string, fallbackName?: string) => {
+    let code: string | undefined;
+    let name: string;
+    let copyId: string;
+
+    if (typeof loader === 'string') {
+      name = fallbackName || loader;
+      copyId = loader;
+      code = loadersCode[loader] || (fallbackName ? loadersCode[fallbackName] : undefined);
+    } else if (loader && typeof loader === 'object') {
+      name = loader.name;
+      copyId = loader.kebabName || loader.name;
+      code = loadersCode[loader.kebabName] ||
+             (loader.component?.name ? loadersCode[loader.component.name] : undefined) ||
+             (loader.component?.displayName ? loadersCode[loader.component.displayName] : undefined) ||
+             loadersCode[loader.name];
+    } else {
+      name = 'Unknown';
+      copyId = 'unknown';
+    }
+
+    if (!code) {
+      code = `// Loader ${name} code not found`;
+    }
+
     navigator.clipboard.writeText(code)
       .then(() => {
         triggerHaptic('success');
+        setCopiedText(copyId);
+        setTimeout(() => setCopiedText(null), 2000);
         showToast(`Copied ${name} loader code!`);
       })
       .catch(() => {
@@ -968,6 +994,7 @@ export default function App() {
                               <div className="w-full">
                                 {group.loaders.map((loader, loaderIdx) => {
                                   const LoaderComponent = loader.component;
+                                  const isCopied = copiedText === loader.kebabName || copiedText === loader.name;
                                   return (
                                     <div 
                                       key={loaderIdx} 
@@ -992,15 +1019,27 @@ export default function App() {
                                           {loader.name}
                                         </span>
                                         
-                                        <button
-                                          onClick={() => handleCopyLoaderCode(loader.component.name || loader.component.displayName || loader.name)}
-                                          className={`p-2 rounded-xl transition-all cursor-pointer border-0 ${
-                                            theme === 'dark' ? 'bg-white/[0.08] hover:bg-white/[0.12] text-neutral-300 hover:text-white' : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-650 hover:text-black'
+                                        <motion.button
+                                          whileHover={{ scale: 1.08 }}
+                                          whileTap={{ scale: 0.92 }}
+                                          onClick={() => handleCopyLoaderCode(loader)}
+                                          className={`p-2 rounded-xl transition-all cursor-pointer border flex items-center justify-center ${
+                                            isCopied
+                                              ? (theme === 'dark' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-emerald-100 text-emerald-600 border-emerald-300')
+                                              : (theme === 'dark' ? 'bg-white/[0.08] border-transparent hover:bg-white/[0.14] text-neutral-300 hover:text-white' : 'bg-neutral-100 border-transparent hover:bg-neutral-200 text-neutral-650 hover:text-black')
                                           }`}
                                           title="Copy loader code"
                                         >
-                                          <Copy className="w-4 h-4" />
-                                        </button>
+                                          <IconSwap>
+                                            <IconSwapItem key={isCopied ? "check" : "copy"}>
+                                              {isCopied ? (
+                                                <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
+                                              ) : (
+                                                <Copy className="w-4 h-4" />
+                                              )}
+                                            </IconSwapItem>
+                                          </IconSwap>
+                                        </motion.button>
                                       </div>
                                     </div>
                                   );
@@ -1010,6 +1049,7 @@ export default function App() {
                               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 w-full">
                                 {group.loaders.map((loader, loaderIdx) => {
                                   const LoaderComponent = loader.component;
+                                  const isCopied = copiedText === loader.kebabName || copiedText === loader.name;
                                   return (
                                     <div 
                                       key={loaderIdx} 
@@ -1032,15 +1072,27 @@ export default function App() {
                                           {loader.name}
                                         </span>
                                         
-                                        <button
-                                          onClick={() => handleCopyLoaderCode(loader.component.name || loader.component.displayName || loader.name)}
-                                          className={`p-1.5 rounded-lg opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity cursor-pointer border-0 ${
-                                            theme === 'dark' ? 'bg-white/[0.06] text-neutral-400 hover:text-white' : 'bg-neutral-100 text-neutral-600 hover:text-black'
+                                        <motion.button
+                                          whileHover={{ scale: 1.1 }}
+                                          whileTap={{ scale: 0.9 }}
+                                          onClick={() => handleCopyLoaderCode(loader)}
+                                          className={`p-1.5 rounded-lg transition-all cursor-pointer border flex items-center justify-center ${
+                                            isCopied
+                                              ? (theme === 'dark' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-emerald-100 text-emerald-600 border-emerald-300')
+                                              : (theme === 'dark' ? 'bg-white/[0.08] border-transparent text-neutral-300 hover:text-white hover:bg-white/[0.14]' : 'bg-neutral-100/90 border-transparent text-neutral-600 hover:text-black hover:bg-neutral-200')
                                           }`}
                                           title="Copy loader code"
                                         >
-                                          <Copy className="w-3 h-3" />
-                                        </button>
+                                          <IconSwap>
+                                            <IconSwapItem key={isCopied ? "check" : "copy"}>
+                                              {isCopied ? (
+                                                <Check className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
+                                              ) : (
+                                                <Copy className="w-3.5 h-3.5" />
+                                              )}
+                                            </IconSwapItem>
+                                          </IconSwap>
+                                        </motion.button>
                                       </div>
                                     </div>
                                   );
