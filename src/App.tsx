@@ -82,6 +82,7 @@ export default function App() {
   const [catalogTab, setCatalogTab] = useState<CatalogTabType>('buttons');
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
+  const POLAR_CHECKOUT_URL = "YOUR_POLAR_CHECKOUT_LINK"; // Replace with your actual Polar Checkout Link
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
@@ -151,26 +152,55 @@ export default function App() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const paymentSuccess = params.get('payment_success');
-    const slotIdStr = params.get('slot_id');
-    const companyName = params.get('company_name');
-    const description = params.get('description');
-    const siteUrl = params.get('site_url');
 
-    if (paymentSuccess === 'true' && slotIdStr && companyName && description && siteUrl) {
-      const slotId = parseInt(slotIdStr, 10);
-      setSponsors(prev => prev.map(s => {
-        if (s.id === slotId) {
-          return {
-            id: s.id,
-            companyName,
-            description,
-            siteUrl,
-            isAvailable: false
-          };
+    if (paymentSuccess === 'true') {
+      const slotIdStr = params.get('slot_id');
+      const companyName = params.get('company_name');
+      const description = params.get('description');
+      const siteUrl = params.get('site_url');
+
+      if (slotIdStr && companyName && description && siteUrl) {
+        const slotId = parseInt(slotIdStr, 10);
+        setSponsors(prev => prev.map(s => {
+          if (s.id === slotId) {
+            return {
+              id: s.id,
+              companyName,
+              description,
+              siteUrl,
+              isAvailable: false
+            };
+          }
+          return s;
+        }));
+        showToast(`Sponsor ad placed successfully for ${companyName}!`);
+      } else {
+        // Fallback: read from localStorage for no-code static checkout links
+        const pending = localStorage.getItem('amicro_pending_sponsor');
+        if (pending) {
+          try {
+            const data = JSON.parse(pending);
+            setSponsors(prev => prev.map(s => {
+              if (s.id === data.slotId) {
+                return {
+                  id: s.id,
+                  companyName: data.companyName,
+                  description: data.description,
+                  siteUrl: data.siteUrl.startsWith('http://') || data.siteUrl.startsWith('https://')
+                    ? data.siteUrl
+                    : `https://${data.siteUrl}`,
+                  isAvailable: false
+                };
+              }
+              return s;
+            }));
+            showToast(`Sponsor ad placed successfully for ${data.companyName}!`);
+            localStorage.removeItem('amicro_pending_sponsor');
+          } catch (e) {
+            console.error('Error parsing pending sponsor:', e);
+          }
         }
-        return s;
-      }));
-      showToast(`Sponsor ad placed successfully for ${companyName}!`);
+      }
       // Clean up URL parameters
       window.history.replaceState({}, document.title, window.location.pathname);
     }
@@ -1262,61 +1292,50 @@ export default function App() {
                           onClick={() => {
                             triggerHaptic('medium');
                             setIsProcessingPayment(true);
+
+                            // Save sponsor details to localStorage for static checkout success callback
+                            localStorage.setItem('amicro_pending_sponsor', JSON.stringify({
+                              slotId: selectedSlotId,
+                              companyName: adForm.companyName,
+                              description: adForm.description,
+                              siteUrl: adForm.siteUrl
+                            }));
                             
-                            // Call Polar serverless API
-                            fetch('/api/checkout', {
-                              method: 'POST',
-                              headers: {
-                                'Content-Type': 'application/json',
-                              },
-                              body: JSON.stringify({
-                                slotId: selectedSlotId,
-                                companyName: adForm.companyName,
-                                description: adForm.description,
-                                siteUrl: adForm.siteUrl,
-                              }),
-                            })
-                              .then(async (res) => {
-                                if (res.ok) {
-                                  const data = await res.json();
-                                  if (data.url) {
-                                    window.location.href = data.url; // Redirect to Polar checkout page
-                                  } else {
-                                    throw new Error('No checkout URL returned');
-                                  }
-                                } else {
-                                  throw new Error('API request failed');
-                                }
-                              })
-                              .catch((err) => {
-                                console.warn('Polar backend not available locally, running local checkout simulator instead.', err);
-                                // Fallback to simulated checkout flow
+                            // Redirect directly to the Polar static checkout link
+                            if (POLAR_CHECKOUT_URL && POLAR_CHECKOUT_URL !== "YOUR_POLAR_CHECKOUT_LINK") {
+                              setTimeout(() => {
+                                window.location.href = POLAR_CHECKOUT_URL;
+                              }, 800);
+                            } else {
+                              console.warn('POLAR_CHECKOUT_URL is not configured, running local checkout simulator instead.');
+                              // Fallback to simulated checkout flow
+                              setTimeout(() => {
+                                triggerHaptic('success');
+                                // Mock payment processing duration
                                 setTimeout(() => {
+                                  // Save sponsor data locally and set success
+                                  setSponsors(prev => prev.map(s => {
+                                    if (s.id === selectedSlotId) {
+                                      return {
+                                        id: s.id,
+                                        companyName: adForm.companyName,
+                                        description: adForm.description,
+                                        siteUrl: adForm.siteUrl.startsWith('http://') || adForm.siteUrl.startsWith('https://')
+                                          ? adForm.siteUrl
+                                          : `https://${adForm.siteUrl}`,
+                                        isAvailable: false
+                                      };
+                                    }
+                                    return s;
+                                  }));
+                                  setPaymentSuccess(true);
+                                  setIsProcessingPayment(false);
                                   triggerHaptic('success');
-                                  // Mock payment processing duration
-                                  setTimeout(() => {
-                                    // Save sponsor data locally and set success
-                                    setSponsors(prev => prev.map(s => {
-                                      if (s.id === selectedSlotId) {
-                                        return {
-                                          id: s.id,
-                                          companyName: adForm.companyName,
-                                          description: adForm.description,
-                                          siteUrl: adForm.siteUrl.startsWith('http://') || adForm.siteUrl.startsWith('https://')
-                                            ? adForm.siteUrl
-                                            : `https://${adForm.siteUrl}`,
-                                          isAvailable: false
-                                        };
-                                      }
-                                      return s;
-                                    }));
-                                    setPaymentSuccess(true);
-                                    setIsProcessingPayment(false);
-                                    triggerHaptic('success');
-                                    showToast(`Sponsor ad placed successfully for ${adForm.companyName}!`);
-                                  }, 2500);
-                                }, 1200);
-                              });
+                                  showToast(`Sponsor ad placed successfully for ${adForm.companyName}!`);
+                                  localStorage.removeItem('amicro_pending_sponsor');
+                                }, 2500);
+                              }, 1200);
+                            }
                           }}
                           className={`w-full h-[44px] rounded-full text-[13px] font-semibold cursor-pointer border-0 flex items-center justify-center gap-2 transition-all ${
                             !adForm.companyName || !adForm.description || !adForm.siteUrl
