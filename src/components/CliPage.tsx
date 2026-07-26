@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Copy, Check, ChevronDown, ArrowLeft } from 'lucide-react';
+import { useWebHaptics } from '../hooks/useWebHaptics';
 
 interface CliPageProps {
   theme: 'dark' | 'light';
@@ -10,14 +11,19 @@ interface CliPageProps {
 export function CliPage({ theme, onNavigateHome }: CliPageProps) {
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [faqOpen, setFaqOpen] = useState<Record<number, boolean>>({});
+  const { trigger: triggerHaptic } = useWebHaptics();
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text)
       .then(() => {
+        triggerHaptic('light');
         setCopiedText(id);
         setTimeout(() => setCopiedText(null), 2000);
       })
-      .catch((err) => console.error('Failed to copy: ', err));
+      .catch((err) => {
+        triggerHaptic('error');
+        console.error('Failed to copy: ', err);
+      });
   };
 
   const toggleFaq = (index: number) => {

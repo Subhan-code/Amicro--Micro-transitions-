@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/text-morph.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/text-morph.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const TextMorph = () => (\r\n  <div className=\"relative h-6 w-24 flex items-center justify-center font-medium text-sm text-zinc-900 dark:text-white overflow-hidden\">\r\n    <motion.div\r\n      className=\"absolute\"\r\n      animate={{ opacity: [1, 0, 0, 1], y: [0, -16, 16, 0] }}\r\n      transition={{ duration: 3, repeat: Infinity, ease: \"easeInOut\" }}\r\n    >\r\n      Loading\r\n    </motion.div>\r\n    <motion.div\r\n      className=\"absolute\"\r\n      animate={{ opacity: [0, 1, 1, 0], y: [16, 0, 0, -16] }}\r\n      transition={{ duration: 3, repeat: Infinity, ease: \"easeInOut\" }}\r\n    >\r\n      Wait\r\n    </motion.div>\r\n  </div>\r\n);\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const TextMorph = () => (\r\n  <div className=\"relative h-6 w-24 flex items-center justify-center font-medium text-sm text-zinc-900 dark:text-white overflow-hidden\">\r\n    <motion.div\r\n      className=\"absolute\"\r\n      animate={{ opacity: [1, 0, 0, 1], y: [0, -16, 16, 0] }}\r\n      transition={{ duration: 3, repeat: Infinity, ease: \"easeInOut\" }}\r\n    >\r\n      Loading\r\n    </motion.div>\r\n    <motion.div\r\n      className=\"absolute\"\r\n      animate={{ opacity: [0, 1, 1, 0], y: [16, 0, 0, -16] }}\r\n      transition={{ duration: 3, repeat: Infinity, ease: \"easeInOut\" }}\r\n    >\r\n      Wait\r\n    </motion.div>\r\n  </div>\r\n);\r\n"
     }
   ]
 }

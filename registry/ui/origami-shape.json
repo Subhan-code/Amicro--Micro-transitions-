@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/origami-shape.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/origami-shape.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const OrigamiShape = () => (\r\n  <div className=\"relative w-10 h-10\">\r\n    <motion.div\r\n      className=\"absolute top-0 left-0 w-5 h-5 bg-zinc-800 dark:bg-white rounded-tl-md\"\r\n      animate={{ rotateY: [0, 180, 0] }}\r\n      style={{ transformOrigin: \"right\" }}\r\n      transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n    <motion.div\r\n      className=\"absolute bottom-0 right-0 w-5 h-5 bg-zinc-500 dark:bg-zinc-350 rounded-br-md\"\r\n      animate={{ rotateY: [0, 180, 0] }}\r\n      style={{ transformOrigin: \"left\" }}\r\n      transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n  </div>\r\n);\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const OrigamiShape = () => (\r\n  <div className=\"relative w-10 h-10\">\r\n    <motion.div\r\n      className=\"absolute top-0 left-0 w-5 h-5 bg-zinc-800 dark:bg-white rounded-tl-md\"\r\n      animate={{ rotateY: [0, 180, 0] }}\r\n      style={{ transformOrigin: \"right\" }}\r\n      transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n    <motion.div\r\n      className=\"absolute bottom-0 right-0 w-5 h-5 bg-zinc-500 dark:bg-zinc-350 rounded-br-md\"\r\n      animate={{ rotateY: [0, 180, 0] }}\r\n      style={{ transformOrigin: \"left\" }}\r\n      transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n  </div>\r\n);\r\n"
     }
   ]
 }

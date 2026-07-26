@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/typing.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/typing.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const Typing = () => {\r\n  return (\r\n    <div className=\"flex items-center text-zinc-900 dark:text-white font-medium text-lg w-20\">\r\n      Loading\r\n      <motion.span\r\n        className=\"w-1.5 h-4 bg-zinc-900 dark:bg-white ml-1 inline-block\"\r\n        animate={{ opacity: [1, 0, 1] }}\r\n        transition={{ duration: 0.8, repeat: Infinity, ease: \"linear\" }}\r\n      />\r\n    </div>\r\n  );\r\n};\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const Typing = () => {\r\n  return (\r\n    <div className=\"flex items-center text-zinc-900 dark:text-white font-medium text-lg w-20\">\r\n      Loading\r\n      <motion.span\r\n        className=\"w-1.5 h-4 bg-zinc-900 dark:bg-white ml-1 inline-block\"\r\n        animate={{ opacity: [1, 0, 1] }}\r\n        transition={{ duration: 0.8, repeat: Infinity, ease: \"linear\" }}\r\n      />\r\n    </div>\r\n  );\r\n};\r\n"
     }
   ]
 }

@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/spring-text-pop.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/spring-text-pop.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const SpringTextPop = () => {\n  const text = \"Loading...\";\n  return (\n    <div className=\"flex font-medium text-sm tracking-widest text-zinc-800 dark:text-white\">\n      {text.split(\"\").map((char, i) => (\n        <motion.span\n          key={i}\n          className=\"origin-bottom inline-block\"\n          animate={{ y: [0, -6, 0] }}\n          transition={{\n            duration: 1.2,\n            repeat: Infinity,\n            ease: \"easeInOut\",\n            delay: i * 0.08,\n          }}\n        >\n          {char === \" \" ? \"\\u00A0\" : char}\n        </motion.span>\n      ))}\n    </div>\n  );\n};\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const SpringTextPop = () => {\r\n  const text = \"Loading...\";\r\n  return (\r\n    <div className=\"flex font-medium text-sm tracking-widest text-zinc-800 dark:text-white\">\r\n      {text.split(\"\").map((char, i) => (\r\n        <motion.span\r\n          key={i}\r\n          className=\"origin-bottom inline-block\"\r\n          animate={{ y: [0, -6, 0] }}\r\n          transition={{\r\n            duration: 1.2,\r\n            repeat: Infinity,\r\n            ease: \"easeInOut\",\r\n            delay: i * 0.08,\r\n          }}\r\n        >\r\n          {char === \" \" ? \"\\u00A0\" : char}\r\n        </motion.span>\r\n      ))}\r\n    </div>\r\n  );\r\n};\r\n"
     }
   ]
 }

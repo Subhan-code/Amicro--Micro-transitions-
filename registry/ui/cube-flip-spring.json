@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/cube-flip-spring.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/cube-flip-spring.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const CubeFlipSpring = () => (\r\n  <motion.div\r\n    className=\"w-8 h-8 bg-zinc-800 dark:bg-white rounded-lg\"\r\n    animate={{ rotateX: [0, 180, 180], rotateY: [0, 0, 180] }}\r\n    transition={{ duration: 2, repeat: Infinity, type: \"spring\", bounce: 0.2 }}\r\n  />\r\n);\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const CubeFlipSpring = () => (\r\n  <motion.div\r\n    className=\"w-8 h-8 bg-zinc-800 dark:bg-white rounded-lg\"\r\n    animate={{ rotateX: [0, 180, 180], rotateY: [0, 0, 180] }}\r\n    transition={{ duration: 2, repeat: Infinity, type: \"spring\", bounce: 0.2 }}\r\n  />\r\n);\r\n"
     }
   ]
 }

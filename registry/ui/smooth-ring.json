@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/smooth-ring.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/smooth-ring.tsx",
-      "content": "import React from 'react';\n\nexport const SmoothRing = () => (\n  <div className=\"w-9 h-9\">\n    <svg className=\"w-full h-full animate-spin\" viewBox=\"0 0 32 32\">\n      <circle\n        cx=\"16\"\n        cy=\"16\"\n        r=\"14\"\n        fill=\"none\"\n        strokeWidth=\"3\"\n        className=\"stroke-zinc-200 dark:stroke-zinc-800\"\n      />\n      <circle\n        cx=\"16\"\n        cy=\"16\"\n        r=\"14\"\n        fill=\"none\"\n        strokeWidth=\"3\"\n        className=\"stroke-zinc-800 dark:stroke-white\"\n        strokeDasharray=\"38 80\"\n        strokeLinecap=\"round\"\n      />\n    </svg>\n  </div>\n);\n"
+      "content": "import React from 'react';\r\n\r\nexport const SmoothRing = () => (\r\n  <div className=\"w-9 h-9\">\r\n    <svg className=\"w-full h-full animate-spin\" viewBox=\"0 0 32 32\">\r\n      <circle\r\n        cx=\"16\"\r\n        cy=\"16\"\r\n        r=\"14\"\r\n        fill=\"none\"\r\n        strokeWidth=\"3\"\r\n        className=\"stroke-zinc-200 dark:stroke-zinc-800\"\r\n      />\r\n      <circle\r\n        cx=\"16\"\r\n        cy=\"16\"\r\n        r=\"14\"\r\n        fill=\"none\"\r\n        strokeWidth=\"3\"\r\n        className=\"stroke-zinc-800 dark:stroke-white\"\r\n        strokeDasharray=\"38 80\"\r\n        strokeLinecap=\"round\"\r\n      />\r\n    </svg>\r\n  </div>\r\n);\r\n"
     }
   ]
 }

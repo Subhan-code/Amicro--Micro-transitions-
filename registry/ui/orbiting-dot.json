@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/orbiting-dot.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/orbiting-dot.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const OrbitingDot = () => {\r\n  return (\r\n    <div className=\"relative w-10 h-10 flex items-center justify-center\">\r\n      <div className=\"w-2 h-2 bg-zinc-300 dark:bg-zinc-700 rounded-full\" />\r\n      <motion.div\r\n        className=\"absolute w-full h-full border border-zinc-200 dark:border-zinc-800 rounded-full\"\r\n        animate={{ rotate: 360 }}\r\n        transition={{ duration: 2, repeat: Infinity, ease: \"linear\" }}\r\n      >\r\n        <div className=\"absolute top-0 left-1/2 -ml-1.5 -mt-1.5 w-3 h-3 bg-zinc-800 dark:bg-white rounded-full shadow-sm\" />\r\n      </motion.div>\r\n    </div>\r\n  );\r\n};\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const OrbitingDot = () => {\r\n  return (\r\n    <div className=\"relative w-10 h-10 flex items-center justify-center\">\r\n      <div className=\"w-2 h-2 bg-zinc-300 dark:bg-zinc-700 rounded-full\" />\r\n      <motion.div\r\n        className=\"absolute w-full h-full border border-zinc-200 dark:border-zinc-800 rounded-full\"\r\n        animate={{ rotate: 360 }}\r\n        transition={{ duration: 2, repeat: Infinity, ease: \"linear\" }}\r\n      >\r\n        <div className=\"absolute top-0 left-1/2 -ml-1.5 -mt-1.5 w-3 h-3 bg-zinc-800 dark:bg-white rounded-full shadow-sm\" />\r\n      </motion.div>\r\n    </div>\r\n  );\r\n};\r\n"
     }
   ]
 }

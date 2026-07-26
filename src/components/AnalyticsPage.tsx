@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Copy, Check, ArrowLeft, Terminal, Cpu, Code2, Globe, Rocket, HelpCircle, AlertCircle } from 'lucide-react';
+import { useWebHaptics } from '../hooks/useWebHaptics';
 
 interface AnalyticsPageProps {
   theme: 'dark' | 'light';
@@ -14,14 +15,19 @@ export function AnalyticsPage({ theme, onNavigateHome }: AnalyticsPageProps) {
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [packageManager, setPackageManager] = useState<PackageManager>('npm');
   const [selectedFramework, setSelectedFramework] = useState<Framework>('nextjs');
+  const { trigger: triggerHaptic } = useWebHaptics();
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text)
       .then(() => {
+        triggerHaptic('light');
         setCopiedText(id);
         setTimeout(() => setCopiedText(null), 2000);
       })
-      .catch((err) => console.error('Failed to copy: ', err));
+      .catch((err) => {
+        triggerHaptic('error');
+        console.error('Failed to copy: ', err);
+      });
   };
 
   const isDark = theme === 'dark';

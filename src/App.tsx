@@ -11,6 +11,7 @@ import { getComponentCode, ThemeToggleCode, getCardComponentCode } from './utils
 import { CliPage } from './components/CliPage';
 import { SkillsPage } from './components/SkillsPage';
 import { AnalyticsPage } from './components/AnalyticsPage';
+import { useWebHaptics } from './hooks/useWebHaptics';
 
 // Loaders imports
 import { loaderGroups } from './data/loaders';
@@ -74,6 +75,7 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
+  const { trigger: triggerHaptic } = useWebHaptics();
 
   // Hash-based router
   useEffect(() => {
@@ -116,40 +118,68 @@ export default function App() {
   const handleCopyCode = useCallback((button: typeof buttonsData[0]) => {
     const code = getComponentCode(button);
     navigator.clipboard.writeText(code)
-      .then(() => showToast(`Copied ${button.label} component code!`))
-      .catch(() => showToast("Failed to copy code."));
-  }, [showToast]);
+      .then(() => {
+        triggerHaptic('success');
+        showToast(`Copied ${button.label} component code!`);
+      })
+      .catch(() => {
+        triggerHaptic('error');
+        showToast("Failed to copy code.");
+      });
+  }, [showToast, triggerHaptic]);
 
   const handleCopyCardCode = useCallback((card: CardConfig) => {
     const code = getCardComponentCode(card);
     navigator.clipboard.writeText(code)
-      .then(() => showToast(`Copied ${card.label} component code!`))
-      .catch(() => showToast("Failed to copy code."));
-  }, [showToast]);
+      .then(() => {
+        triggerHaptic('success');
+        showToast(`Copied ${card.label} component code!`);
+      })
+      .catch(() => {
+        triggerHaptic('error');
+        showToast("Failed to copy code.");
+      });
+  }, [showToast, triggerHaptic]);
 
   const handleCopyLoaderCode = useCallback((name: string) => {
     const code = loadersCode[name] || `// Loader ${name} code not found`;
     navigator.clipboard.writeText(code)
-      .then(() => showToast(`Copied ${name} loader code!`))
-      .catch(() => showToast("Failed to copy code."));
-  }, [showToast]);
+      .then(() => {
+        triggerHaptic('success');
+        showToast(`Copied ${name} loader code!`);
+      })
+      .catch(() => {
+        triggerHaptic('error');
+        showToast("Failed to copy code.");
+      });
+  }, [showToast, triggerHaptic]);
 
   const copyCliCommand = useCallback((text: string, id: string) => {
     navigator.clipboard.writeText(text)
       .then(() => {
+        triggerHaptic('light');
         setCopiedText(id);
         setTimeout(() => setCopiedText(null), 2000);
       })
-      .catch(() => showToast("Failed to copy command."));
-  }, [showToast]);
+      .catch(() => {
+        triggerHaptic('error');
+        showToast("Failed to copy command.");
+      });
+  }, [showToast, triggerHaptic]);
 
   const handleThemeToggle = useCallback(() => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(nextTheme);
     navigator.clipboard.writeText(ThemeToggleCode)
-      .then(() => showToast("Theme toggled & ThemeToggle code copied!"))
-      .catch(() => showToast("Failed to copy theme code."));
-  }, [theme, showToast]);
+      .then(() => {
+        triggerHaptic('medium');
+        showToast("Theme toggled & ThemeToggle code copied!");
+      })
+      .catch(() => {
+        triggerHaptic('error');
+        showToast("Failed to copy theme code.");
+      });
+  }, [theme, showToast, triggerHaptic]);
 
   const displayedButtons = useMemo(() => {
     let sorted = [...buttonsData];

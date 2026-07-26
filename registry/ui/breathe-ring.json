@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/breathe-ring.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/breathe-ring.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const BreatheRing = () => (\r\n  <motion.div\r\n    className=\"w-10 h-10 rounded-full border-4 border-zinc-800 dark:border-zinc-700\"\r\n    animate={{ scale: [0.8, 1.1, 0.8], borderWidth: [6, 2, 6] }}\r\n    transition={{ duration: 3, repeat: Infinity, ease: \"easeInOut\" }}\r\n  />\r\n);\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const BreatheRing = () => (\r\n  <motion.div\r\n    className=\"w-10 h-10 rounded-full border-4 border-zinc-800 dark:border-zinc-700\"\r\n    animate={{ scale: [0.8, 1.1, 0.8], borderWidth: [6, 2, 6] }}\r\n    transition={{ duration: 3, repeat: Infinity, ease: \"easeInOut\" }}\r\n  />\r\n);\r\n"
     }
   ]
 }

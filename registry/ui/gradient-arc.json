@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/gradient-arc.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/gradient-arc.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const GradientArc = () => {\n  return (\n    <div className=\"relative w-10 h-10 flex items-center justify-center\">\n      <motion.div\n        className=\"w-10 h-10 rounded-full\"\n        style={{\n          background: \"linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)\",\n          maskImage: \"radial-gradient(transparent 55%, black 60%)\",\n          WebkitMaskImage: \"radial-gradient(transparent 55%, black 60%)\",\n        }}\n        animate={{ rotate: 360 }}\n        transition={{ duration: 1.2, repeat: Infinity, ease: \"linear\" }}\n      />\n    </div>\n  );\n};\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const GradientArc = () => {\r\n  return (\r\n    <div className=\"relative w-10 h-10 flex items-center justify-center\">\r\n      <motion.div\r\n        className=\"w-10 h-10 rounded-full\"\r\n        style={{\r\n          background: \"linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)\",\r\n          maskImage: \"radial-gradient(transparent 55%, black 60%)\",\r\n          WebkitMaskImage: \"radial-gradient(transparent 55%, black 60%)\",\r\n        }}\r\n        animate={{ rotate: 360 }}\r\n        transition={{ duration: 1.2, repeat: Infinity, ease: \"linear\" }}\r\n      />\r\n    </div>\r\n  );\r\n};\r\n"
     }
   ]
 }

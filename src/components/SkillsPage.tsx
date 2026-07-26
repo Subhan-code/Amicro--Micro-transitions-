@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Copy, Check, ArrowLeft, Terminal, Cpu, Code, ShieldCheck } from 'lucide-react';
+import { useWebHaptics } from '../hooks/useWebHaptics';
 
 interface SkillsPageProps {
   theme: 'dark' | 'light';
@@ -10,14 +11,19 @@ interface SkillsPageProps {
 export function SkillsPage({ theme, onNavigateHome }: SkillsPageProps) {
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'install' | 'commands'>('install');
+  const { trigger: triggerHaptic } = useWebHaptics();
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text)
       .then(() => {
+        triggerHaptic('light');
         setCopiedText(id);
         setTimeout(() => setCopiedText(null), 2000);
       })
-      .catch((err) => console.error('Failed to copy: ', err));
+      .catch((err) => {
+        triggerHaptic('error');
+        console.error('Failed to copy: ', err);
+      });
   };
 
   const isDark = theme === 'dark';

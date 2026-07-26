@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/breathing-square.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/breathing-square.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const BreathingSquare = () => {\r\n  return (\r\n    <motion.div\r\n      className=\"w-8 h-8 bg-zinc-800 dark:bg-white\"\r\n      animate={{\r\n        scale: [1, 1.2, 1],\r\n        borderRadius: [\"0%\", \"50%\", \"0%\"],\r\n        rotate: [0, 90, 180]\r\n      }}\r\n      transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n  );\r\n};\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const BreathingSquare = () => {\r\n  return (\r\n    <motion.div\r\n      className=\"w-8 h-8 bg-zinc-800 dark:bg-white\"\r\n      animate={{\r\n        scale: [1, 1.2, 1],\r\n        borderRadius: [\"0%\", \"50%\", \"0%\"],\r\n        rotate: [0, 90, 180]\r\n      }}\r\n      transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n  );\r\n};\r\n"
     }
   ]
 }

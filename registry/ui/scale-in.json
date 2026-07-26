@@ -13,7 +13,7 @@
       "path": "registry/ui/entrance/scale-in.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/scale-in.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\ninterface ScaleInProps {\n  children: React.ReactNode;\n  duration?: number;\n  delay?: number;\n  initialScale?: number;\n  className?: string;\n}\n\nexport function ScaleIn({\n  children,\n  duration = 0.5,\n  delay = 0,\n  initialScale = 0.92,\n  className = '',\n}: ScaleInProps) {\n  return (\n    <motion.div\n      initial={{ opacity: 0, scale: initialScale }}\n      animate={{ opacity: 1, scale: 1 }}\n      transition={{\n        duration,\n        delay,\n        ease: [0.34, 1.56, 0.64, 1], // Custom springy cubic bezier\n      }}\n      className={className}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\ninterface ScaleInProps {\r\n  children: React.ReactNode;\r\n  duration?: number;\r\n  delay?: number;\r\n  initialScale?: number;\r\n  className?: string;\r\n}\r\n\r\nexport function ScaleIn({\r\n  children,\r\n  duration = 0.5,\r\n  delay = 0,\r\n  initialScale = 0.92,\r\n  className = '',\r\n}: ScaleInProps) {\r\n  return (\r\n    <motion.div\r\n      initial={{ opacity: 0, scale: initialScale }}\r\n      animate={{ opacity: 1, scale: 1 }}\r\n      transition={{\r\n        duration,\r\n        delay,\r\n        ease: [0.34, 1.56, 0.64, 1], // Custom springy cubic bezier\r\n      }}\r\n      className={className}\r\n    >\r\n      {children}\r\n    </motion.div>\r\n  );\r\n}\r\n"
     }
   ]
 }

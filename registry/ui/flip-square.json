@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/flip-square.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/flip-square.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const FlipSquare = () => {\r\n  return (\r\n    <motion.div\r\n      className=\"w-8 h-8 bg-zinc-800 dark:bg-white rounded-md shadow-sm\"\r\n      animate={{ rotateX: [0, 180, 180, 0], rotateY: [0, 0, 180, 180] }}\r\n      transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n  );\r\n};\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const FlipSquare = () => {\r\n  return (\r\n    <motion.div\r\n      className=\"w-8 h-8 bg-zinc-800 dark:bg-white rounded-md shadow-sm\"\r\n      animate={{ rotateX: [0, 180, 180, 0], rotateY: [0, 0, 180, 180] }}\r\n      transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n  );\r\n};\r\n"
     }
   ]
 }

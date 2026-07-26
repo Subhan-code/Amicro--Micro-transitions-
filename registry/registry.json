@@ -472,6 +472,21 @@
       ]
     },
     {
+      "name": "use-web-haptics",
+      "type": "registry:hook",
+      "title": "Use Web Haptics",
+      "description": "Provides responsive device haptic feedback and vibrations for web interfaces.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "registry/hooks/use-web-haptics.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-web-haptics.ts"
+        }
+      ]
+    },
+    {
       "name": "presets",
       "type": "registry:lib",
       "title": "Presets",

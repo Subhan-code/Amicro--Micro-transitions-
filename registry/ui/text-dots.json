@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/text-dots.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/text-dots.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const TextDots = () => {\r\n  return (\r\n    <div className=\"font-medium text-lg text-zinc-900 dark:text-white flex w-24\">\r\n      <span>Thinking</span>\r\n      <span className=\"flex w-6 pl-0.5\">\r\n        <motion.span animate={{ opacity: [0, 1, 1, 0] }} transition={{ duration: 2, repeat: Infinity, times: [0, 0.2, 0.8, 1] }}>.</motion.span>\r\n        <motion.span animate={{ opacity: [0, 0, 1, 0] }} transition={{ duration: 2, repeat: Infinity, times: [0, 0.4, 0.8, 1] }}>.</motion.span>\r\n        <motion.span animate={{ opacity: [0, 0, 1, 0] }} transition={{ duration: 2, repeat: Infinity, times: [0, 0.6, 0.8, 1] }}>.</motion.span>\r\n      </span>\r\n    </div>\r\n  );\r\n};\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const TextDots = () => {\r\n  return (\r\n    <div className=\"font-medium text-lg text-zinc-900 dark:text-white flex w-24\">\r\n      <span>Thinking</span>\r\n      <span className=\"flex w-6 pl-0.5\">\r\n        <motion.span animate={{ opacity: [0, 1, 1, 0] }} transition={{ duration: 2, repeat: Infinity, times: [0, 0.2, 0.8, 1] }}>.</motion.span>\r\n        <motion.span animate={{ opacity: [0, 0, 1, 0] }} transition={{ duration: 2, repeat: Infinity, times: [0, 0.4, 0.8, 1] }}>.</motion.span>\r\n        <motion.span animate={{ opacity: [0, 0, 1, 0] }} transition={{ duration: 2, repeat: Infinity, times: [0, 0.6, 0.8, 1] }}>.</motion.span>\r\n      </span>\r\n    </div>\r\n  );\r\n};\r\n"
     }
   ]
 }

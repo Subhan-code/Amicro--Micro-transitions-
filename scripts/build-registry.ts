@@ -255,6 +255,13 @@ const registryItems: RegistryItem[] = [
     description: 'Detects client system reduced motion media query standard.',
     files: [{ path: 'registry/hooks/use-reduced-motion.ts', type: 'registry:hook', target: '@hooks/use-reduced-motion.ts' }]
   },
+  {
+    name: 'use-web-haptics',
+    type: 'registry:hook',
+    title: 'Use Web Haptics',
+    description: 'Provides responsive device haptic feedback and vibrations for web interfaces.',
+    files: [{ path: 'registry/hooks/use-web-haptics.ts', type: 'registry:hook', target: '@hooks/use-web-haptics.ts' }]
+  },
 
   // --- LIB ---
   {

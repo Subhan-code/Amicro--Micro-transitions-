@@ -14,7 +14,7 @@
       "path": "registry/lib/utils.ts",
       "type": "registry:lib",
       "target": "@lib/utils.ts",
-      "content": "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}\n\n// Utility to map a value from one range to another (helpful for mouse following animations)\nexport function mapRange(\n  value: number,\n  inMin: number,\n  inMax: number,\n  outMin: number,\n  outMax: number\n): number {\n  return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;\n}\n"
+      "content": "import { clsx, type ClassValue } from \"clsx\";\r\nimport { twMerge } from \"tailwind-merge\";\r\n\r\nexport function cn(...inputs: ClassValue[]) {\r\n  return twMerge(clsx(inputs));\r\n}\r\n\r\n// Utility to map a value from one range to another (helpful for mouse following animations)\r\nexport function mapRange(\r\n  value: number,\r\n  inMin: number,\r\n  inMax: number,\r\n  outMin: number,\r\n  outMax: number\r\n): number {\r\n  return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;\r\n}\r\n"
     }
   ]
 }

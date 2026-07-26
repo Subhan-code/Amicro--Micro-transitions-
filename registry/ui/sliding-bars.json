@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/sliding-bars.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/sliding-bars.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const SlidingBars = () => (\r\n  <div className=\"relative w-8 h-8\">\r\n    <motion.div\r\n      className=\"absolute top-0 left-0 w-8 h-1.5 bg-zinc-800 dark:bg-white rounded-full\"\r\n      animate={{ y: [0, 24, 0] }}\r\n      transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n    <motion.div\r\n      className=\"absolute bottom-0 left-0 w-8 h-1.5 bg-zinc-400 dark:bg-zinc-200 rounded-full\"\r\n      animate={{ y: [0, -24, 0] }}\r\n      transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n  </div>\r\n);\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const SlidingBars = () => (\r\n  <div className=\"relative w-8 h-8\">\r\n    <motion.div\r\n      className=\"absolute top-0 left-0 w-8 h-1.5 bg-zinc-800 dark:bg-white rounded-full\"\r\n      animate={{ y: [0, 24, 0] }}\r\n      transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n    <motion.div\r\n      className=\"absolute bottom-0 left-0 w-8 h-1.5 bg-zinc-400 dark:bg-zinc-200 rounded-full\"\r\n      animate={{ y: [0, -24, 0] }}\r\n      transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n  </div>\r\n);\r\n"
     }
   ]
 }

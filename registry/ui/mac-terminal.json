@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/mac-terminal.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/mac-terminal.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const MacTerminal = () => (\r\n  <div className=\"flex items-center text-zinc-900 dark:text-white font-mono text-sm\">\r\n    <span>~ %</span>\r\n    <motion.span\r\n      className=\"ml-1.5 w-2 h-4 bg-zinc-900 dark:bg-white inline-block\"\r\n      animate={{ opacity: [1, 0, 1] }}\r\n      transition={{ duration: 1, repeat: Infinity, ease: \"linear\" }}\r\n    />\r\n  </div>\r\n);\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const MacTerminal = () => (\r\n  <div className=\"flex items-center text-zinc-900 dark:text-white font-mono text-sm\">\r\n    <span>~ %</span>\r\n    <motion.span\r\n      className=\"ml-1.5 w-2 h-4 bg-zinc-900 dark:bg-white inline-block\"\r\n      animate={{ opacity: [1, 0, 1] }}\r\n      transition={{ duration: 1, repeat: Infinity, ease: \"linear\" }}\r\n    />\r\n  </div>\r\n);\r\n"
     }
   ]
 }

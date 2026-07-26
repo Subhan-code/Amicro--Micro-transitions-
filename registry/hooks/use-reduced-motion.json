@@ -11,7 +11,7 @@
       "path": "registry/hooks/use-reduced-motion.ts",
       "type": "registry:hook",
       "target": "@hooks/use-reduced-motion.ts",
-      "content": "import { useState, useEffect } from 'react';\n\nexport function useReducedMotion() {\n  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);\n\n  useEffect(() => {\n    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');\n    setShouldReduceMotion(mediaQuery.matches);\n\n    const handleMediaChange = (event: MediaQueryListEvent) => {\n      setShouldReduceMotion(event.matches);\n    };\n\n    mediaQuery.addEventListener('change', handleMediaChange);\n    return () => {\n      mediaQuery.removeEventListener('change', handleMediaChange);\n    };\n  }, []);\n\n  return shouldReduceMotion;\n}\n"
+      "content": "import { useState, useEffect } from 'react';\r\n\r\nexport function useReducedMotion() {\r\n  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);\r\n\r\n  useEffect(() => {\r\n    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');\r\n    setShouldReduceMotion(mediaQuery.matches);\r\n\r\n    const handleMediaChange = (event: MediaQueryListEvent) => {\r\n      setShouldReduceMotion(event.matches);\r\n    };\r\n\r\n    mediaQuery.addEventListener('change', handleMediaChange);\r\n    return () => {\r\n      mediaQuery.removeEventListener('change', handleMediaChange);\r\n    };\r\n  }, []);\r\n\r\n  return shouldReduceMotion;\r\n}\r\n"
     }
   ]
 }

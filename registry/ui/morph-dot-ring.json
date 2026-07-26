@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/morph-dot-ring.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/morph-dot-ring.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const MorphDotRing = () => (\r\n  <motion.div\r\n    className=\"grid grid-cols-2 gap-1 w-6 h-6\"\r\n    animate={{ rotate: 180, gap: [\"4px\", \"0px\", \"4px\"] }}\r\n    transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n  >\r\n    {[0,1,2,3].map(i => <div key={i} className=\"w-full h-full bg-zinc-800 dark:bg-white rounded-full\" />)}\r\n  </motion.div>\r\n);\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const MorphDotRing = () => (\r\n  <motion.div\r\n    className=\"grid grid-cols-2 gap-1 w-6 h-6\"\r\n    animate={{ rotate: 180, gap: [\"4px\", \"0px\", \"4px\"] }}\r\n    transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n  >\r\n    {[0,1,2,3].map(i => <div key={i} className=\"w-full h-full bg-zinc-800 dark:bg-white rounded-full\" />)}\r\n  </motion.div>\r\n);\r\n"
     }
   ]
 }

@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/apple-text-reveal.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/apple-text-reveal.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const AppleTextReveal = () => (\r\n  <div className=\"font-medium text-lg text-zinc-900 dark:text-white overflow-hidden h-6 relative\">\r\n    <motion.div\r\n      animate={{ y: [\"100%\", \"0%\", \"-100%\"] }}\r\n      transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n    >\r\n      Loading\r\n    </motion.div>\r\n  </div>\r\n);\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const AppleTextReveal = () => (\r\n  <div className=\"font-medium text-lg text-zinc-900 dark:text-white overflow-hidden h-6 relative\">\r\n    <motion.div\r\n      animate={{ y: [\"100%\", \"0%\", \"-100%\"] }}\r\n      transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n    >\r\n      Loading\r\n    </motion.div>\r\n  </div>\r\n);\r\n"
     }
   ]
 }

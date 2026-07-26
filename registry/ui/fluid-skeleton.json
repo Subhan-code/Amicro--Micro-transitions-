@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/fluid-skeleton.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/fluid-skeleton.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const FluidSkeleton = () => (\r\n  <div className=\"w-24 h-10 bg-zinc-200 dark:bg-zinc-800 rounded-xl overflow-hidden relative\">\r\n    <motion.div\r\n      className=\"absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent\"\r\n      animate={{ x: [\"-100%\", \"200%\"] }}\r\n      transition={{ duration: 1.5, repeat: Infinity, ease: \"linear\" }}\r\n    />\r\n  </div>\r\n);\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const FluidSkeleton = () => (\r\n  <div className=\"w-24 h-10 bg-zinc-200 dark:bg-zinc-800 rounded-xl overflow-hidden relative\">\r\n    <motion.div\r\n      className=\"absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent\"\r\n      animate={{ x: [\"-100%\", \"200%\"] }}\r\n      transition={{ duration: 1.5, repeat: Infinity, ease: \"linear\" }}\r\n    />\r\n  </div>\r\n);\r\n"
     }
   ]
 }

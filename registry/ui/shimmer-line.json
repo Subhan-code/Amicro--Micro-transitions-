@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/shimmer-line.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/shimmer-line.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const ShimmerLine = () => {\r\n  return (\r\n    <div className=\"w-24 h-1 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden relative\">\r\n      <motion.div\r\n        className=\"absolute top-0 left-0 bottom-0 w-1/3 bg-zinc-800 dark:bg-white rounded-full\"\r\n        animate={{ x: [\"-100%\", \"300%\"] }}\r\n        transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\" }}\r\n      />\r\n    </div>\r\n  );\r\n};\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const ShimmerLine = () => {\r\n  return (\r\n    <div className=\"w-24 h-1 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden relative\">\r\n      <motion.div\r\n        className=\"absolute top-0 left-0 bottom-0 w-1/3 bg-zinc-800 dark:bg-white rounded-full\"\r\n        animate={{ x: [\"-100%\", \"300%\"] }}\r\n        transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\" }}\r\n      />\r\n    </div>\r\n  );\r\n};\r\n"
     }
   ]
 }

@@ -13,7 +13,7 @@
       "path": "registry/ui/loading/pulse-square.tsx",
       "type": "registry:ui",
       "target": "@components/amicro/pulse-square.tsx",
-      "content": "import React from 'react';\nimport { motion } from 'framer-motion';\n\nexport const PulseSquare = () => {\r\n  return (\r\n    <motion.div\r\n      className=\"w-8 h-8 border-4 border-zinc-800 dark:border-zinc-700 rounded-md\"\r\n      animate={{ scale: [1, 1.2, 1], opacity: [1, 0.3, 1], borderRadius: [\"20%\", \"50%\", \"20%\"] }}\r\n      transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n  );\r\n};\n"
+      "content": "import React from 'react';\r\nimport { motion } from 'framer-motion';\r\n\r\nexport const PulseSquare = () => {\r\n  return (\r\n    <motion.div\r\n      className=\"w-8 h-8 border-4 border-zinc-800 dark:border-zinc-700 rounded-md\"\r\n      animate={{ scale: [1, 1.2, 1], opacity: [1, 0.3, 1], borderRadius: [\"20%\", \"50%\", \"20%\"] }}\r\n      transition={{ duration: 1.5, repeat: Infinity, ease: \"easeInOut\" }}\r\n    />\r\n  );\r\n};\r\n"
     }
   ]
 }
