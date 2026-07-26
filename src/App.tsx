@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, animate } from 'motion/react';
 import { 
   LayoutGrid, List, LayoutTemplate, ArrowDownAZ, Copy, Sun, Moon, Github, 
   Terminal, Check, Cpu, Zap, Code, ShieldCheck, Sparkles, RefreshCw, Smartphone, 
@@ -10,6 +10,7 @@ import { AnimatedButton } from './components/AnimatedButton';
 import { getComponentCode, ThemeToggleCode, getCardComponentCode } from './utils/codeGenerator';
 import { CliPage } from './components/CliPage';
 import { SkillsPage } from './components/SkillsPage';
+import { AnalyticsPage } from './components/AnalyticsPage';
 
 // Loaders imports
 import { loaderGroups } from './data/loaders';
@@ -33,7 +34,7 @@ import { CardTimeMachine } from './components/cards/CardTimeMachine';
 
 type LayoutMode = 'list' | 'grid' | 'matrix';
 type SortMode = 'default' | 'alphabetical';
-type PageMode = 'home' | 'cli' | 'skills';
+type PageMode = 'home' | 'cli' | 'skills' | 'analytics';
 type CatalogTabType = 'buttons' | 'cards' | 'carousels' | 'loaders';
 
 const tabLabels: Record<CatalogTabType, string> = {
@@ -42,6 +43,23 @@ const tabLabels: Record<CatalogTabType, string> = {
   carousels: '3D Carousels',
   loaders: 'Loaders',
 };
+
+function AnimatedNumber({ value }: { value: number | null }) {
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    if (value === null) return;
+    const controls = animate(0, value, {
+      duration: 1.2,
+      ease: [0.16, 1, 0.3, 1], // easeOutExpo
+      onUpdate: (latest) => setDisplayValue(Math.round(latest)),
+    });
+    return () => controls.stop();
+  }, [value]);
+
+  if (value === null) return null;
+  return <>{displayValue}</>;
+}
 
 export default function App() {
   const [layout, setLayout] = useState<LayoutMode>('grid');
@@ -65,6 +83,8 @@ export default function App() {
         setCurrentPage('cli');
       } else if (hash.startsWith('#/skills') || hash.startsWith('#skills')) {
         setCurrentPage('skills');
+      } else if (hash.startsWith('#/analytics') || hash.startsWith('#analytics')) {
+        setCurrentPage('analytics');
       } else {
         setCurrentPage('home');
       }
@@ -155,6 +175,8 @@ export default function App() {
       window.location.hash = '#cli';
     } else if (page === 'skills') {
       window.location.hash = '#skills';
+    } else if (page === 'analytics') {
+      window.location.hash = '#analytics';
     } else {
       window.location.hash = '';
     }
@@ -215,6 +237,16 @@ export default function App() {
               >
                 Skills
               </button>
+              <button 
+                onClick={() => navigateTo('analytics')}
+                className={`inline-flex items-center justify-center h-[36px] px-[14px] rounded-full text-[13px] font-medium leading-[16px] cursor-pointer no-underline whitespace-nowrap transition-all duration-200 border-0 ${
+                  currentPage === 'analytics'
+                    ? (theme === 'dark' ? 'text-white bg-[rgba(255,255,255,0.08)]' : 'text-black bg-neutral-200/80 font-semibold')
+                    : (theme === 'dark' ? 'text-[rgba(202,202,202,0.7)] hover:text-white hover:bg-[rgba(255,255,255,0.04)]' : 'text-neutral-600 hover:text-black hover:bg-neutral-200/40')
+                }`}
+              >
+                Analytics
+              </button>
             </nav>
           </div>
           
@@ -229,7 +261,9 @@ export default function App() {
               <svg viewBox="0 0 16 16" fill="currentColor" className="w-auto h-[16px] max-w-[16px] block">
                 <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
               </svg>
-              <span className="inline-block">{stars !== null ? stars : 'Star'}</span>
+              <span className="inline-block">
+                {stars !== null ? <AnimatedNumber value={stars} /> : 'Star'}
+              </span>
             </a>
             <a 
               href="https://x.com/SubhanHQ" 
@@ -306,6 +340,16 @@ export default function App() {
               >
                 Skills
               </button>
+              <button 
+                onClick={() => navigateTo('analytics')}
+                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent ${
+                  currentPage === 'analytics'
+                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
+                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
+                }`}
+              >
+                Analytics
+              </button>
             </motion.div>
           )}
         </AnimatePresence>
@@ -332,6 +376,16 @@ export default function App() {
             transition={{ duration: 0.25 }}
           >
             <SkillsPage theme={theme} onNavigateHome={() => navigateTo('home')} />
+          </motion.div>
+        ) : currentPage === 'analytics' ? (
+          <motion.div
+            key="analytics-page"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.25 }}
+          >
+            <AnalyticsPage theme={theme} onNavigateHome={() => navigateTo('home')} />
           </motion.div>
         ) : (
           <motion.div
@@ -383,7 +437,7 @@ export default function App() {
                     <span>GitHub Repo</span>
                     {stars !== null && (
                       <span className={`text-[10.5px] px-1.5 py-0.5 rounded-full font-semibold ml-1 ${theme === 'dark' ? 'bg-black/10 text-black/70' : 'bg-white/20 text-white/90'}`}>
-                        {stars}
+                        <AnimatedNumber value={stars} />
                       </span>
                     )}
                   </motion.a>
