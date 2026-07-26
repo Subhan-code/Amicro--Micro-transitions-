@@ -82,7 +82,7 @@ export default function App() {
   const [catalogTab, setCatalogTab] = useState<CatalogTabType>('buttons');
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
-  const POLAR_CHECKOUT_URL = "YOUR_POLAR_CHECKOUT_LINK"; // Replace with your actual Polar Checkout Link
+  const POLAR_CHECKOUT_URL = "https://buy.polar.sh/polar_cl_kgaC0fUqnLvTlW7A7RrvGQRaHzmTKjezxWNaA19AyV4" as string; // Replace with your actual Polar Checkout Link
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
