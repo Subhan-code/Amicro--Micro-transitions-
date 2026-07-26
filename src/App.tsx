@@ -91,10 +91,10 @@ export default function App() {
   const [sponsors, setSponsors] = useState<SponsorSlot[]>([
     {
       id: 1,
-      companyName: 'Dodo Payments',
-      description: 'Merchant of Record for SaaS & AI founders. Accept global cards, bank transfers & local UPI.',
-      logoType: 'dodo',
-      siteUrl: 'https://dodopayments.com',
+      companyName: 'Stripe',
+      description: 'Financial infrastructure for the internet. Accept payments and manage billing globally.',
+      logoType: 'stripe',
+      siteUrl: 'https://stripe.com',
       isAvailable: false,
     },
     { id: 2, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
@@ -556,12 +556,12 @@ export default function App() {
                             }`}
                           >
                             <div className="flex flex-col items-center justify-center w-full">
-                              {slot.logoType === 'dodo' ? (
-                                <div className="flex items-center gap-1 font-bold tracking-tight text-[12px] text-[#ff5f56]">
+                              {slot.logoType === 'stripe' ? (
+                                <div className="flex items-center gap-1 font-bold tracking-tight text-[12px] text-[#635bff]">
                                   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                                    <path d="M13.998 12.06c.036-.312-.132-.576-.48-.684l-2.928-.9a.952.952 0 0 1-.648-.96c.024-.264.216-.444.6-.444.42 0 .768.168 1.044.468.228-.216.516-.42.756-.54a1.86 1.86 0 0 0-1.8-1.044c-1.008 0-1.788.588-1.824 1.512-.036.72.324 1.152.924 1.344l2.256.7c.36.108.456.288.42.54-.036.324-.312.492-.78.492a2.388 2.388 0 0 1-1.392-.516c-.228.24-.516.48-.756.624a2.916 2.916 0 0 0 2.148.936c1.176.012 1.836-.612 1.872-1.548z" />
                                   </svg>
-                                  <span>Dodo Payments</span>
+                                  <span>Stripe</span>
                                 </div>
                               ) : (
                                 <div className="flex items-center justify-center gap-1 font-bold tracking-tight text-[12px] text-emerald-500 w-full px-1">
@@ -1167,7 +1167,7 @@ export default function App() {
                     <h2 className="text-[20px] font-bold tracking-tight">Sponsor Amicro</h2>
                   </div>
                   <p className={`text-[13px] leading-relaxed mb-5 ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
-                    Promote your brand to 50k+ developers. Secure checkout is managed globally by **Dodo Payments** (Merchant of Record).
+                    Promote your brand to 50k+ developers. Secure checkout is managed globally by **Stripe**.
                   </p>
 
                   {/* Form inputs */}
@@ -1225,82 +1225,84 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Dodo Payments Simulator Trigger */}
-                  <button
-                    disabled={!adForm.companyName || !adForm.description || !adForm.siteUrl || isProcessingPayment}
-                    onClick={() => {
-                      triggerHaptic('medium');
-                      setIsProcessingPayment(true);
-                      // Simulate Dodo Checkout session launch
-                      setTimeout(() => {
-                        triggerHaptic('success');
-                        // Mock payment processing duration
-                        setTimeout(() => {
-                          // Save sponsor data and set success
-                          setSponsors(prev => prev.map(s => {
-                            if (s.id === selectedSlotId) {
-                              return {
-                                id: s.id,
-                                companyName: adForm.companyName,
-                                description: adForm.description,
-                                siteUrl: adForm.siteUrl,
-                                isAvailable: false
-                              };
-                            }
-                            return s;
-                          }));
-                          setPaymentSuccess(true);
-                          setIsProcessingPayment(false);
-                          triggerHaptic('success');
-                          showToast(`Sponsor ad placed successfully for ${adForm.companyName}!`);
-                        }, 2500);
-                      }, 1200);
-                    }}
-                    className={`w-full h-[44px] rounded-full text-[13px] font-semibold cursor-pointer border-0 flex items-center justify-center gap-2 transition-all ${
-                      !adForm.companyName || !adForm.description || !adForm.siteUrl
-                        ? 'bg-neutral-400/20 text-neutral-400 cursor-not-allowed'
-                        : 'bg-[#ff5f56] text-white hover:bg-[#ff4e44] shadow-md shadow-red-500/10 active:scale-98'
-                    }`}
-                  >
-                    {isProcessingPayment ? (
-                      <>
-                        <RefreshCw className="w-4 h-4 animate-spin" />
-                        <span>Processing payment via Dodo...</span>
-                      </>
+                        {/* Stripe Payments Simulator Trigger */}
+                        <button
+                          disabled={!adForm.companyName || !adForm.description || !adForm.siteUrl || isProcessingPayment}
+                          onClick={() => {
+                            triggerHaptic('medium');
+                            setIsProcessingPayment(true);
+                            // Simulate Stripe Checkout session launch
+                            setTimeout(() => {
+                              triggerHaptic('success');
+                              // Mock payment processing duration
+                              setTimeout(() => {
+                                // Save sponsor data and set success
+                                setSponsors(prev => prev.map(s => {
+                                  if (s.id === selectedSlotId) {
+                                    return {
+                                      id: s.id,
+                                      companyName: adForm.companyName,
+                                      description: adForm.description,
+                                      siteUrl: adForm.siteUrl.startsWith('http://') || adForm.siteUrl.startsWith('https://')
+                                        ? adForm.siteUrl
+                                        : `https://${adForm.siteUrl}`,
+                                      isAvailable: false
+                                    };
+                                  }
+                                  return s;
+                                }));
+                                setPaymentSuccess(true);
+                                setIsProcessingPayment(false);
+                                triggerHaptic('success');
+                                showToast(`Sponsor ad placed successfully for ${adForm.companyName}!`);
+                              }, 2500);
+                            }, 1200);
+                          }}
+                          className={`w-full h-[44px] rounded-full text-[13px] font-semibold cursor-pointer border-0 flex items-center justify-center gap-2 transition-all ${
+                            !adForm.companyName || !adForm.description || !adForm.siteUrl
+                              ? 'bg-neutral-400/20 text-neutral-400 cursor-not-allowed'
+                              : 'bg-[#635bff] text-white hover:bg-[#5244e0] shadow-md shadow-indigo-500/10 active:scale-98'
+                          }`}
+                        >
+                          {isProcessingPayment ? (
+                            <>
+                              <RefreshCw className="w-4 h-4 animate-spin" />
+                              <span>Processing payment via Stripe...</span>
+                            </>
+                          ) : (
+                            <>
+                              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm5 0h-4v-4h4v4zm0-6H4V8h16v4z" />
+                              </svg>
+                              <span>Pay with Stripe ($49.00)</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
                     ) : (
-                      <>
-                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                        </svg>
-                        <span>Pay with Dodo Payments ($49.00)</span>
-                      </>
+                      <div className="flex flex-col items-center text-center py-4">
+                        <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-4">
+                          <Check className="w-6 h-6 stroke-[3]" />
+                        </div>
+                        <h2 className="text-[20px] font-bold tracking-tight mb-2">Order Confirmed!</h2>
+                        <p className={`text-[13px] leading-relaxed mb-6 max-w-xs ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
+                          Thank you! Your sponsor slot for **{adForm.companyName}** is now live on the Amicro homepage.
+                        </p>
+                        <button
+                          onClick={() => {
+                            triggerHaptic('light');
+                            setSelectedSlotId(null);
+                          }}
+                          className={`px-6 py-2.5 rounded-full text-[13px] font-semibold cursor-pointer border transition-colors ${
+                            theme === 'dark'
+                              ? 'bg-white text-black border-white hover:bg-neutral-200'
+                              : 'bg-neutral-950 text-white border-neutral-950 hover:bg-neutral-800'
+                          }`}
+                        >
+                          Back to Dashboard
+                        </button>
+                      </div>
                     )}
-                  </button>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center text-center py-4">
-                  <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-4">
-                    <Check className="w-6 h-6 stroke-[3]" />
-                  </div>
-                  <h2 className="text-[20px] font-bold tracking-tight mb-2">Order Confirmed!</h2>
-                  <p className={`text-[13px] leading-relaxed mb-6 max-w-xs ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
-                    Thank you! Your sponsor slot for **{adForm.companyName}** is now live on the Amicro homepage.
-                  </p>
-                  <button
-                    onClick={() => {
-                      triggerHaptic('light');
-                      setSelectedSlotId(null);
-                    }}
-                    className={`px-6 py-2.5 rounded-full text-[13px] font-semibold cursor-pointer border transition-colors ${
-                      theme === 'dark'
-                        ? 'bg-white text-black border-white hover:bg-neutral-200'
-                        : 'bg-neutral-950 text-white border-neutral-950 hover:bg-neutral-800'
-                    }`}
-                  >
-                    Back to Dashboard
-                  </button>
-                </div>
-              )}
             </motion.div>
           </div>
         )}
