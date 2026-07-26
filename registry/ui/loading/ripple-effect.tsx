@@ -10,12 +10,16 @@ export const RippleEffect = () => {
         <motion.div
           key={i}
           className="absolute w-8 h-8 border border-zinc-850 dark:border-white rounded-full"
-          initial={{ scale: 0.3, opacity: 0.8 }}
-          animate={{ scale: 1.6, opacity: 0 }}
+          initial={{ scale: 0.3, opacity: 0 }}
+          animate={{
+            scale: [0.3, 0.3, 1.6],
+            opacity: [0, 0.8, 0],
+          }}
           transition={{
             duration: 2.2,
             repeat: Infinity,
             ease: "easeOut",
+            times: [0, 0.08, 1],
             delay: i * 0.7,
           }}
         />
