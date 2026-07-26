@@ -88,7 +88,6 @@ export default function App() {
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
   const { trigger: triggerHaptic } = useWebHaptics();
 
-  const [selectedSlotId, setSelectedSlotId] = useState<number | null>(null);
   const [sponsors, setSponsors] = useState<SponsorSlot[]>([
     {
       id: 1,
@@ -102,13 +101,6 @@ export default function App() {
     { id: 3, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
     { id: 4, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
   ]);
-  const [adForm, setAdForm] = useState({
-    companyName: '',
-    description: '',
-    siteUrl: '',
-  });
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   // Hash-based router
   useEffect(() => {
@@ -148,63 +140,7 @@ export default function App() {
     }, 3000);
   }, []);
 
-  // Listen for Polar redirect parameters to confirm slot updates
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const paymentSuccess = params.get('payment_success');
 
-    if (paymentSuccess === 'true') {
-      const slotIdStr = params.get('slot_id');
-      const companyName = params.get('company_name');
-      const description = params.get('description');
-      const siteUrl = params.get('site_url');
-
-      if (slotIdStr && companyName && description && siteUrl) {
-        const slotId = parseInt(slotIdStr, 10);
-        setSponsors(prev => prev.map(s => {
-          if (s.id === slotId) {
-            return {
-              id: s.id,
-              companyName,
-              description,
-              siteUrl,
-              isAvailable: false
-            };
-          }
-          return s;
-        }));
-        showToast(`Sponsor ad placed successfully for ${companyName}!`);
-      } else {
-        // Fallback: read from localStorage for no-code static checkout links
-        const pending = localStorage.getItem('amicro_pending_sponsor');
-        if (pending) {
-          try {
-            const data = JSON.parse(pending);
-            setSponsors(prev => prev.map(s => {
-              if (s.id === data.slotId) {
-                return {
-                  id: s.id,
-                  companyName: data.companyName,
-                  description: data.description,
-                  siteUrl: data.siteUrl.startsWith('http://') || data.siteUrl.startsWith('https://')
-                    ? data.siteUrl
-                    : `https://${data.siteUrl}`,
-                  isAvailable: false
-                };
-              }
-              return s;
-            }));
-            showToast(`Sponsor ad placed successfully for ${data.companyName}!`);
-            localStorage.removeItem('amicro_pending_sponsor');
-          } catch (e) {
-            console.error('Error parsing pending sponsor:', e);
-          }
-        }
-      }
-      // Clean up URL parameters
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-  }, [showToast]);
 
   const handleCopyCode = useCallback((button: typeof buttonsData[0]) => {
     const code = getComponentCode(button);
@@ -642,10 +578,7 @@ export default function App() {
                             key={slot.id}
                             onClick={() => {
                               triggerHaptic('medium');
-                              setSelectedSlotId(slot.id);
-                              setPaymentSuccess(false);
-                              setIsProcessingPayment(false);
-                              setAdForm({ companyName: '', description: '', siteUrl: '' });
+                              window.open(POLAR_CHECKOUT_URL, '_blank');
                             }}
                             className={`group flex flex-col items-center justify-center text-center p-3 rounded-xl border border-dashed transition-all duration-300 hover:scale-[1.02] cursor-pointer bg-transparent h-[58px] ${
                               theme === 'dark'
@@ -1178,214 +1111,7 @@ export default function App() {
         </AnimatePresence>
       </div>
 
-      {/* Sponsor Purchase Modal */}
-      <AnimatePresence>
-        {selectedSlotId !== null && (
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => {
-                if (!isProcessingPayment) setSelectedSlotId(null);
-              }}
-              className="fixed inset-0 bg-black/60 backdrop-blur-xs cursor-pointer"
-            />
 
-            {/* Modal Window */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ type: "spring", duration: 0.4 }}
-              className={`relative w-full max-w-md rounded-3xl border p-6 flex flex-col shadow-2xl z-10 ${
-                theme === 'dark' 
-                  ? 'bg-zinc-950 border-white/10 text-white shadow-black/80' 
-                  : 'bg-white border-neutral-200 text-black shadow-neutral-200/50'
-              }`}
-            >
-              {/* Close button */}
-              {!isProcessingPayment && (
-                <button
-                  onClick={() => setSelectedSlotId(null)}
-                  className={`absolute top-4 right-4 p-1.5 rounded-full border-0 cursor-pointer bg-transparent transition-colors ${
-                    theme === 'dark' ? 'text-neutral-400 hover:text-white hover:bg-white/10' : 'text-neutral-500 hover:text-black hover:bg-neutral-100'
-                  }`}
-                  aria-label="Close modal"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-
-              {!paymentSuccess ? (
-                <div className="flex flex-col">
-                  {/* Header */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold">
-                      $
-                    </div>
-                    <h2 className="text-[20px] font-bold tracking-tight">Sponsor Amicro</h2>
-                  </div>
-                  <p className={`text-[13px] leading-relaxed mb-5 ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
-                    Promote your brand to 50k+ developers. Secure checkout is managed globally by **Polar**.
-                  </p>
-
-                  {/* Form inputs */}
-                  <div className="flex flex-col gap-4 mb-6">
-                    <div>
-                      <label className={`block text-[11px] font-bold uppercase tracking-wider mb-1.5 ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'}`}>
-                        Company / Brand Name
-                      </label>
-                      <input
-                        type="text"
-                        value={adForm.companyName}
-                        onChange={(e) => setAdForm({ ...adForm, companyName: e.target.value })}
-                        placeholder="e.g. Acme Inc"
-                        className={`w-full px-4 py-2.5 rounded-xl border text-[13.5px] font-medium transition-all ${
-                          theme === 'dark'
-                            ? 'bg-neutral-900 border-neutral-800 text-white focus:border-neutral-600 focus:outline-none'
-                            : 'bg-neutral-50 border-neutral-200 text-black focus:border-neutral-400 focus:outline-none'
-                        }`}
-                      />
-                    </div>
-
-                    <div>
-                      <label className={`block text-[11px] font-bold uppercase tracking-wider mb-1.5 ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'}`}>
-                        Description / Tagline (max 80 chars)
-                      </label>
-                      <input
-                        type="text"
-                        maxLength={80}
-                        value={adForm.description}
-                        onChange={(e) => setAdForm({ ...adForm, description: e.target.value })}
-                        placeholder="e.g. Best hosting solution for fast React apps."
-                        className={`w-full px-4 py-2.5 rounded-xl border text-[13.5px] font-medium transition-all ${
-                          theme === 'dark'
-                            ? 'bg-neutral-900 border-neutral-800 text-white focus:border-neutral-600 focus:outline-none'
-                            : 'bg-neutral-50 border-neutral-200 text-black focus:border-neutral-400 focus:outline-none'
-                        }`}
-                      />
-                    </div>
-
-                    <div>
-                      <label className={`block text-[11px] font-bold uppercase tracking-wider mb-1.5 ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'}`}>
-                        Website / Redirect URL
-                      </label>
-                      <input
-                        type="url"
-                        value={adForm.siteUrl}
-                        onChange={(e) => setAdForm({ ...adForm, siteUrl: e.target.value })}
-                        placeholder="https://acme.com"
-                        className={`w-full px-4 py-2.5 rounded-xl border text-[13.5px] font-medium transition-all ${
-                          theme === 'dark'
-                            ? 'bg-neutral-900 border-neutral-800 text-white focus:border-neutral-600 focus:outline-none'
-                            : 'bg-neutral-50 border-neutral-200 text-black focus:border-neutral-400 focus:outline-none'
-                        }`}
-                      />
-                    </div>
-                  </div>
-
-                        {/* Polar Payments Trigger */}
-                        <button
-                          disabled={!adForm.companyName || !adForm.description || !adForm.siteUrl || isProcessingPayment}
-                          onClick={() => {
-                            triggerHaptic('medium');
-                            setIsProcessingPayment(true);
-
-                            // Save sponsor details to localStorage for static checkout success callback
-                            localStorage.setItem('amicro_pending_sponsor', JSON.stringify({
-                              slotId: selectedSlotId,
-                              companyName: adForm.companyName,
-                              description: adForm.description,
-                              siteUrl: adForm.siteUrl
-                            }));
-                            
-                            // Redirect directly to the Polar static checkout link
-                            if (POLAR_CHECKOUT_URL && POLAR_CHECKOUT_URL !== "YOUR_POLAR_CHECKOUT_LINK") {
-                              setTimeout(() => {
-                                window.location.href = POLAR_CHECKOUT_URL;
-                              }, 800);
-                            } else {
-                              console.warn('POLAR_CHECKOUT_URL is not configured, running local checkout simulator instead.');
-                              // Fallback to simulated checkout flow
-                              setTimeout(() => {
-                                triggerHaptic('success');
-                                // Mock payment processing duration
-                                setTimeout(() => {
-                                  // Save sponsor data locally and set success
-                                  setSponsors(prev => prev.map(s => {
-                                    if (s.id === selectedSlotId) {
-                                      return {
-                                        id: s.id,
-                                        companyName: adForm.companyName,
-                                        description: adForm.description,
-                                        siteUrl: adForm.siteUrl.startsWith('http://') || adForm.siteUrl.startsWith('https://')
-                                          ? adForm.siteUrl
-                                          : `https://${adForm.siteUrl}`,
-                                        isAvailable: false
-                                      };
-                                    }
-                                    return s;
-                                  }));
-                                  setPaymentSuccess(true);
-                                  setIsProcessingPayment(false);
-                                  triggerHaptic('success');
-                                  showToast(`Sponsor ad placed successfully for ${adForm.companyName}!`);
-                                  localStorage.removeItem('amicro_pending_sponsor');
-                                }, 2500);
-                              }, 1200);
-                            }
-                          }}
-                          className={`w-full h-[44px] rounded-full text-[13px] font-semibold cursor-pointer border-0 flex items-center justify-center gap-2 transition-all ${
-                            !adForm.companyName || !adForm.description || !adForm.siteUrl
-                              ? 'bg-neutral-400/20 text-neutral-400 cursor-not-allowed'
-                              : 'bg-[#0062ff] text-white hover:bg-[#0052d4] shadow-md shadow-blue-500/10 active:scale-98'
-                          }`}
-                        >
-                          {isProcessingPayment ? (
-                            <>
-                              <RefreshCw className="w-4 h-4 animate-spin" />
-                              <span>Processing payment via Polar...</span>
-                            </>
-                          ) : (
-                            <>
-                              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                              </svg>
-                              <span>Pay with Polar ($49.00)</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center text-center py-4">
-                        <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-4">
-                          <Check className="w-6 h-6 stroke-[3]" />
-                        </div>
-                        <h2 className="text-[20px] font-bold tracking-tight mb-2">Order Confirmed!</h2>
-                        <p className={`text-[13px] leading-relaxed mb-6 max-w-xs ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
-                          Thank you! Your sponsor slot for **{adForm.companyName}** is now live on the Amicro homepage.
-                        </p>
-                        <button
-                          onClick={() => {
-                            triggerHaptic('light');
-                            setSelectedSlotId(null);
-                          }}
-                          className={`px-6 py-2.5 rounded-full text-[13px] font-semibold cursor-pointer border transition-colors ${
-                            theme === 'dark'
-                              ? 'bg-white text-black border-white hover:bg-neutral-200'
-                              : 'bg-neutral-950 text-white border-neutral-950 hover:bg-neutral-800'
-                          }`}
-                        >
-                          Back to Dashboard
-                        </button>
-                      </div>
-                    )}
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
       <Analytics />
     </div>
