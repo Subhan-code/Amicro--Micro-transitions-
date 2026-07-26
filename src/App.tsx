@@ -535,11 +535,11 @@ export default function App() {
                 </div>
 
                 {/* Sponsor Ad Grid */}
-                <div className="w-full max-w-4xl mx-auto mt-14 px-4 sm:px-0 flex flex-col items-center">
-                  <div className={`text-[11px] font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-neutral-500' : 'text-neutral-400'}`}>
+                <div className="w-full max-w-3xl mx-auto mt-10 px-4 sm:px-0 flex flex-col items-center">
+                  <div className={`text-[10px] font-bold uppercase tracking-widest mb-3.5 ${theme === 'dark' ? 'text-neutral-500' : 'text-neutral-400'}`}>
                     Sponsored by
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full">
                     {sponsors.map((slot) => {
                       if (!slot.isAvailable) {
                         return (
@@ -549,35 +549,29 @@ export default function App() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={() => triggerHaptic('light')}
-                            className={`group relative flex flex-col items-center justify-between text-center p-5 rounded-2xl border transition-all duration-300 hover:scale-[1.03] ${
+                            className={`group relative flex flex-col items-center justify-center text-center p-3 h-[58px] rounded-xl border transition-all duration-300 hover:scale-[1.02] ${
                               theme === 'dark'
-                                ? 'bg-[#181818] border-neutral-800/80 hover:bg-[#1e1e1e] text-white shadow-lg shadow-black/25'
-                                : 'bg-white border-neutral-200 hover:shadow-md text-black shadow-sm'
+                                ? 'bg-[#181818] border-neutral-800/80 hover:bg-[#1e1e1e] text-white'
+                                : 'bg-white border-neutral-200 hover:shadow-xs text-black shadow-2xs'
                             }`}
                           >
-                            <div className="flex flex-col items-center gap-2 flex-1 justify-center">
+                            <div className="flex flex-col items-center justify-center w-full">
                               {slot.logoType === 'dodo' ? (
-                                <div className="flex items-center gap-1.5 font-bold tracking-tight text-[15px] text-[#ff5f56]">
-                                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                <div className="flex items-center gap-1 font-bold tracking-tight text-[12px] text-[#ff5f56]">
+                                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                                   </svg>
                                   <span>Dodo Payments</span>
                                 </div>
                               ) : (
-                                <div className="flex items-center gap-1.5 font-bold tracking-tight text-[15px] text-emerald-500">
-                                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                                  <span>{slot.companyName}</span>
+                                <div className="flex items-center justify-center gap-1 font-bold tracking-tight text-[12px] text-emerald-500 w-full px-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 animate-pulse" />
+                                  <span className="truncate max-w-[120px]">{slot.companyName}</span>
                                 </div>
                               )}
-                              <p className={`text-[11.5px] leading-normal mt-1.5 font-medium transition-colors ${theme === 'dark' ? 'text-neutral-400 group-hover:text-neutral-300' : 'text-neutral-600 group-hover:text-neutral-850'}`}>
+                              <p className={`text-[9.5px] leading-snug mt-0.5 font-medium truncate w-full px-1 transition-colors ${theme === 'dark' ? 'text-neutral-500 group-hover:text-neutral-400' : 'text-neutral-500 group-hover:text-neutral-750'}`}>
                                 {slot.description}
                               </p>
-                            </div>
-                            <div className={`text-[10px] font-semibold mt-3.5 flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'}`}>
-                              <span>Visit Site</span>
-                              <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                              </svg>
                             </div>
                           </a>
                         );
@@ -592,18 +586,17 @@ export default function App() {
                               setIsProcessingPayment(false);
                               setAdForm({ companyName: '', description: '', siteUrl: '' });
                             }}
-                            className={`group flex flex-col items-center justify-center text-center p-5 rounded-2xl border border-dashed transition-all duration-300 hover:scale-[1.03] cursor-pointer bg-transparent ${
+                            className={`group flex flex-col items-center justify-center text-center p-3 rounded-xl border border-dashed transition-all duration-300 hover:scale-[1.02] cursor-pointer bg-transparent h-[58px] ${
                               theme === 'dark'
-                                ? 'border-neutral-800 hover:border-neutral-600 text-neutral-400 hover:text-white hover:bg-neutral-900/20'
-                                : 'border-neutral-300 hover:border-neutral-400 text-neutral-500 hover:text-black hover:bg-neutral-50/50'
+                                ? 'border-neutral-800 hover:border-neutral-700 text-neutral-500 hover:text-neutral-300 hover:bg-neutral-900/10'
+                                : 'border-neutral-300 hover:border-neutral-400 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-50/30'
                             }`}
                           >
-                            <div className={`w-8 h-8 rounded-full border border-dashed flex items-center justify-center mb-2.5 transition-colors group-hover:border-solid ${theme === 'dark' ? 'border-neutral-800 group-hover:border-neutral-600' : 'border-neutral-300 group-hover:border-neutral-400'}`}>
-                              <span className="text-[18px] font-medium group-hover:scale-110 transition-transform">+</span>
-                            </div>
-                            <span className="text-[12.5px] font-bold tracking-tight">Sponsor Slot</span>
-                            <span className={`text-[10px] mt-1 transition-colors ${theme === 'dark' ? 'text-neutral-500 group-hover:text-neutral-400' : 'text-neutral-400 group-hover:text-neutral-500'}`}>
-                              $49 / month
+                            <span className="text-[11px] font-bold tracking-tight flex items-center gap-1">
+                              <span>+</span> Sponsor
+                            </span>
+                            <span className={`text-[8.5px] mt-0.5 transition-colors ${theme === 'dark' ? 'text-neutral-600 group-hover:text-neutral-500' : 'text-neutral-400 group-hover:text-neutral-500'}`}>
+                              $49/mo
                             </span>
                           </button>
                         );
