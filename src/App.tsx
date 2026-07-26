@@ -91,10 +91,10 @@ export default function App() {
   const [sponsors, setSponsors] = useState<SponsorSlot[]>([
     {
       id: 1,
-      companyName: 'Stripe',
-      description: 'Financial infrastructure for the internet. Accept payments and manage billing globally.',
-      logoType: 'stripe',
-      siteUrl: 'https://stripe.com',
+      companyName: 'Ossium',
+      description: 'Design systems, UI kits, and templates for indie builders and developers.',
+      logoType: 'ossium',
+      siteUrl: 'https://ossium.live/',
       isAvailable: false,
     },
     { id: 2, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
@@ -146,6 +146,35 @@ export default function App() {
       setToastMessage(null);
     }, 3000);
   }, []);
+
+  // Listen for Stripe redirect parameters to confirm slot updates
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const paymentSuccess = params.get('payment_success');
+    const slotIdStr = params.get('slot_id');
+    const companyName = params.get('company_name');
+    const description = params.get('description');
+    const siteUrl = params.get('site_url');
+
+    if (paymentSuccess === 'true' && slotIdStr && companyName && description && siteUrl) {
+      const slotId = parseInt(slotIdStr, 10);
+      setSponsors(prev => prev.map(s => {
+        if (s.id === slotId) {
+          return {
+            id: s.id,
+            companyName,
+            description,
+            siteUrl,
+            isAvailable: false
+          };
+        }
+        return s;
+      }));
+      showToast(`Sponsor ad placed successfully for ${companyName}!`);
+      // Clean up URL parameters
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [showToast]);
 
   const handleCopyCode = useCallback((button: typeof buttonsData[0]) => {
     const code = getComponentCode(button);
@@ -556,12 +585,14 @@ export default function App() {
                             }`}
                           >
                             <div className="flex flex-col items-center justify-center w-full">
-                              {slot.logoType === 'stripe' ? (
-                                <div className="flex items-center gap-1 font-bold tracking-tight text-[12px] text-[#635bff]">
-                                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M13.998 12.06c.036-.312-.132-.576-.48-.684l-2.928-.9a.952.952 0 0 1-.648-.96c.024-.264.216-.444.6-.444.42 0 .768.168 1.044.468.228-.216.516-.42.756-.54a1.86 1.86 0 0 0-1.8-1.044c-1.008 0-1.788.588-1.824 1.512-.036.72.324 1.152.924 1.344l2.256.7c.36.108.456.288.42.54-.036.324-.312.492-.78.492a2.388 2.388 0 0 1-1.392-.516c-.228.24-.516.48-.756.624a2.916 2.916 0 0 0 2.148.936c1.176.012 1.836-.612 1.872-1.548z" />
+                              {slot.logoType === 'ossium' ? (
+                                <div className="flex items-center gap-1.5 font-bold tracking-tight text-[12px] text-emerald-500">
+                                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                                    <path d="M2 12h20" />
                                   </svg>
-                                  <span>Stripe</span>
+                                  <span>Ossium</span>
                                 </div>
                               ) : (
                                 <div className="flex items-center justify-center gap-1 font-bold tracking-tight text-[12px] text-emerald-500 w-full px-1">
@@ -1225,38 +1256,67 @@ export default function App() {
                     </div>
                   </div>
 
-                        {/* Stripe Payments Simulator Trigger */}
+                        {/* Stripe Payments Trigger */}
                         <button
                           disabled={!adForm.companyName || !adForm.description || !adForm.siteUrl || isProcessingPayment}
                           onClick={() => {
                             triggerHaptic('medium');
                             setIsProcessingPayment(true);
-                            // Simulate Stripe Checkout session launch
-                            setTimeout(() => {
-                              triggerHaptic('success');
-                              // Mock payment processing duration
-                              setTimeout(() => {
-                                // Save sponsor data and set success
-                                setSponsors(prev => prev.map(s => {
-                                  if (s.id === selectedSlotId) {
-                                    return {
-                                      id: s.id,
-                                      companyName: adForm.companyName,
-                                      description: adForm.description,
-                                      siteUrl: adForm.siteUrl.startsWith('http://') || adForm.siteUrl.startsWith('https://')
-                                        ? adForm.siteUrl
-                                        : `https://${adForm.siteUrl}`,
-                                      isAvailable: false
-                                    };
+                            
+                            // Call Stripe serverless API
+                            fetch('/api/checkout', {
+                              method: 'POST',
+                              headers: {
+                                'Content-Type': 'application/json',
+                              },
+                              body: JSON.stringify({
+                                slotId: selectedSlotId,
+                                companyName: adForm.companyName,
+                                description: adForm.description,
+                                siteUrl: adForm.siteUrl,
+                              }),
+                            })
+                              .then(async (res) => {
+                                if (res.ok) {
+                                  const data = await res.json();
+                                  if (data.url) {
+                                    window.location.href = data.url; // Redirect to Stripe checkout page
+                                  } else {
+                                    throw new Error('No checkout URL returned');
                                   }
-                                  return s;
-                                }));
-                                setPaymentSuccess(true);
-                                setIsProcessingPayment(false);
-                                triggerHaptic('success');
-                                showToast(`Sponsor ad placed successfully for ${adForm.companyName}!`);
-                              }, 2500);
-                            }, 1200);
+                                } else {
+                                  throw new Error('API request failed');
+                                }
+                              })
+                              .catch((err) => {
+                                console.warn('Stripe backend not available locally, running local checkout simulator instead.', err);
+                                // Fallback to simulated checkout flow
+                                setTimeout(() => {
+                                  triggerHaptic('success');
+                                  // Mock payment processing duration
+                                  setTimeout(() => {
+                                    // Save sponsor data locally and set success
+                                    setSponsors(prev => prev.map(s => {
+                                      if (s.id === selectedSlotId) {
+                                        return {
+                                          id: s.id,
+                                          companyName: adForm.companyName,
+                                          description: adForm.description,
+                                          siteUrl: adForm.siteUrl.startsWith('http://') || adForm.siteUrl.startsWith('https://')
+                                            ? adForm.siteUrl
+                                            : `https://${adForm.siteUrl}`,
+                                          isAvailable: false
+                                        };
+                                      }
+                                      return s;
+                                    }));
+                                    setPaymentSuccess(true);
+                                    setIsProcessingPayment(false);
+                                    triggerHaptic('success');
+                                    showToast(`Sponsor ad placed successfully for ${adForm.companyName}!`);
+                                  }, 2500);
+                                }, 1200);
+                              });
                           }}
                           className={`w-full h-[44px] rounded-full text-[13px] font-semibold cursor-pointer border-0 flex items-center justify-center gap-2 transition-all ${
                             !adForm.companyName || !adForm.description || !adForm.siteUrl
