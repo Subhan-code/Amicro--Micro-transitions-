@@ -9,12 +9,12 @@ interface AnalyticsPageProps {
 }
 
 type PackageManager = 'npm' | 'yarn' | 'pnpm';
-type Framework = 'nextjs' | 'vite' | 'remix' | 'astro';
+type Framework = 'react' | 'nextjs' | 'remix' | 'astro';
 
 export function AnalyticsPage({ theme, onNavigateHome }: AnalyticsPageProps) {
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [packageManager, setPackageManager] = useState<PackageManager>('npm');
-  const [selectedFramework, setSelectedFramework] = useState<Framework>('nextjs');
+  const [selectedFramework, setSelectedFramework] = useState<Framework>('react');
   const { trigger: triggerHaptic } = useWebHaptics();
 
   const copyToClipboard = (text: string, id: string) => {
@@ -38,11 +38,11 @@ export function AnalyticsPage({ theme, onNavigateHome }: AnalyticsPageProps) {
     pnpm: 'pnpm add @vercel/analytics',
   };
 
-  const codeSample = `import { Analytics } from "@vercel/analytics/next"`;
+  const codeSample = `import { Analytics } from "@vercel/analytics/react"`;
 
   const frameworks = [
-    { id: 'nextjs', name: 'Next.js', active: true },
-    { id: 'vite', name: 'Vite / React', active: false, label: 'Coming Soon' },
+    { id: 'react', name: 'React', active: true },
+    { id: 'nextjs', name: 'Next.js', active: false, label: 'Coming Soon' },
     { id: 'remix', name: 'Remix', active: false, label: 'Coming Soon' },
     { id: 'astro', name: 'Astro', active: false, label: 'Coming Soon' },
   ];
@@ -189,7 +189,7 @@ export function AnalyticsPage({ theme, onNavigateHome }: AnalyticsPageProps) {
             </div>
             
             <p className={`text-[14.5px] leading-relaxed pl-11 ${isDark ? 'text-neutral-400' : 'text-neutral-600'}`}>
-              Import and use the <code className="px-1.5 py-0.5 rounded font-mono text-[13px] bg-neutral-200/50 dark:bg-neutral-800 text-blue-500 dark:text-blue-400 font-semibold">&lt;Analytics/&gt;</code> React component into your app's layout.
+              Import and use the <code className="px-1.5 py-0.5 rounded font-mono text-[13px] bg-neutral-200/50 dark:bg-neutral-800 text-blue-500 dark:text-blue-400 font-semibold">&lt;Analytics/&gt;</code> React component into your main app file.
             </p>
 
             <div className="pl-11 flex flex-col gap-4">
@@ -205,7 +205,7 @@ export function AnalyticsPage({ theme, onNavigateHome }: AnalyticsPageProps) {
                     <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
                     <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
                     <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
-                    <span className="ml-2 font-mono text-[11px]">app/layout.tsx</span>
+                    <span className="ml-2 font-mono text-[11px]">src/App.tsx</span>
                   </div>
                   <button 
                     onClick={() => copyToClipboard(codeSample, 'code-sample')}
@@ -234,7 +234,7 @@ export function AnalyticsPage({ theme, onNavigateHome }: AnalyticsPageProps) {
                     <span className="text-[#e5c07b] dark:text-[#79c0ff]">Analytics</span>{' '}
                     <span className="text-[#abb2bf] dark:text-[#c9d1d9]">{'}'}</span>{' '}
                     <span className="text-[#e06c75] dark:text-[#ff7b72]">from</span>{' '}
-                    <span className="text-[#98c379] dark:text-[#a5d6ff]">"@vercel/analytics/next"</span>
+                    <span className="text-[#98c379] dark:text-[#a5d6ff]">"@vercel/analytics/react"</span>
                   </pre>
                 </div>
               </div>

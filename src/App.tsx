@@ -12,6 +12,7 @@ import { CliPage } from './components/CliPage';
 import { SkillsPage } from './components/SkillsPage';
 import { AnalyticsPage } from './components/AnalyticsPage';
 import { useWebHaptics } from './hooks/useWebHaptics';
+import { Analytics } from '@vercel/analytics/react';
 
 // Loaders imports
 import { loaderGroups } from './data/loaders';
@@ -1013,6 +1014,7 @@ export default function App() {
         </AnimatePresence>
       </div>
 
+      <Analytics />
     </div>
   );
 }
