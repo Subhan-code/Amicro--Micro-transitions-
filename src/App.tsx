@@ -88,14 +88,16 @@ export default function App() {
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
   const { trigger: triggerHaptic } = useWebHaptics();
 
+  const isOssiumActive = new Date() < new Date('2026-07-30T13:20:00Z');
+
   const [sponsors, setSponsors] = useState<SponsorSlot[]>([
     {
       id: 1,
-      companyName: 'Ossium',
-      description: 'Design systems, UI kits, and templates for indie builders and developers.',
-      logoType: 'ossium',
-      siteUrl: 'https://ossium.live/',
-      isAvailable: false,
+      companyName: isOssiumActive ? 'Ossium' : 'Available Slot',
+      description: isOssiumActive ? 'Design systems, UI kits, and templates for indie builders and developers.' : 'Advertise your product here.',
+      logoType: isOssiumActive ? 'ossium' : undefined,
+      siteUrl: isOssiumActive ? 'https://ossium.live/' : undefined,
+      isAvailable: !isOssiumActive,
     },
     { id: 2, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
     { id: 3, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
@@ -552,12 +554,12 @@ export default function App() {
                           >
                             <div className="flex flex-col items-center justify-center w-full">
                               {slot.logoType === 'ossium' ? (
-                                <div className="flex items-center gap-1.5 font-bold tracking-tight text-[12px] text-emerald-500">
-                                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-                                    <circle cx="12" cy="12" r="10" />
-                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                                    <path d="M2 12h20" />
-                                  </svg>
+                                <div className="flex items-center gap-1.5 font-bold tracking-tight text-[12px] text-neutral-900 dark:text-neutral-100">
+                                  <img 
+                                    src="https://ossium.live/_next/image?url=%2Fossium_logo.webp&w=256&q=75" 
+                                    alt="Ossium Logo" 
+                                    className="w-3.5 h-3.5 object-contain rounded-xs"
+                                  />
                                   <span>Ossium</span>
                                 </div>
                               ) : (
