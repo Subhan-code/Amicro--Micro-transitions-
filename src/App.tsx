@@ -39,6 +39,15 @@ type SortMode = 'default' | 'alphabetical';
 type PageMode = 'home' | 'cli' | 'skills' | 'analytics';
 type CatalogTabType = 'buttons' | 'cards' | 'carousels' | 'loaders';
 
+interface SponsorSlot {
+  id: number;
+  companyName: string;
+  description: string;
+  logoType?: string;
+  siteUrl?: string;
+  isAvailable: boolean;
+}
+
 const tabLabels: Record<CatalogTabType, string> = {
   buttons: 'Buttons',
   cards: 'Card Spreads',
@@ -77,6 +86,28 @@ export default function App() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
   const { trigger: triggerHaptic } = useWebHaptics();
+
+  const [selectedSlotId, setSelectedSlotId] = useState<number | null>(null);
+  const [sponsors, setSponsors] = useState<SponsorSlot[]>([
+    {
+      id: 1,
+      companyName: 'Dodo Payments',
+      description: 'Merchant of Record for SaaS & AI founders. Accept global cards, bank transfers & local UPI.',
+      logoType: 'dodo',
+      siteUrl: 'https://dodopayments.com',
+      isAvailable: false,
+    },
+    { id: 2, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
+    { id: 3, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
+    { id: 4, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
+  ]);
+  const [adForm, setAdForm] = useState({
+    companyName: '',
+    description: '',
+    siteUrl: '',
+  });
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   // Hash-based router
   useEffect(() => {
@@ -502,6 +533,85 @@ export default function App() {
                     <span>Browse Components</span>
                   </motion.button>
                 </div>
+
+                {/* Sponsor Ad Grid */}
+                <div className="w-full max-w-4xl mx-auto mt-14 px-4 sm:px-0 flex flex-col items-center">
+                  <div className={`text-[11px] font-bold uppercase tracking-widest mb-4 ${theme === 'dark' ? 'text-neutral-500' : 'text-neutral-400'}`}>
+                    Sponsored by
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full">
+                    {sponsors.map((slot) => {
+                      if (!slot.isAvailable) {
+                        return (
+                          <a
+                            key={slot.id}
+                            href={slot.siteUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => triggerHaptic('light')}
+                            className={`group relative flex flex-col items-center justify-between text-center p-5 rounded-2xl border transition-all duration-300 hover:scale-[1.03] ${
+                              theme === 'dark'
+                                ? 'bg-[#181818] border-neutral-800/80 hover:bg-[#1e1e1e] text-white shadow-lg shadow-black/25'
+                                : 'bg-white border-neutral-200 hover:shadow-md text-black shadow-sm'
+                            }`}
+                          >
+                            <div className="flex flex-col items-center gap-2 flex-1 justify-center">
+                              {slot.logoType === 'dodo' ? (
+                                <div className="flex items-center gap-1.5 font-bold tracking-tight text-[15px] text-[#ff5f56]">
+                                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                                  </svg>
+                                  <span>Dodo Payments</span>
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-1.5 font-bold tracking-tight text-[15px] text-emerald-500">
+                                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                                  <span>{slot.companyName}</span>
+                                </div>
+                              )}
+                              <p className={`text-[11.5px] leading-normal mt-1.5 font-medium transition-colors ${theme === 'dark' ? 'text-neutral-400 group-hover:text-neutral-300' : 'text-neutral-600 group-hover:text-neutral-850'}`}>
+                                {slot.description}
+                              </p>
+                            </div>
+                            <div className={`text-[10px] font-semibold mt-3.5 flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'}`}>
+                              <span>Visit Site</span>
+                              <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                              </svg>
+                            </div>
+                          </a>
+                        );
+                      } else {
+                        return (
+                          <button
+                            key={slot.id}
+                            onClick={() => {
+                              triggerHaptic('medium');
+                              setSelectedSlotId(slot.id);
+                              setPaymentSuccess(false);
+                              setIsProcessingPayment(false);
+                              setAdForm({ companyName: '', description: '', siteUrl: '' });
+                            }}
+                            className={`group flex flex-col items-center justify-center text-center p-5 rounded-2xl border border-dashed transition-all duration-300 hover:scale-[1.03] cursor-pointer bg-transparent ${
+                              theme === 'dark'
+                                ? 'border-neutral-800 hover:border-neutral-600 text-neutral-400 hover:text-white hover:bg-neutral-900/20'
+                                : 'border-neutral-300 hover:border-neutral-400 text-neutral-500 hover:text-black hover:bg-neutral-50/50'
+                            }`}
+                          >
+                            <div className={`w-8 h-8 rounded-full border border-dashed flex items-center justify-center mb-2.5 transition-colors group-hover:border-solid ${theme === 'dark' ? 'border-neutral-800 group-hover:border-neutral-600' : 'border-neutral-300 group-hover:border-neutral-400'}`}>
+                              <span className="text-[18px] font-medium group-hover:scale-110 transition-transform">+</span>
+                            </div>
+                            <span className="text-[12.5px] font-bold tracking-tight">Sponsor Slot</span>
+                            <span className={`text-[10px] mt-1 transition-colors ${theme === 'dark' ? 'text-neutral-500 group-hover:text-neutral-400' : 'text-neutral-400 group-hover:text-neutral-500'}`}>
+                              $49 / month
+                            </span>
+                          </button>
+                        );
+                      }
+                    })}
+                  </div>
+                </div>
+
                 {/* Filter and layout controls */}
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 w-full max-w-xl mx-auto px-4 sm:px-0">                  {/* Category Switcher: Dropdown on Mobile, Pills on Desktop */}
                   <div className="relative block sm:hidden w-full max-w-[260px] mx-auto z-40">
@@ -1013,6 +1123,195 @@ export default function App() {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Sponsor Purchase Modal */}
+      <AnimatePresence>
+        {selectedSlotId !== null && (
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => {
+                if (!isProcessingPayment) setSelectedSlotId(null);
+              }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs cursor-pointer"
+            />
+
+            {/* Modal Window */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ type: "spring", duration: 0.4 }}
+              className={`relative w-full max-w-md rounded-3xl border p-6 flex flex-col shadow-2xl z-10 ${
+                theme === 'dark' 
+                  ? 'bg-zinc-950 border-white/10 text-white shadow-black/80' 
+                  : 'bg-white border-neutral-200 text-black shadow-neutral-200/50'
+              }`}
+            >
+              {/* Close button */}
+              {!isProcessingPayment && (
+                <button
+                  onClick={() => setSelectedSlotId(null)}
+                  className={`absolute top-4 right-4 p-1.5 rounded-full border-0 cursor-pointer bg-transparent transition-colors ${
+                    theme === 'dark' ? 'text-neutral-400 hover:text-white hover:bg-white/10' : 'text-neutral-500 hover:text-black hover:bg-neutral-100'
+                  }`}
+                  aria-label="Close modal"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+
+              {!paymentSuccess ? (
+                <div className="flex flex-col">
+                  {/* Header */}
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold">
+                      $
+                    </div>
+                    <h2 className="text-[20px] font-bold tracking-tight">Sponsor Amicro</h2>
+                  </div>
+                  <p className={`text-[13px] leading-relaxed mb-5 ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
+                    Promote your brand to 50k+ developers. Secure checkout is managed globally by **Dodo Payments** (Merchant of Record).
+                  </p>
+
+                  {/* Form inputs */}
+                  <div className="flex flex-col gap-4 mb-6">
+                    <div>
+                      <label className={`block text-[11px] font-bold uppercase tracking-wider mb-1.5 ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'}`}>
+                        Company / Brand Name
+                      </label>
+                      <input
+                        type="text"
+                        value={adForm.companyName}
+                        onChange={(e) => setAdForm({ ...adForm, companyName: e.target.value })}
+                        placeholder="e.g. Acme Inc"
+                        className={`w-full px-4 py-2.5 rounded-xl border text-[13.5px] font-medium transition-all ${
+                          theme === 'dark'
+                            ? 'bg-neutral-900 border-neutral-800 text-white focus:border-neutral-600 focus:outline-none'
+                            : 'bg-neutral-50 border-neutral-200 text-black focus:border-neutral-400 focus:outline-none'
+                        }`}
+                      />
+                    </div>
+
+                    <div>
+                      <label className={`block text-[11px] font-bold uppercase tracking-wider mb-1.5 ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'}`}>
+                        Description / Tagline (max 80 chars)
+                      </label>
+                      <input
+                        type="text"
+                        maxLength={80}
+                        value={adForm.description}
+                        onChange={(e) => setAdForm({ ...adForm, description: e.target.value })}
+                        placeholder="e.g. Best hosting solution for fast React apps."
+                        className={`w-full px-4 py-2.5 rounded-xl border text-[13.5px] font-medium transition-all ${
+                          theme === 'dark'
+                            ? 'bg-neutral-900 border-neutral-800 text-white focus:border-neutral-600 focus:outline-none'
+                            : 'bg-neutral-50 border-neutral-200 text-black focus:border-neutral-400 focus:outline-none'
+                        }`}
+                      />
+                    </div>
+
+                    <div>
+                      <label className={`block text-[11px] font-bold uppercase tracking-wider mb-1.5 ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'}`}>
+                        Website / Redirect URL
+                      </label>
+                      <input
+                        type="url"
+                        value={adForm.siteUrl}
+                        onChange={(e) => setAdForm({ ...adForm, siteUrl: e.target.value })}
+                        placeholder="https://acme.com"
+                        className={`w-full px-4 py-2.5 rounded-xl border text-[13.5px] font-medium transition-all ${
+                          theme === 'dark'
+                            ? 'bg-neutral-900 border-neutral-800 text-white focus:border-neutral-600 focus:outline-none'
+                            : 'bg-neutral-50 border-neutral-200 text-black focus:border-neutral-400 focus:outline-none'
+                        }`}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Dodo Payments Simulator Trigger */}
+                  <button
+                    disabled={!adForm.companyName || !adForm.description || !adForm.siteUrl || isProcessingPayment}
+                    onClick={() => {
+                      triggerHaptic('medium');
+                      setIsProcessingPayment(true);
+                      // Simulate Dodo Checkout session launch
+                      setTimeout(() => {
+                        triggerHaptic('success');
+                        // Mock payment processing duration
+                        setTimeout(() => {
+                          // Save sponsor data and set success
+                          setSponsors(prev => prev.map(s => {
+                            if (s.id === selectedSlotId) {
+                              return {
+                                id: s.id,
+                                companyName: adForm.companyName,
+                                description: adForm.description,
+                                siteUrl: adForm.siteUrl,
+                                isAvailable: false
+                              };
+                            }
+                            return s;
+                          }));
+                          setPaymentSuccess(true);
+                          setIsProcessingPayment(false);
+                          triggerHaptic('success');
+                          showToast(`Sponsor ad placed successfully for ${adForm.companyName}!`);
+                        }, 2500);
+                      }, 1200);
+                    }}
+                    className={`w-full h-[44px] rounded-full text-[13px] font-semibold cursor-pointer border-0 flex items-center justify-center gap-2 transition-all ${
+                      !adForm.companyName || !adForm.description || !adForm.siteUrl
+                        ? 'bg-neutral-400/20 text-neutral-400 cursor-not-allowed'
+                        : 'bg-[#ff5f56] text-white hover:bg-[#ff4e44] shadow-md shadow-red-500/10 active:scale-98'
+                    }`}
+                  >
+                    {isProcessingPayment ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <span>Processing payment via Dodo...</span>
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                        </svg>
+                        <span>Pay with Dodo Payments ($49.00)</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center text-center py-4">
+                  <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-4">
+                    <Check className="w-6 h-6 stroke-[3]" />
+                  </div>
+                  <h2 className="text-[20px] font-bold tracking-tight mb-2">Order Confirmed!</h2>
+                  <p className={`text-[13px] leading-relaxed mb-6 max-w-xs ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
+                    Thank you! Your sponsor slot for **{adForm.companyName}** is now live on the Amicro homepage.
+                  </p>
+                  <button
+                    onClick={() => {
+                      triggerHaptic('light');
+                      setSelectedSlotId(null);
+                    }}
+                    className={`px-6 py-2.5 rounded-full text-[13px] font-semibold cursor-pointer border transition-colors ${
+                      theme === 'dark'
+                        ? 'bg-white text-black border-white hover:bg-neutral-200'
+                        : 'bg-neutral-950 text-white border-neutral-950 hover:bg-neutral-800'
+                    }`}
+                  >
+                    Back to Dashboard
+                  </button>
+                </div>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       <Analytics />
     </div>
