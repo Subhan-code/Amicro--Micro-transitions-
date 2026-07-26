@@ -100,7 +100,7 @@ export default function App() {
           parsed[0] = {
             id: 1,
             companyName: isOssiumActive ? 'Ossium' : 'Available Slot',
-            description: isOssiumActive ? 'Design systems, UI kits, and templates for indie builders and developers.' : 'Advertise your product here.',
+            description: isOssiumActive ? 'The ultimate hub for open-source contributors. Discover open-source projects, issues, and bounties from across the ecosystem.' : 'Advertise your product here.',
             logoType: isOssiumActive ? 'ossium' : undefined,
             siteUrl: isOssiumActive ? 'https://ossium.live/' : undefined,
             isAvailable: !isOssiumActive,
@@ -115,7 +115,7 @@ export default function App() {
       {
         id: 1,
         companyName: isOssiumActive ? 'Ossium' : 'Available Slot',
-        description: isOssiumActive ? 'Design systems, UI kits, and templates for indie builders and developers.' : 'Advertise your product here.',
+        description: isOssiumActive ? 'The ultimate hub for open-source contributors. Discover open-source projects, issues, and bounties from across the ecosystem.' : 'Advertise your product here.',
         logoType: isOssiumActive ? 'ossium' : undefined,
         siteUrl: isOssiumActive ? 'https://ossium.live/' : undefined,
         isAvailable: !isOssiumActive,
