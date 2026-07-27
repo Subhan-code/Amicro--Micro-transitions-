@@ -10,7 +10,6 @@ import { AnimatedButton } from './components/AnimatedButton';
 import { getComponentCode, ThemeToggleCode, getCardComponentCode } from './utils/codeGenerator';
 import { CliPage } from './components/CliPage';
 import { SkillsPage } from './components/SkillsPage';
-import { AnalyticsPage } from './components/AnalyticsPage';
 import { useWebHaptics } from './hooks/useWebHaptics';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -37,7 +36,7 @@ import { CardTimeMachine } from './components/cards/CardTimeMachine';
 
 type LayoutMode = 'list' | 'grid' | 'matrix';
 type SortMode = 'default' | 'alphabetical';
-type PageMode = 'home' | 'cli' | 'skills' | 'analytics';
+type PageMode = 'home' | 'cli' | 'skills';
 type CatalogTabType = 'buttons' | 'cards' | 'carousels' | 'loaders';
 
 interface SponsorSlot {
@@ -140,8 +139,6 @@ export default function App() {
         setCurrentPage('cli');
       } else if (hash.startsWith('#/skills') || hash.startsWith('#skills')) {
         setCurrentPage('skills');
-      } else if (hash.startsWith('#/analytics') || hash.startsWith('#analytics')) {
-        setCurrentPage('analytics');
       } else {
         setCurrentPage('home');
       }
@@ -331,8 +328,6 @@ export default function App() {
       window.location.hash = '#cli';
     } else if (page === 'skills') {
       window.location.hash = '#skills';
-    } else if (page === 'analytics') {
-      window.location.hash = '#analytics';
     } else {
       window.location.hash = '';
     }
@@ -392,16 +387,6 @@ export default function App() {
                 }`}
               >
                 Skills
-              </button>
-              <button 
-                onClick={() => navigateTo('analytics')}
-                className={`inline-flex items-center justify-center h-[36px] px-[14px] rounded-full text-[13px] font-medium leading-[16px] cursor-pointer no-underline whitespace-nowrap transition-all duration-200 border-0 ${
-                  currentPage === 'analytics'
-                    ? (theme === 'dark' ? 'text-white bg-[rgba(255,255,255,0.08)]' : 'text-black bg-neutral-200/80 font-semibold')
-                    : (theme === 'dark' ? 'text-[rgba(202,202,202,0.7)] hover:text-white hover:bg-[rgba(255,255,255,0.04)]' : 'text-neutral-600 hover:text-black hover:bg-neutral-200/40')
-                }`}
-              >
-                Analytics
               </button>
             </nav>
           </div>
@@ -496,16 +481,6 @@ export default function App() {
               >
                 Skills
               </button>
-              <button 
-                onClick={() => navigateTo('analytics')}
-                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent ${
-                  currentPage === 'analytics'
-                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
-                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
-                }`}
-              >
-                Analytics
-              </button>
             </motion.div>
           )}
         </AnimatePresence>
@@ -532,16 +507,6 @@ export default function App() {
             transition={{ duration: 0.25 }}
           >
             <SkillsPage theme={theme} onNavigateHome={() => navigateTo('home')} />
-          </motion.div>
-        ) : currentPage === 'analytics' ? (
-          <motion.div
-            key="analytics-page"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25 }}
-          >
-            <AnalyticsPage theme={theme} onNavigateHome={() => navigateTo('home')} />
           </motion.div>
         ) : (
           <motion.div
