@@ -130,6 +130,7 @@ Created with ❤️ by **Syed Subhan**
 - **Support**: [Sponsor on GitHub](https://github.com/sponsors/Subhan-code) | [Support on Ko-fi](https://ko-fi.com/subhanuddin)
 
 ---
+[![RepoStars](https://repostars.dev/api/embed?repo=Subhan-code%2FAmicro--Micro-transitions-&theme=light)](https://repostars.dev/?repos=Subhan-code%2FAmicro--Micro-transitions-&theme=light)
 
 ## 📄 License
 
