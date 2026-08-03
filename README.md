@@ -44,7 +44,6 @@ npx @subhanhq/amicro@latest add card-arc-5
 ```
 
 ---
-<img width="1850" height="1086" alt="repostars-Subhan-code-Amicro--Micro-transitions-" src="https://github.com/user-attachments/assets/f6ac1d0d-08d8-4823-a692-c39619b36567" />
 
 
 ## 🎨 shadcn/ui Registry Integration
