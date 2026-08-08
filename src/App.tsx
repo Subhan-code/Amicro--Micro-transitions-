@@ -10,6 +10,8 @@ import { AnimatedButton } from './components/AnimatedButton';
 import { getComponentCode, ThemeToggleCode, getCardComponentCode } from './utils/codeGenerator';
 import { CliPage } from './components/CliPage';
 import { SkillsPage } from './components/SkillsPage';
+import { SimpleCompPage } from './components/SimpleCompPage';
+import { SimpleCompGrid } from './components/simple-comp/SimpleCompGrid';
 import { useWebHaptics } from './hooks/useWebHaptics';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -36,8 +38,8 @@ import { CardTimeMachine } from './components/cards/CardTimeMachine';
 
 type LayoutMode = 'list' | 'grid' | 'matrix';
 type SortMode = 'default' | 'alphabetical';
-type PageMode = 'home' | 'cli' | 'skills';
-type CatalogTabType = 'buttons' | 'cards' | 'carousels' | 'loaders';
+type PageMode = 'home' | 'cli' | 'skills' | 'simple-comp';
+type CatalogTabType = 'buttons' | 'cards' | 'carousels' | 'loaders' | 'simple-comp';
 
 interface SponsorSlot {
   id: number;
@@ -53,6 +55,7 @@ const tabLabels: Record<CatalogTabType, string> = {
   cards: 'Card Spreads',
   carousels: '3D Carousels',
   loaders: 'Loaders',
+  'simple-comp': 'Simple Comp',
 };
 
 function AnimatedNumber({ value }: { value: number | null }) {
@@ -139,6 +142,8 @@ export default function App() {
         setCurrentPage('cli');
       } else if (hash.startsWith('#/skills') || hash.startsWith('#skills')) {
         setCurrentPage('skills');
+      } else if (hash.startsWith('#/simple-comp') || hash.startsWith('#simple-comp')) {
+        setCurrentPage('simple-comp');
       } else {
         setCurrentPage('home');
       }
@@ -328,6 +333,8 @@ export default function App() {
       window.location.hash = '#cli';
     } else if (page === 'skills') {
       window.location.hash = '#skills';
+    } else if (page === 'simple-comp') {
+      window.location.hash = '#simple-comp';
     } else {
       window.location.hash = '';
     }
@@ -387,6 +394,16 @@ export default function App() {
                 }`}
               >
                 Skills
+              </button>
+              <button 
+                onClick={() => navigateTo('simple-comp')}
+                className={`inline-flex items-center justify-center h-[36px] px-[14px] rounded-full text-[13px] font-medium leading-[16px] cursor-pointer no-underline whitespace-nowrap transition-all duration-200 border-0 ${
+                  currentPage === 'simple-comp'
+                    ? (theme === 'dark' ? 'text-white bg-[rgba(255,255,255,0.08)]' : 'text-black bg-neutral-200/80 font-semibold')
+                    : (theme === 'dark' ? 'text-[rgba(202,202,202,0.7)] hover:text-white hover:bg-[rgba(255,255,255,0.04)]' : 'text-neutral-600 hover:text-black hover:bg-neutral-200/40')
+                }`}
+              >
+                Simple Comp
               </button>
             </nav>
           </div>
@@ -481,6 +498,16 @@ export default function App() {
               >
                 Skills
               </button>
+              <button 
+                onClick={() => navigateTo('simple-comp')}
+                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent ${
+                  currentPage === 'simple-comp'
+                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
+                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
+                }`}
+              >
+                Simple Comp
+              </button>
             </motion.div>
           )}
         </AnimatePresence>
@@ -507,6 +534,16 @@ export default function App() {
             transition={{ duration: 0.25 }}
           >
             <SkillsPage theme={theme} onNavigateHome={() => navigateTo('home')} />
+          </motion.div>
+        ) : currentPage === 'simple-comp' ? (
+          <motion.div
+            key="simple-comp-page"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.25 }}
+          >
+            <SimpleCompPage theme={theme} showToast={showToast} triggerHaptic={triggerHaptic} />
           </motion.div>
         ) : (
           <motion.div
@@ -702,7 +739,8 @@ export default function App() {
                               { id: 'buttons', label: 'Buttons' },
                               { id: 'cards', label: 'Card Spreads' },
                               { id: 'carousels', label: '3D Carousels' },
-                              { id: 'loaders', label: 'Loaders' }
+                              { id: 'loaders', label: 'Loaders' },
+                              { id: 'simple-comp', label: 'Simple Comp' }
                             ].map((tab) => (
                               <button
                                 key={tab.id}
@@ -779,6 +817,16 @@ export default function App() {
                         }`}
                       >
                         Loaders
+                      </button>
+                      <button
+                        onClick={() => setCatalogTab('simple-comp')}
+                        className={`flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 whitespace-nowrap ${
+                          catalogTab === 'simple-comp' 
+                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
+                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
+                        }`}
+                      >
+                        Simple Comp
                       </button>
 
                       {/* More Filters Dropdown */}
@@ -1068,6 +1116,8 @@ export default function App() {
                         );
                       })}
                     </div>
+                  ) : catalogTab === 'simple-comp' ? (
+                    <SimpleCompGrid theme={theme} showToast={showToast} triggerHaptic={triggerHaptic} />
                   ) : (
                     displayedCards.map((card) => (
                       <motion.div 

@@ -1,0 +1,14 @@
+{
+  "name": "classic-toggle",
+  "type": "registry:ui",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "files": [
+    {
+      "path": "ui/toggles/classic-toggle.tsx",
+      "content": "import React, { useState } from 'react';\nimport { motion } from 'framer-motion';\n\nexport const ClassicToggle = () => {\n  const [isOn, setIsOn] = useState(false);\n  return (\n    <button\n      onClick={() => setIsOn(!isOn)}\n      className={`relative w-16 h-9 rounded-full p-1 transition-colors duration-300 cursor-pointer border-0 ${isOn ? 'bg-emerald-500' : 'bg-neutral-800'}`}\n    >\n      <motion.div\n        animate={{ x: isOn ? 28 : 0 }}\n        transition={{ type: 'spring', stiffness: 500, damping: 30 }}\n        className=\"w-7 h-7 bg-white rounded-full shadow-md\"\n      />\n    </button>\n  );\n};\n",
+      "type": "registry:ui"
+    }
+  ]
+}
