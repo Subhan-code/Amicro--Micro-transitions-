@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 // Define the absolute workspace root
-const WORKSPACE_ROOT = 'c:/Users/we/Desktop/Amicro---Micro-transitions';
+const WORKSPACE_ROOT = process.cwd();
 
 interface RegistryFile {
   path: string;
@@ -330,7 +330,7 @@ if (fs.existsSync(loadingDir)) {
 function build() {
   console.log('Building custom shadcn registry with target properties...');
 
-  const outputBaseDir = path.join(WORKSPACE_ROOT, 'registry');
+  const outputBaseDir = path.join(WORKSPACE_ROOT, 'public/r');
 
   // Ensure directories exist
   const dirs = [
@@ -379,14 +379,7 @@ function build() {
     };
 
     // Save individual item JSON
-    let subfolder = 'ui';
-    if (item.type === 'registry:hook') {
-      subfolder = 'hooks';
-    } else if (item.type === 'registry:lib') {
-      subfolder = 'lib';
-    }
-
-    const itemJsonPath = path.join(outputBaseDir, subfolder, `${item.name}.json`);
+    const itemJsonPath = path.join(outputBaseDir, `${item.name}.json`);
     fs.writeFileSync(itemJsonPath, JSON.stringify(registryItemPayload, null, 2), 'utf-8');
     console.log(`✓ Generated: ${path.relative(WORKSPACE_ROOT, itemJsonPath)}`);
 
