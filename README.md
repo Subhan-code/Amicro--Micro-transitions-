@@ -2,13 +2,18 @@
 
 A curated collection of premium React micro-interactions, transition components, and card layouts powered by **Motion**.
 
-> [!NOTE]
-> **Layout Attribution & Appreciation**: The layout of this project is from [transition.dev](https://transition.dev/). Huge thanks to [Jakub Antalík (@Jakubantalik)](https://x.com/Jakubantalik) for making it open-source! With time, this layout will be continuously updated and evolved.
-
 [![npm version](https://img.shields.io/npm/v/@subhanhq/amicro?style=for-the-badge&color=000000&logo=npm&logoColor=white)](https://www.npmjs.com/package/@subhanhq/amicro)
 [![License](https://img.shields.io/github/license/Subhan-code/Amicro--Micro-transitions-?style=for-the-badge&color=000000&logo=opensourceinitiative&logoColor=white)](https://github.com/Subhan-code/Amicro--Micro-transitions-/blob/main/LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/Subhan-code/Amicro--Micro-transitions-?style=for-the-badge&color=000000&logo=github&logoColor=white)](https://github.com/Subhan-code/Amicro--Micro-transitions-/stargazers)
 [![Sponsor](https://img.shields.io/badge/Sponsor%20%E2%9D%A4%EF%B8%8F-000000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sponsors/Subhan-code)
+
+<br />
+<br />
+<a href="https://vercel.com/open-source-program">
+  <img alt="Vercel OSS Program" src="https://vercel.com/oss/program-badge-2026.svg" />
+</a>
+<br />
+<br />
 
 ---
 
@@ -64,7 +69,7 @@ Add the `@amicro` namespace to the `registries` field in your project's `compone
 ```json
 {
   "registries": {
-    "@amicro": "https://raw.githubusercontent.com/Subhan-code/Amicro--Micro-transitions-/main/registry/{name}.json"
+    "@amicro": "https://amicro.vercel.app/r/{name}.json"
   }
 }
 ```

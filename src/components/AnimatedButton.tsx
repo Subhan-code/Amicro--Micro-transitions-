@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ButtonConfig } from '../data/buttons';
-import { FocusBlur } from './cards/FocusBlur';
 
 interface AnimatedButtonProps {
   config: ButtonConfig;
@@ -11,20 +10,6 @@ interface AnimatedButtonProps {
 
 export const AnimatedButton = React.memo(function AnimatedButton({ config, layoutMode, theme = 'dark' }: AnimatedButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
-  
-  if (config.interactionType === 'focus-blur') {
-    return (
-      <FocusBlur 
-        items={[
-          { label: '@X', href: '#' },
-          { label: '@Threads', href: '#' },
-          { label: '@GitHub', href: '#' }
-        ]} 
-        showBrackets={true} 
-        className={layoutMode === 'matrix' ? "scale-[0.5] origin-center text-[10px] gap-1 px-1 py-1" : "text-sm gap-4"} 
-      />
-    );
-  }
 
   const Icon1 = config.icon1 as React.ElementType;
   const Icon2 = config.icon2 as React.ElementType;
@@ -397,17 +382,27 @@ export const AnimatedButton = React.memo(function AnimatedButton({ config, layou
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       animate={{ 
-        paddingLeft: isMatrix ? 0 : (isHovered ? 28 : 24), 
-        paddingRight: isMatrix ? 0 : (isHovered ? 28 : 24),
+        paddingLeft: isMatrix ? 0 : (isHovered ? 20 : 16), 
+        paddingRight: isMatrix ? 0 : (isHovered ? 20 : 16),
         x: isHovered && config.interactionType === 'magnetic' ? mouseCoords.x : 0,
         y: isHovered && config.interactionType === 'magnetic' ? mouseCoords.y : 0,
         backgroundColor: isLightTheme
-          ? ((hasInteracted && config.id === '4') ? "rgba(0,0,0,0.08)" : (isHovered ? "rgba(0,0,0,0.06)" : "rgba(0,0,0,0.04)"))
-          : ((hasInteracted && config.id === '4') ? "rgba(255,255,255,0.08)" : (isHovered ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.04)"))
+          ? ((hasInteracted && config.id === '4') ? "#e4e4e7" : (isHovered ? "#f4f4f5" : "#ffffff"))
+          : ((hasInteracted && config.id === '4') ? "#27272a" : (isHovered ? "#27272a" : "#18181b")),
       }}
       whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.96 }}
-      className={`relative flex items-center justify-center rounded-[40px] border-0 cursor-pointer shadow-none transition-colors duration-150 ${isMatrix ? 'w-[36px] h-[36px] sm:w-[42px] sm:h-[42px] px-0' : 'h-[36px] min-w-[75px]'} ${config.interactionType === 'glare' ? 'overflow-hidden' : ''} ${isLightTheme ? 'text-black' : 'text-[#e3e3e3]'}`}
+      whileTap={{ scale: 0.97 }}
+      className={`relative inline-flex items-center justify-center whitespace-nowrap text-sm font-medium overflow-hidden rounded-2xl cursor-pointer transition-colors duration-200 ${
+        isMatrix 
+          ? 'w-[38px] h-[38px] sm:w-[42px] sm:h-[42px] px-0' 
+          : 'h-10 min-w-[130px] px-4 py-2'
+      } ${
+        config.interactionType === 'glare' ? 'overflow-hidden' : ''
+      } ${
+        isLightTheme
+          ? 'text-zinc-900 bg-white border border-border shadow-[inset_0px_0.5px_0px_1px_#00000010] drop-shadow-sm'
+          : 'text-zinc-100 bg-zinc-900 shadow-[inset_0px_0.5px_0px_1px_#65656522] drop-shadow-md border border-white/[0.06]'
+      }`}
     >
       <motion.div layout transition={{ type: "spring", stiffness: 500, damping: 25 }} className={`flex items-center justify-center w-full ${isMatrix ? 'scale-100 sm:scale-[1.15] origin-center' : ''}`}>
         {renderIconContent()}

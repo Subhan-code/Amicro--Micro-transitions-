@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import {
   ResponsiveContainer,
   ScatterChart,
@@ -11,17 +12,17 @@ import {
 import { DitherChartTooltipContent } from '../dither-charts/lib/recharts-tooltip';
 
 interface BubblePoint {
-  x: number;
-  y: number;
-  z: number;
-  tag: string;
+  x: number; // Volume $M
+  y: number; // Fee APY %
+  z: number; // Liquidity Depth
+  pair: string;
 }
 
 const BUBBLE_DATA: BubblePoint[] = [
-  { x: 20, y: 30, z: 300, tag: 'Cluster 1' },
-  { x: 45, y: 70, z: 600, tag: 'Cluster 2' },
-  { x: 70, y: 40, z: 450, tag: 'Cluster 3' },
-  { x: 85, y: 80, z: 750, tag: 'Cluster 4' },
+  { x: 180, y: 18.5, z: 750, pair: 'SOL / USDC' },
+  { x: 95, y: 14.2, z: 480, pair: 'SOL / USDT' },
+  { x: 64, y: 24.8, z: 360, pair: 'JUP / SOL' },
+  { x: 38, y: 32.4, z: 280, pair: 'BONK / SOL' },
 ];
 
 interface MonoRoundedBubbleChartProps {
@@ -33,46 +34,48 @@ export function MonoRoundedBubbleChart({ theme = 'dark', compact = false }: Mono
   const isDark = theme === 'dark';
 
   return (
-    <div
-      className={`relative w-full rounded-[24px] transition-all duration-300 group flex flex-col justify-between overflow-hidden p-4 sm:p-5 ${
-        compact ? 'h-[220px] sm:h-[268px]' : 'min-h-[290px]'
+    <motion.div
+      initial={{ opacity: 0, scale: 0.98, y: 6 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      className={`relative w-full rounded-3xl transition-all duration-300 group flex flex-col justify-between overflow-hidden p-3.5 sm:p-4 ${
+        compact ? 'aspect-[16/10] min-h-[220px] w-full' : 'min-h-[290px]'
       } ${
-        isDark
-          ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]'
-          : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-neutral-100 text-black hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)]'
+        isDark ? 'bg-[#141414] border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:border-white/20' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-neutral-200 text-black hover:border-neutral-300'
       }`}
     >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-1">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className={`text-xs font-semibold tracking-wider uppercase ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
-              Bubble Clusters
-            </span>
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-mono bg-white/10 text-white border border-white/20">
-              Scaled
-            </span>
+      {/* Metric Header */}
+      <div className="flex items-center justify-between mb-1.5">
+        <div className="flex items-baseline gap-2">
+          <div className="text-xl sm:text-2xl font-bold tracking-tight tabular-nums font-sans">
+            $377M <span className="text-xs font-normal opacity-70">TVL</span>
           </div>
-          <div className="text-xl font-bold tracking-tight tabular-nums mt-0.5 font-sans">
-            4 Clusters <span className="text-xs font-normal opacity-70">mapped</span>
-          </div>
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-mono bg-purple-500/10 text-purple-400 border border-purple-500/20">
+            32.4% Max APY
+          </span>
+        </div>
+
+        <div className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-mono ${
+          isDark ? 'bg-white/5 text-neutral-400' : 'bg-neutral-100 text-neutral-600'
+        }`}>
+          Top 4 Pools
         </div>
       </div>
 
       {/* Main Stage */}
-      <div className={`relative w-full flex-1 rounded-[14px] overflow-hidden p-2 transition-colors duration-300 ${
+      <div className={`relative w-full flex-1 rounded-[14px] overflow-hidden p-2 transition-colors min-h-0 duration-300 ${
         isDark ? 'bg-[#131313]' : 'bg-[#f4f4f6]'
       }`}>
-        <ResponsiveContainer width="100%" height={compact ? 130 : 160}>
-          <ScatterChart margin={{ top: 12, right: 12, left: -22, bottom: 0 }}>
-            <XAxis dataKey="x" type="number" tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: isDark ? '#71717A' : '#A1A1AA' }} />
-            <YAxis dataKey="y" type="number" tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: isDark ? '#71717A' : '#A1A1AA' }} />
-            <ZAxis dataKey="z" range={[100, 500]} />
-            <Tooltip content={<DitherChartTooltipContent theme={theme} indicator="dot" />} />
+        <ResponsiveContainer width="100%" height="100%">
+          <ScatterChart margin={{ top: 12, right: 16, left: -16, bottom: 0 }}>
+            <XAxis dataKey="x" name="24h Vol ($M)" unit="M" tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: isDark ? '#71717A' : '#A1A1AA' }} />
+            <YAxis dataKey="y" name="Fee APY (%)" unit="%" tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: isDark ? '#71717A' : '#A1A1AA' }} />
+            <ZAxis dataKey="z" range={[120, 480]} />
+            <Tooltip content={<DitherChartTooltipContent theme={theme} indicator="dot" />} cursor={{ strokeDasharray: '3 3' }} />
             <Scatter
-              name="Clusters"
+              name="Liquidity Pool"
               data={BUBBLE_DATA}
-              fill={isDark ? 'rgba(255,255,255,0.2)' : 'rgba(9,9,11,0.2)'}
+              fill={isDark ? 'rgba(255,255,255,0.22)' : 'rgba(9,9,11,0.2)'}
               stroke={isDark ? '#FFFFFF' : '#09090B'}
               strokeWidth={2}
               animationDuration={800}
@@ -80,12 +83,6 @@ export function MonoRoundedBubbleChart({ theme = 'dark', compact = false }: Mono
           </ScatterChart>
         </ResponsiveContainer>
       </div>
-
-      {/* Footer */}
-      <div className="flex items-center justify-between mt-3 pt-1 border-t border-white/5 text-[11px] font-mono">
-        <span className={isDark ? 'text-neutral-400' : 'text-neutral-600'}>Rounded Sphere Circles</span>
-        <span className={isDark ? 'text-white font-medium' : 'text-black font-medium'}>Z-Scaled Radii</span>
-      </div>
-    </div>
+    </motion.div>
   );
 }

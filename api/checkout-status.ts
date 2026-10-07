@@ -1,6 +1,11 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
+import {
+  getSponsorshipById,
+  getSponsorshipByPaymentId,
+  updateSponsorshipRecord,
+} from './lib/db';
+import { getDurationDaysForTier } from './lib/pricing';
 
-// Allow-list of domains that may call this API
 const ALLOWED_ORIGINS = [
   'https://amicro.vercel.app',
   'http://localhost:3000',
@@ -9,9 +14,8 @@ const ALLOWED_ORIGINS = [
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const origin = req.headers.origin || '';
-
-  // Strict CORS — only allow the production URL and local dev
   const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
   res.setHeader('Vary', 'Origin');
@@ -19,94 +23,150 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept');
 
   if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+    return res.status(200).end();
   }
 
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { checkout_id } = req.query;
+  const query = req.query || {};
+  const sponsorshipId = (query.sponsorship_id || query.sponsorshipId) as string | undefined;
+  const paymentId = (query.payment_id || query.checkout_id || query.id) as string | undefined;
 
-  // Validate + sanitize: Polar checkout IDs are alphanumeric with hyphens/underscores only
-  if (
-    !checkout_id ||
-    typeof checkout_id !== 'string' ||
-    !/^[a-zA-Z0-9_-]{10,128}$/.test(checkout_id)
-  ) {
-    return res.status(400).json({ error: 'Invalid or missing checkout_id parameter' });
-  }
+  const idToLookup = sponsorshipId || paymentId;
 
-  const polarToken = process.env.POLAR_ACCESS_TOKEN;
-
-  if (!polarToken) {
-    console.error('POLAR_ACCESS_TOKEN is not set in environment variables.');
-    return res.status(500).json({ error: 'Server configuration error' });
+  if (!idToLookup || typeof idToLookup !== 'string') {
+    return res.status(400).json({ error: 'Invalid or missing payment/sponsorship ID parameter' });
   }
 
   try {
-    // Safely call Polar API — checkout_id is validated above
-    const response = await fetch(`https://api.polar.sh/v1/checkouts/${checkout_id}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${polarToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    // 1. Check local / Supabase DB first
+    let record = sponsorshipId ? await getSponsorshipById(sponsorshipId) : null;
+    if (!record && paymentId) {
+      record = await getSponsorshipByPaymentId(paymentId);
+    }
+    if (!record && !sponsorshipId && paymentId) {
+      // In case paymentId is actually the sponsorshipId
+      record = await getSponsorshipById(paymentId);
+    }
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`Polar API Error (${response.status}): ${errorText}`);
-      // Return a generic error — don't leak Polar API details to clients
-      return res.status(response.status === 404 ? 404 : 502).json({
-        error: response.status === 404 ? 'Checkout session not found' : 'Payment provider error',
+    // 2. If record is already ACTIVE/PAID, return immediately (Webhook confirmed it)
+    if (record && record.ad_status === 'ACTIVE' && record.payment_status === 'PAID') {
+      return res.status(200).json({
+        payment_success: true,
+        status: 'ACTIVE',
+        sponsorshipId: record.id,
+        placement: record.placement,
+        tier: record.tier,
+        companyName: record.company_name,
+        description: record.description,
+        siteUrl: record.site_url,
+        logoUrl: record.logo_url,
       });
     }
 
-    const session = await response.json();
+    // 3. If Dodo API key is configured, verify with Dodo Payments server-side
+    const dodoApiKey = process.env.DODO_PAYMENTS_API_KEY;
+    const baseUrl =
+      process.env.DODO_PAYMENTS_ENVIRONMENT === 'test'
+        ? 'https://test.dodopayments.com'
+        : 'https://live.dodopayments.com';
 
-    // Only confirm if Polar reports payment as confirmed
-    const isConfirmed = session.status === 'confirmed' || session.status === 'succeeded';
+    const checkId = paymentId || record?.dodo_checkout_id || record?.dodo_payment_id;
 
-    if (!isConfirmed) {
-      return res.status(200).json({ payment_success: false });
-    }
+    if (dodoApiKey && checkId) {
+      // Check Dodo Payments API
+      let response = await fetch(`${baseUrl}/payments/${checkId}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${dodoApiKey}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-    // Extract custom fields values (fuzzy key matching for flexibility)
-    const customData: Record<string, string> = session.custom_field_data || {};
+      if (response.status === 404) {
+        response = await fetch(`${baseUrl}/checkouts/${checkId}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${dodoApiKey}`,
+            'Content-Type': 'application/json',
+          },
+        });
+      }
 
-    const getFuzzyKey = (keywords: string[]): string | null => {
-      for (const k of Object.keys(customData)) {
-        const lowerK = k.toLowerCase();
-        if (keywords.some(kw => lowerK.includes(kw))) {
-          return String(customData[k]);
+      if (response.ok) {
+        const session = await response.json();
+        const status = String(session.status || session.payment_status || '').toLowerCase();
+        const isConfirmed =
+          status === 'succeeded' || status === 'successful' || status === 'completed';
+
+        if (isConfirmed) {
+          // Activate in database
+          const targetTier = record?.tier || (session.metadata?.tier as string) || 'diamond';
+          const durationDays = getDurationDaysForTier(targetTier);
+          const now = new Date();
+          const startsAt = now.toISOString();
+          const expiresAt = new Date(now.getTime() + durationDays * 24 * 60 * 60 * 1000).toISOString();
+
+          const targetId = record?.id || (session.metadata?.sponsorship_id as string);
+          if (targetId) {
+            record = await updateSponsorshipRecord(targetId, {
+              payment_status: 'PAID',
+              ad_status: 'ACTIVE',
+              dodo_payment_id: session.payment_id || checkId,
+              starts_at: startsAt,
+              expires_at: expiresAt,
+            });
+          }
+
+          return res.status(200).json({
+            payment_success: true,
+            status: 'ACTIVE',
+            sponsorshipId: record?.id || targetId,
+            placement: record?.placement || session.metadata?.placement,
+            tier: record?.tier || session.metadata?.tier,
+            companyName: record?.company_name || session.customer?.name || 'New Sponsor',
+            description: record?.description || 'Supporting open-source UI transitions on Amicro.',
+            siteUrl: record?.site_url || 'https://amicro.dev',
+            logoUrl: record?.logo_url,
+          });
         }
       }
-      return null;
-    };
-
-    // Safely extract, sanitize, and cap field lengths
-    const companyName = (getFuzzyKey(['company', 'brand', 'name']) || 'New Sponsor').slice(0, 60);
-    const description = (getFuzzyKey(['description', 'tagline', 'text']) || 'Advertise your product here.').slice(0, 100);
-    const rawSiteUrl = getFuzzyKey(['url', 'website', 'redirect', 'site']) || 'https://polar.sh';
-
-    // Validate the URL — only allow http/https
-    let siteUrl = 'https://polar.sh';
-    try {
-      const parsed = new URL(rawSiteUrl.startsWith('http') ? rawSiteUrl : `https://${rawSiteUrl}`);
-      if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
-        siteUrl = parsed.href;
-      }
-    } catch {
-      // Keep fallback
     }
 
+    // 4. Handle simulated test flow ONLY in non-production local development when keys are not configured
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
+    const isSimulated = query.simulated === 'true';
+    if (!isProduction && !dodoApiKey && isSimulated && record) {
+      const durationDays = getDurationDaysForTier(record.tier);
+      const now = new Date();
+      record = await updateSponsorshipRecord(record.id, {
+        payment_status: 'PAID',
+        ad_status: 'ACTIVE',
+        starts_at: now.toISOString(),
+        expires_at: new Date(now.getTime() + durationDays * 24 * 60 * 60 * 1000).toISOString(),
+      });
+
+      return res.status(200).json({
+        payment_success: true,
+        status: 'ACTIVE',
+        sponsorshipId: record?.id,
+        placement: record?.placement,
+        tier: record?.tier,
+        companyName: record?.company_name,
+        description: record?.description,
+        siteUrl: record?.site_url,
+        logoUrl: record?.logo_url,
+        simulated: true,
+      });
+    }
+
+    // Still pending
     return res.status(200).json({
-      payment_success: true,
-      companyName,
-      description,
-      siteUrl,
+      payment_success: false,
+      status: record?.payment_status || 'PENDING_PAYMENT',
+      sponsorshipId: record?.id,
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';

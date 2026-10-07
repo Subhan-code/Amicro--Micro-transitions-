@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { motion } from 'motion/react';
 
 interface HeatmapNode {
   day: string;
@@ -6,12 +7,14 @@ interface HeatmapNode {
 }
 
 const HEATMAP_DATA: HeatmapNode[] = [
-  { day: 'Mon', hours: [10, 40, 80, 50, 90, 30, 60] },
-  { day: 'Tue', hours: [30, 60, 90, 70, 40, 80, 20] },
-  { day: 'Wed', hours: [50, 70, 30, 80, 60, 90, 40] },
-  { day: 'Thu', hours: [20, 80, 60, 40, 90, 50, 70] },
-  { day: 'Fri', hours: [60, 90, 70, 90, 50, 30, 80] },
+  { day: 'Mon', hours: [14, 38, 72, 54, 88, 32, 58] },
+  { day: 'Tue', hours: [28, 56, 84, 68, 42, 76, 24] },
+  { day: 'Wed', hours: [48, 68, 34, 78, 62, 92, 44] },
+  { day: 'Thu', hours: [22, 76, 58, 44, 94, 52, 68] },
+  { day: 'Fri', hours: [58, 88, 66, 84, 48, 36, 74] },
 ];
+
+const TIME_SLOTS = ['00h', '04h', '08h', '12h', '16h', '20h', '24h'];
 
 interface MonoRoundedHeatmapChartProps {
   theme?: 'dark' | 'light';
@@ -20,51 +23,59 @@ interface MonoRoundedHeatmapChartProps {
 
 export function MonoRoundedHeatmapChart({ theme = 'dark', compact = false }: MonoRoundedHeatmapChartProps) {
   const isDark = theme === 'dark';
+  const [hoveredCell, setHoveredCell] = useState<{ day: string; time: string; val: number } | null>(null);
 
   return (
-    <div
-      className={`relative w-full rounded-[24px] transition-all duration-300 group flex flex-col justify-between overflow-hidden p-4 sm:p-5 ${
-        compact ? 'h-[220px] sm:h-[268px]' : 'min-h-[290px]'
+    <motion.div
+      initial={{ opacity: 0, scale: 0.98, y: 6 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      className={`relative w-full rounded-3xl transition-all duration-300 group flex flex-col justify-between overflow-hidden p-3.5 sm:p-4 ${
+        compact ? 'aspect-[16/10] min-h-[220px] w-full' : 'min-h-[290px]'
       } ${
-        isDark
-          ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]'
-          : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-neutral-100 text-black hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)]'
+        isDark ? 'bg-[#141414] border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:border-white/20' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-neutral-200 text-black hover:border-neutral-300'
       }`}
     >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-1">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className={`text-xs font-semibold tracking-wider uppercase ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
-              Matrix Heatmap
-            </span>
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-mono bg-white/10 text-white border border-white/20">
-              Activity
-            </span>
+      {/* Metric Header */}
+      <div className="flex items-center justify-between mb-1.5">
+        <div className="flex items-baseline gap-2">
+          <div className="text-xl sm:text-2xl font-bold tracking-tight tabular-nums font-sans">
+            {hoveredCell ? `${hoveredCell.val}%` : '58%'}
           </div>
-          <div className="text-xl font-bold tracking-tight tabular-nums mt-0.5 font-sans">
-            35 Nodes <span className="text-xs font-normal opacity-70">mapped</span>
-          </div>
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-mono bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            {hoveredCell ? `${hoveredCell.day} ${hoveredCell.time}` : 'Peak 94% (16h UTC)'}
+          </span>
+        </div>
+
+        <div className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-mono ${
+          isDark ? 'bg-white/5 text-neutral-400' : 'bg-neutral-100 text-neutral-600'
+        }`}>
+          35 Windows
         </div>
       </div>
 
       {/* Main Stage Matrix Grid */}
-      <div className={`relative w-full flex-1 rounded-[14px] overflow-hidden p-3 transition-colors duration-300 flex flex-col justify-center gap-1.5 ${
+      <div className={`relative w-full flex-1 rounded-[14px] overflow-hidden p-2.5 sm:p-3 transition-colors duration-300 flex flex-col justify-between gap-1.5 sm:gap-2 min-h-0 ${
         isDark ? 'bg-[#131313]' : 'bg-[#f4f4f6]'
       }`}>
         {HEATMAP_DATA.map((row, rIdx) => (
-          <div key={rIdx} className="flex items-center justify-between gap-2 max-w-[280px] mx-auto w-full">
+          <div key={rIdx} className="flex items-center justify-between gap-2.5 w-full">
             <span className={`text-[10px] font-mono w-7 shrink-0 ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
               {row.day}
             </span>
-            <div className="flex-1 flex items-center justify-between gap-1.5">
+            <div className="flex-1 flex items-center justify-between gap-1.5 sm:gap-2">
               {row.hours.map((val, cIdx) => {
-                const opacity = val / 100;
+                const opacity = Math.max(0.08, val / 100);
+                const isHovered = hoveredCell?.day === row.day && hoveredCell?.time === TIME_SLOTS[cIdx];
+
                 return (
                   <div
                     key={cIdx}
-                    title={`Activity: ${val}%`}
-                    className="aspect-square flex-1 rounded-[4px] sm:rounded-[6px] transition-all hover:scale-110 cursor-pointer"
+                    onMouseEnter={() => setHoveredCell({ day: row.day, time: TIME_SLOTS[cIdx], val })}
+                    onMouseLeave={() => setHoveredCell(null)}
+                    className={`aspect-square flex-1 rounded-[4px] sm:rounded-[6px] transition-all cursor-pointer ${
+                      isHovered ? 'scale-125 z-10 shadow-md ring-2 ring-white/50' : 'hover:scale-110'
+                    }`}
                     style={{
                       backgroundColor: isDark ? `rgba(255,255,255,${opacity})` : `rgba(9,9,11,${opacity})`,
                     }}
@@ -75,12 +86,6 @@ export function MonoRoundedHeatmapChart({ theme = 'dark', compact = false }: Mon
           </div>
         ))}
       </div>
-
-      {/* Footer */}
-      <div className="flex items-center justify-between mt-3 pt-1 border-t border-white/5 text-[11px] font-mono">
-        <span className={isDark ? 'text-neutral-400' : 'text-neutral-600'}>Rounded Node Cells</span>
-        <span className={isDark ? 'text-white font-medium' : 'text-black font-medium'}>7x5 Density Grid</span>
-      </div>
-    </div>
+    </motion.div>
   );
 }

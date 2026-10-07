@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "loader-morphing",
+  "type": "registry:ui",
+  "title": "Loader Morphing",
+  "description": "Loader Morphing loading animation.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/loading/loader-morphing.tsx",
+      "type": "registry:ui",
+      "target": "components/amicro/loader-morphing.tsx",
+      "content": "\"use client\";\nimport * as React from \"react\";\nimport { motion, HTMLMotionProps } from \"motion/react\";\n\nexport interface LoaderMorphingProps\n  extends Omit<HTMLMotionProps<\"div\">, \"children\"> {\n  size?: number;\n  color?: string;\n  duration?: number;\n}\n\nexport function LoaderMorphing({\n  className = \"\",\n  size = 40,\n  color = \"currentColor\",\n  duration = 2,\n  ...props\n}: LoaderMorphingProps) {\n  return (\n    <motion.div\n      className={className}\n      style={{\n        width: size,\n        height: size,\n        backgroundColor: color,\n        display: \"inline-block\",\n      }}\n      animate={{\n        borderRadius: [\"20%\", \"50%\", \"20%\", \"50%\", \"20%\"],\n        rotate: [0, 90, 180, 270, 360],\n        scale: [1, 1.2, 1, 1.2, 1],\n      }}\n      transition={{\n        duration,\n        ease: \"easeInOut\",\n        repeat: Infinity,\n      }}\n      {...props}\n    />\n  );\n}\n"
+    }
+  ]
+}

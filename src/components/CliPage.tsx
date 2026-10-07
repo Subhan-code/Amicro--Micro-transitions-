@@ -1,24 +1,33 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Copy, Check, ChevronDown, ArrowLeft } from 'lucide-react';
 import { useWebHaptics } from '../hooks/useWebHaptics';
+import { SponsorSection, SponsorItem } from './SponsorSection';
+import { RegistryMode, getStoredRegistryMode, setStoredRegistryMode } from '../utils/registryPreference';
 
 interface CliPageProps {
   theme: 'dark' | 'light';
   onNavigateHome: () => void;
+  sponsors?: SponsorItem[];
+  checkoutUrl?: string;
+  onNavigateSponsors?: () => void;
 }
 
-export function CliPage({ theme, onNavigateHome }: CliPageProps) {
-  const [copiedText, setCopiedText] = useState<string | null>(null);
-  const [faqOpen, setFaqOpen] = useState<Record<number, boolean>>({});
+export function CliPage({ theme, sponsors, checkoutUrl, onNavigateSponsors }: CliPageProps) {
+  const [registryMode, setRegistryMode] = useState<RegistryMode>(getStoredRegistryMode());
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const { trigger: triggerHaptic } = useWebHaptics();
+
+  const handleModeSwitch = (mode: RegistryMode) => {
+    triggerHaptic('light');
+    setRegistryMode(mode);
+    setStoredRegistryMode(mode);
+  };
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text)
       .then(() => {
         triggerHaptic('light');
-        setCopiedText(id);
-        setTimeout(() => setCopiedText(null), 2000);
+        setCopiedId(id);
+        setTimeout(() => setCopiedId(null), 1500);
       })
       .catch((err) => {
         triggerHaptic('error');
@@ -26,198 +35,300 @@ export function CliPage({ theme, onNavigateHome }: CliPageProps) {
       });
   };
 
-  const toggleFaq = (index: number) => {
-    setFaqOpen(prev => ({
-      ...prev,
-      [index]: !prev[index]
-    }));
-  };
-
-  const faqs = [
-    {
-      q: "Does Amicro require complex configuration?",
-      a: "No! Amicro is designed to be plug-and-play. It works seamlessly with Vite, Next.js, and standard React configurations. The CLI sets up paths automatically so components compile cleanly."
-    },
-    {
-      q: "How does this benefit my bundle size?",
-      a: "Amicro CLI downloads the raw TSX component code directly into your project. If you only use one component, your build bundle size only includes that single component's code—zero library wrapper overhead."
-    },
-    {
-      q: "Can I customize the animations after CLI installation?",
-      a: "Yes! Since the raw source code of the component is written straight into your workspace, you have full ownership. You can easily adjust framer-motion settings, colors, and tailwind classes."
-    },
-    {
-      q: "Does it support React Server Components (RSC)?",
-      a: "Yes. The CLI adds the \"use client\" directive at the top of motion components where interactivity is required, making them fully compatible with server-rendered React frameworks."
-    }
-  ];
+  const componentsJsonText = `{\n  "registries": {\n    "@amicro": "https://amicro.vercel.app/r/{name}.json"\n  }\n}`;
 
   const isDark = theme === 'dark';
 
   return (
-    <div className={`w-full min-h-dvh transition-colors duration-300 pb-20 ${isDark ? 'bg-[#121212] text-white' : 'bg-[#f8f9fa] text-black'}`}>
-      
-      {/* Mini Breadcrumb Navbar */}
-      <div className="w-full max-w-[1240px] mx-auto px-6 pt-6">
-        <button 
-          onClick={onNavigateHome}
-          className={`flex items-center gap-2 text-[13px] font-medium transition-colors cursor-pointer border-0 bg-transparent p-0 ${isDark ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black'}`}
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Components
-        </button>
-      </div>
-
-      {/* Hero Section */}
-      <section className="w-full max-w-[1240px] mx-auto px-6 pt-12 pb-16 text-center flex flex-col items-center">
-        <h1 className={`text-[36px] sm:text-[54px] font-bold leading-[1.1] tracking-tight max-w-[850px] mb-6 ${isDark ? 'text-white' : 'text-black'}`}>
-          Amicro CLI
-        </h1>
-
-        <p className={`text-[16px] sm:text-[18px] leading-[26px] max-w-[620px] mb-10 ${isDark ? 'text-neutral-400' : 'text-neutral-600'}`}>
-          Add beautiful micro-interactions and seamless transitions to your React website with a single CLI command. Open source and zero runtime configuration needed.
-        </p>
-
-        {/* Hero Code Snippet */}
-        <div className={`relative flex items-center justify-between gap-4 p-4 pl-5 rounded-2xl border w-full max-w-[480px] shadow-sm mb-8 ${
-          isDark 
-            ? 'bg-[#181818] border-neutral-800 text-white' 
-            : 'bg-white border-neutral-200 text-black'
-        }`}>
-          <div className="flex items-center gap-2.5 min-w-0">
-            <span className={isDark ? 'text-neutral-500' : 'text-neutral-400'}>$</span>
-            <code className="text-[14px] font-mono select-all truncate font-medium">npx @subhanhq/amicro@latest add</code>
-          </div>
-          <button 
-            onClick={() => copyToClipboard('npx @subhanhq/amicro@latest add', 'hero-cli')}
-            className={`p-2 rounded-lg cursor-pointer shrink-0 transition-colors border-0 ${
-              isDark ? 'bg-neutral-800/80 hover:bg-neutral-700 text-neutral-300' : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-700'
-            }`}
-            aria-label="Copy installation command"
-          >
-            {copiedText === 'hero-cli' ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-          </button>
-        </div>
-      </section>
-
-      {/* Installation Guide */}
-      <section className="w-full max-w-[700px] mx-auto px-6 py-12">
-        <h2 className="text-[24px] font-bold tracking-tight mb-8">Installation</h2>
-        
-        <div className="flex flex-col gap-8">
-          {/* Step 1 */}
-          <div className="flex flex-col gap-3">
-            <h3 className="text-[16px] font-semibold">1. Initialize Amicro Configuration</h3>
-            <p className={`text-[14px] ${isDark ? 'text-neutral-400' : 'text-neutral-600'}`}>
-              Run the initialization command to detect your workspace setup and install peer dependencies (`motion/react` and `lucide-react`).
-            </p>
-            <div className={`relative flex items-center justify-between gap-4 p-4 pl-5 rounded-xl border font-mono ${
-              isDark ? 'bg-[#181818] border-neutral-800 text-white' : 'bg-white border-neutral-200 text-black'
-            }`}>
-              <code className="text-[13.5px] font-mono">npx @subhanhq/amicro@latest init</code>
-              <button 
-                onClick={() => copyToClipboard('npx @subhanhq/amicro@latest init', 'init-cli')}
-                className={`p-1.5 rounded-lg cursor-pointer border-0 transition-colors ${
-                  isDark ? 'bg-neutral-800/80 hover:bg-neutral-700 text-neutral-350' : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-650'
-                }`}
-              >
-                {copiedText === 'init-cli' ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-              </button>
-            </div>
-          </div>
-
-          {/* Step 2 */}
-          <div className="flex flex-col gap-3">
-            <h3 className="text-[16px] font-semibold">2. Add Component</h3>
-            <p className={`text-[14px] ${isDark ? 'text-neutral-400' : 'text-neutral-600'}`}>
-              Install any button component directly into your local codebase. The TSX code is written directly to your configuration folder (default `src/components/ui/`).
-            </p>
-            <div className={`relative flex items-center justify-between gap-4 p-4 pl-5 rounded-xl border font-mono ${
-              isDark ? 'bg-[#181818] border-neutral-800 text-white' : 'bg-white border-neutral-200 text-black'
-            }`}>
-              <code className="text-[13.5px] font-mono">npx @subhanhq/amicro@latest add download-button</code>
-              <button 
-                onClick={() => copyToClipboard('npx @subhanhq/amicro@latest add download-button', 'add-cli')}
-                className={`p-1.5 rounded-lg cursor-pointer border-0 transition-colors ${
-                  isDark ? 'bg-neutral-800/80 hover:bg-neutral-700 text-neutral-350' : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-650'
-                }`}
-              >
-                {copiedText === 'add-cli' ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="w-full max-w-[700px] mx-auto px-6 py-12">
-        <h2 className="text-[24px] font-bold tracking-tight mb-8">FAQ</h2>
-
-        <div className="flex flex-col gap-4">
-          {faqs.map((faq, idx) => (
-            <div 
-              key={idx}
-              className={`rounded-xl border overflow-hidden transition-colors ${
-                isDark ? 'border-neutral-800 bg-[#181818]' : 'border-neutral-200 bg-white'
-              }`}
-            >
-              <button
-                onClick={() => toggleFaq(idx)}
-                className={`w-full flex items-center justify-between p-5 font-semibold text-left cursor-pointer transition-colors border-0 bg-transparent ${
-                  isDark ? 'hover:bg-neutral-800/40 text-white' : 'hover:bg-neutral-50 text-black'
-                }`}
-                aria-expanded={faqOpen[idx] || false}
-              >
-                <span className="pr-4">{faq.q}</span>
-                <ChevronDown className={`w-4 h-4 text-neutral-400 shrink-0 transition-transform duration-300 ${
-                  faqOpen[idx] ? 'rotate-180' : ''
-                }`} />
-              </button>
-
-              <AnimatePresence initial={false}>
-                {faqOpen[idx] && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2, ease: 'easeInOut' }}
-                  >
-                    <div className={`p-5 pt-0 text-[13.5px] leading-[22px] border-t ${
-                      isDark ? 'border-neutral-800/60 text-neutral-400' : 'border-neutral-100 text-neutral-600'
-                    }`}>
-                      {faq.a}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* CTA Bottom Section */}
-      <section className="w-full max-w-[700px] mx-auto px-6 py-8">
-        <div className={`relative rounded-3xl p-8 text-center flex flex-col items-center border ${
-          isDark 
-            ? 'bg-[#181818] border-neutral-800' 
-            : 'bg-white border-neutral-200'
-        }`}>
-          <h2 className="text-[20px] font-bold tracking-tight mb-2">Ready to explore transitions?</h2>
-          <p className={`text-[14px] mb-6 ${isDark ? 'text-neutral-400' : 'text-neutral-600'}`}>
-            Explore our collection of production-ready components.
+    <div className={`w-full min-h-dvh pb-24 transition-colors select-none ${
+      isDark ? 'bg-[#08080a] text-[#ededed] selection:bg-neutral-800' : 'bg-[#FAFAFA] text-neutral-900 selection:bg-neutral-200'
+    }`}>
+      {/* Header, left-aligned */}
+      <section className="w-full max-w-[960px] mx-auto px-4 sm:px-6 pt-16 pb-6">
+        <div className="flex w-full flex-col gap-[4px]">
+          <p className={`text-[16px] leading-[22px] font-medium tracking-[-0.24px] m-0 ${
+            isDark ? 'text-white/40' : 'text-neutral-500'
+          }`}>
+            Install
           </p>
+          <h1 className={`text-[24px] leading-[30px] font-semibold tracking-[-0.6px] m-0 ${
+            isDark ? 'text-[#fafafa]' : 'text-neutral-900'
+          }`}>
+            CLI
+          </h1>
+        </div>
 
+        {/* Segmented control under the title */}
+        <div className="mt-4 flex items-center gap-1">
           <button
-            onClick={onNavigateHome}
-            className={`inline-flex items-center justify-center h-[40px] px-6 rounded-full text-[13px] font-semibold cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98] border-0 ${
-              isDark ? 'bg-white text-black hover:bg-neutral-200' : 'bg-neutral-900 text-white hover:bg-neutral-800'
+            type="button"
+            onClick={() => handleModeSwitch('shadcn')}
+            className={`px-3 py-1.5 rounded-[8px] text-[14px] font-medium transition-colors cursor-pointer border-0 ${
+              registryMode === 'shadcn'
+                ? isDark
+                  ? 'bg-white/[0.08] text-[#fafafa]'
+                  : 'bg-white text-neutral-900 shadow-xs border border-neutral-200/60'
+                : isDark
+                  ? 'bg-transparent text-[#a3a3a3] hover:text-white'
+                  : 'bg-transparent text-neutral-500 hover:text-neutral-900'
             }`}
           >
-            Explore Components
+            shadcn/ui
+          </button>
+          
+          <button
+            type="button"
+            onClick={() => handleModeSwitch('amicro')}
+            className={`px-3 py-1.5 rounded-[8px] text-[14px] font-medium transition-colors cursor-pointer border-0 ${
+              registryMode === 'amicro'
+                ? isDark
+                  ? 'bg-white/[0.08] text-[#fafafa]'
+                  : 'bg-white text-neutral-900 shadow-xs border border-neutral-200/60'
+                : isDark
+                  ? 'bg-transparent text-[#a3a3a3] hover:text-white'
+                  : 'bg-transparent text-neutral-500 hover:text-neutral-900'
+            }`}
+          >
+            @subhanhq/amicro
           </button>
         </div>
       </section>
 
+      {/* Install Block Shell */}
+      <section className="w-full max-w-[960px] mx-auto px-4 sm:px-6">
+        {/* Shell */}
+        <div className={`relative overflow-hidden rounded-[16px] outline -outline-offset-1 ${
+          isDark ? 'outline-white/[0.03]' : 'outline-black/[0.04]'
+        }`}>
+          {/* Grid inside shell */}
+          <div className="grid grid-cols-1 gap-3">
+            {registryMode === 'shadcn' ? (
+              <>
+                {/* 1. Registry */}
+                <div className={`relative flex flex-col gap-[20px] overflow-hidden rounded-[16px] px-[20px] pt-[18px] pb-[20px] transition-colors ${
+                  isDark
+                    ? 'bg-white/[0.08] hover:bg-white/[0.11]'
+                    : 'bg-white hover:bg-neutral-50/80 border border-neutral-200/80'
+                }`}>
+                  <p className={`text-[16px] leading-[22px] font-medium tracking-[-0.24px] m-0 ${
+                    isDark ? 'text-[#f5f5f5]' : 'text-neutral-900'
+                  }`}>
+                    Registry
+                  </p>
+                  <div className="flex items-center justify-between gap-[16px]">
+                    <code className={`text-[14px] leading-[20px] font-medium font-mono select-all truncate ${
+                      isDark ? 'text-white/80' : 'text-neutral-700'
+                    }`}>
+                      npx shadcn@latest add @amicro/download-button
+                    </code>
+                    <button
+                      type="button"
+                      onClick={() => copyToClipboard('npx shadcn@latest add @amicro/download-button', 'cmd-reg')}
+                      className={`h-[36px] shrink-0 rounded-[8px] px-[16px] text-[14px] leading-[18px] font-medium transition-colors flex items-center justify-center cursor-pointer border-0 ${
+                        isDark
+                          ? 'bg-white/[0.08] text-[#fafafa] hover:bg-white/[0.14]'
+                          : 'bg-black/[0.05] text-neutral-800 hover:bg-black/[0.10]'
+                      }`}
+                    >
+                      {copiedId === 'cmd-reg' ? 'Copied' : 'Copy'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* 2. Endpoint */}
+                <div className={`relative flex flex-col gap-[20px] overflow-hidden rounded-[16px] px-[20px] pt-[18px] pb-[20px] transition-colors ${
+                  isDark
+                    ? 'bg-white/[0.08] hover:bg-white/[0.11]'
+                    : 'bg-white hover:bg-neutral-50/80 border border-neutral-200/80'
+                }`}>
+                  <p className={`text-[16px] leading-[22px] font-medium tracking-[-0.24px] m-0 ${
+                    isDark ? 'text-[#f5f5f5]' : 'text-neutral-900'
+                  }`}>
+                    Endpoint
+                  </p>
+                  <div className="flex items-center justify-between gap-[16px]">
+                    <code className={`text-[14px] leading-[20px] font-medium font-mono select-all truncate ${
+                      isDark ? 'text-white/80' : 'text-neutral-700'
+                    }`}>
+                      npx shadcn@latest add https://amicro.vercel.app/r/download-button.json
+                    </code>
+                    <button
+                      type="button"
+                      onClick={() => copyToClipboard('npx shadcn@latest add https://amicro.vercel.app/r/download-button.json', 'cmd-endpoint')}
+                      className={`h-[36px] shrink-0 rounded-[8px] px-[16px] text-[14px] leading-[18px] font-medium transition-colors flex items-center justify-center cursor-pointer border-0 ${
+                        isDark
+                          ? 'bg-white/[0.08] text-[#fafafa] hover:bg-white/[0.14]'
+                          : 'bg-black/[0.05] text-neutral-800 hover:bg-black/[0.10]'
+                      }`}
+                    >
+                      {copiedId === 'cmd-endpoint' ? 'Copied' : 'Copy'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* 3. components.json */}
+                <div className={`relative flex flex-col gap-[20px] overflow-hidden rounded-[16px] px-[20px] pt-[18px] pb-[20px] transition-colors ${
+                  isDark
+                    ? 'bg-white/[0.08] hover:bg-white/[0.11]'
+                    : 'bg-white hover:bg-neutral-50/80 border border-neutral-200/80'
+                }`}>
+                  <p className={`text-[16px] leading-[22px] font-medium tracking-[-0.24px] m-0 ${
+                    isDark ? 'text-[#f5f5f5]' : 'text-neutral-900'
+                  }`}>
+                    components.json
+                  </p>
+                  <div className="flex items-start justify-between gap-[16px]">
+                    <pre className={`text-[14px] leading-[20px] font-medium font-mono select-all m-0 overflow-x-auto whitespace-pre ${
+                      isDark ? 'text-white/80' : 'text-neutral-700'
+                    }`}>
+                      {componentsJsonText}
+                    </pre>
+                    <button
+                      type="button"
+                      onClick={() => copyToClipboard(componentsJsonText, 'cmd-json')}
+                      className={`h-[36px] shrink-0 rounded-[8px] px-[16px] text-[14px] leading-[18px] font-medium transition-colors flex items-center justify-center cursor-pointer border-0 ${
+                        isDark
+                          ? 'bg-white/[0.08] text-[#fafafa] hover:bg-white/[0.14]'
+                          : 'bg-black/[0.05] text-neutral-800 hover:bg-black/[0.10]'
+                      }`}
+                    >
+                      {copiedId === 'cmd-json' ? 'Copied' : 'Copy'}
+                    </button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* 1. Install */}
+                <div className={`relative flex flex-col gap-[20px] overflow-hidden rounded-[16px] px-[20px] pt-[18px] pb-[20px] transition-colors ${
+                  isDark
+                    ? 'bg-white/[0.08] hover:bg-white/[0.11]'
+                    : 'bg-white hover:bg-neutral-50/80 border border-neutral-200/80'
+                }`}>
+                  <p className={`text-[16px] leading-[22px] font-medium tracking-[-0.24px] m-0 ${
+                    isDark ? 'text-[#f5f5f5]' : 'text-neutral-900'
+                  }`}>
+                    Install
+                  </p>
+                  <div className="flex items-center justify-between gap-[16px]">
+                    <code className={`text-[14px] leading-[20px] font-medium font-mono select-all truncate ${
+                      isDark ? 'text-white/80' : 'text-neutral-700'
+                    }`}>
+                      npm i @subhanhq/amicro
+                    </code>
+                    <button
+                      type="button"
+                      onClick={() => copyToClipboard('npm i @subhanhq/amicro', 'cmd-npm')}
+                      className={`h-[36px] shrink-0 rounded-[8px] px-[16px] text-[14px] leading-[18px] font-medium transition-colors flex items-center justify-center cursor-pointer border-0 ${
+                        isDark
+                          ? 'bg-white/[0.08] text-[#fafafa] hover:bg-white/[0.14]'
+                          : 'bg-black/[0.05] text-neutral-800 hover:bg-black/[0.10]'
+                      }`}
+                    >
+                      {copiedId === 'cmd-npm' ? 'Copied' : 'Copy'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* 2. Initialize */}
+                <div className={`relative flex flex-col gap-[20px] overflow-hidden rounded-[16px] px-[20px] pt-[18px] pb-[20px] transition-colors ${
+                  isDark
+                    ? 'bg-white/[0.08] hover:bg-white/[0.11]'
+                    : 'bg-white hover:bg-neutral-50/80 border border-neutral-200/80'
+                }`}>
+                  <p className={`text-[16px] leading-[22px] font-medium tracking-[-0.24px] m-0 ${
+                    isDark ? 'text-[#f5f5f5]' : 'text-neutral-900'
+                  }`}>
+                    Initialize
+                  </p>
+                  <div className="flex items-center justify-between gap-[16px]">
+                    <code className={`text-[14px] leading-[20px] font-medium font-mono select-all truncate ${
+                      isDark ? 'text-white/80' : 'text-neutral-700'
+                    }`}>
+                      npx @subhanhq/amicro@latest init
+                    </code>
+                    <button
+                      type="button"
+                      onClick={() => copyToClipboard('npx @subhanhq/amicro@latest init', 'cmd-init')}
+                      className={`h-[36px] shrink-0 rounded-[8px] px-[16px] text-[14px] leading-[18px] font-medium transition-colors flex items-center justify-center cursor-pointer border-0 ${
+                        isDark
+                          ? 'bg-white/[0.08] text-[#fafafa] hover:bg-white/[0.14]'
+                          : 'bg-black/[0.05] text-neutral-800 hover:bg-black/[0.10]'
+                      }`}
+                    >
+                      {copiedId === 'cmd-init' ? 'Copied' : 'Copy'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* 3. Add component */}
+                <div className={`relative flex flex-col gap-[20px] overflow-hidden rounded-[16px] px-[20px] pt-[18px] pb-[20px] transition-colors ${
+                  isDark
+                    ? 'bg-white/[0.08] hover:bg-white/[0.11]'
+                    : 'bg-white hover:bg-neutral-50/80 border border-neutral-200/80'
+                }`}>
+                  <p className={`text-[16px] leading-[22px] font-medium tracking-[-0.24px] m-0 ${
+                    isDark ? 'text-[#f5f5f5]' : 'text-neutral-900'
+                  }`}>
+                    Add component
+                  </p>
+                  <div className="flex items-center justify-between gap-[16px]">
+                    <code className={`text-[14px] leading-[20px] font-medium font-mono select-all truncate ${
+                      isDark ? 'text-white/80' : 'text-neutral-700'
+                    }`}>
+                      npx @subhanhq/amicro@latest add download-button
+                    </code>
+                    <button
+                      type="button"
+                      onClick={() => copyToClipboard('npx @subhanhq/amicro@latest add download-button', 'cmd-add')}
+                      className={`h-[36px] shrink-0 rounded-[8px] px-[16px] text-[14px] leading-[18px] font-medium transition-colors flex items-center justify-center cursor-pointer border-0 ${
+                        isDark
+                          ? 'bg-white/[0.08] text-[#fafafa] hover:bg-white/[0.14]'
+                          : 'bg-black/[0.05] text-neutral-800 hover:bg-black/[0.10]'
+                      }`}
+                    >
+                      {copiedId === 'cmd-add' ? 'Copied' : 'Copy'}
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Footnote under the shell */}
+        <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[14px] leading-[20px]">
+          <p className="text-neutral-500 m-0">
+            Registry resolves from amicro.vercel.app.
+          </p>
+          <a
+            href="https://amicro.vercel.app/r/download-button.json"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex cursor-pointer flex-shrink-0 items-center justify-center gap-[5px] text-blue-600 hover:text-blue-700 font-medium no-underline transition-colors focus:outline-none"
+          >
+            <span>View registry</span>
+            <span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="size-4">
+                <path d="M11.9985 4L4 11.9985M11.9985 4L4.00146 4.00146M11.9985 4L12 12" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+          </a>
+        </div>
+      </section>
+
+      {/* Sponsors Section preserved */}
+      {sponsors && sponsors.length > 0 && (
+        <div className="mt-16">
+          <SponsorSection
+            theme={theme}
+            sponsors={sponsors}
+            checkoutUrl={checkoutUrl || "https://polar.sh/checkout/polar_c_aJ9w76csnccSI8uNxJ6rIopDFzVFJkzobaGNC17YNtS"}
+            onNavigateSponsors={onNavigateSponsors}
+            triggerHaptic={triggerHaptic}
+          />
+        </div>
+      )}
     </div>
   );
 }

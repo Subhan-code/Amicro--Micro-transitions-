@@ -1,19 +1,22 @@
 import React, { useState, useMemo, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
-import { motion, AnimatePresence, animate } from 'motion/react';
-import { 
-  LayoutGrid, List, LayoutTemplate, ArrowDownAZ, Copy, Sun, Moon, Github, 
-  Terminal, Check, Cpu, Zap, Code, ShieldCheck, Sparkles, RefreshCw, Smartphone, 
-  ChevronRight, ChevronDown, Shield, Layers, HelpCircle, Palette, Activity, Menu, X,
-  Heart, Box, BarChart2
-} from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Copy, Check } from 'lucide-react';
 import { buttonsData } from './data/buttons';
 import { AnimatedButton } from './components/AnimatedButton';
 import { getComponentCode, ThemeToggleCode, getCardComponentCode } from './utils/codeGenerator';
-import { MapleLogo } from './components/MapleLogo';
-import { AppleSponsorShowcase } from './components/AppleSponsorShowcase';
 import { useWebHaptics } from './hooks/useWebHaptics';
 import { getComponentEntry } from './data/componentEntries';
 import { Analytics } from '@vercel/analytics/react';
+import { MinimalNavbar, NavItemKey } from './components/MinimalNavbar';
+import { HeroSection } from './components/HeroSection';
+import { CategoryPillBar, CatalogCategory } from './components/CategoryPillBar';
+import { SponsorSection } from './components/SponsorSection';
+import { CtaSection } from './components/CtaSection';
+import { MinimalFooter } from './components/MinimalFooter';
+import { SkeletonGrid } from './components/SkeletonGrid';
+import { StickySponsorBanner } from './components/StickySponsorBanner';
+import { HeroSponsorBar } from './components/HeroSponsorBar';
+import { SponsorSuccessModal } from './components/SponsorSuccessModal';
 
 // Loaders imports
 import { loaderGroups, LoaderConfig } from './data/loaders';
@@ -35,78 +38,72 @@ import { CardWheelFan } from './components/cards/CardWheelFan';
 import { CardCarousel } from './components/cards/CardCarousel';
 import { CardCoverFlow } from './components/cards/CardCoverFlow';
 import { CardTimeMachine } from './components/cards/CardTimeMachine';
-import { DitherChartsGrid } from './components/dither-charts/DitherChartsGrid';
 
 // Lazy load secondary subpages for optimal initial bundle performance
 const CliPage = lazy(() => import('./components/CliPage').then(m => ({ default: m.CliPage })));
 const SkillsPage = lazy(() => import('./components/SkillsPage').then(m => ({ default: m.SkillsPage })));
-const DitherChartsPage = lazy(() => import('./components/DitherChartsPage').then(m => ({ default: m.DitherChartsPage })));
 const MonoChartsPage = lazy(() => import('./components/MonoChartsPage').then(m => ({ default: m.MonoChartsPage })));
 const ThreeDPage = lazy(() => import('./components/ThreeDPage').then(m => ({ default: m.ThreeDPage })));
 const CssAnimationsPage = lazy(() => import('./components/CssAnimationsPage').then(m => ({ default: m.CssAnimationsPage })));
 const TextAnimationsPage = lazy(() => import('./components/TextAnimationsPage').then(m => ({ default: m.TextAnimationsPage })));
 const SponsorsPage = lazy(() => import('./components/SponsorsPage').then(m => ({ default: m.SponsorsPage })));
 const ChartDetailPage = lazy(() => import('./components/ChartDetailPage').then(m => ({ default: m.ChartDetailPage })));
+const BlogPage = lazy(() => import('./components/BlogPage').then(m => ({ default: m.BlogPage })));
+const MorphingShapesPage = lazy(() => import('./components/morphing/MorphingShapesPage').then(m => ({ default: m.MorphingShapesPage })));
+const SponsorOnboardingPage = lazy(() => import('./components/SponsorOnboardingPage').then(m => ({ default: m.SponsorOnboardingPage })));
+const SponsorSuccessPage = lazy(() => import('./components/SponsorSuccessPage').then(m => ({ default: m.SponsorSuccessPage })));
+const AdminSponsorsPage = lazy(() => import('./components/AdminSponsorsPage').then(m => ({ default: m.AdminSponsorsPage })));
+import { POLAR_DEFAULT_URL } from './data/tiers';
 
 type LayoutMode = 'list' | 'grid' | 'matrix';
 type SortMode = 'default' | 'alphabetical';
-type PageMode = 'home' | 'cli' | 'skills' | 'dither-charts' | '3d-page' | 'simple-comp' | 'mono-charts' | 'sponsors' | 'chart-detail' | 'css-animations' | 'text-animations';
-type CatalogTabType = 'buttons' | 'cards' | 'carousels' | 'loaders' | 'dither-charts' | 'simple-comp';
+type PageMode = 'home' | 'cli' | 'skills' | 'dither-charts' | '3d-page' | 'mono-charts' | 'sponsors' | 'chart-detail' | 'css-animations' | 'text-animations' | 'blog' | 'sponsor-onboarding' | 'sponsor-success' | 'admin-sponsors';
+type CatalogTabType = 'buttons' | 'morphing' | 'cards' | 'carousels' | 'loaders' | 'mono-charts' | 'anime' | '3d' | 'text-animations' | 'dither-charts';
 
 interface SponsorSlot {
   id: number;
   companyName: string;
   description: string;
   logoType?: string;
+  logoUrl?: string;
   siteUrl?: string;
   isAvailable: boolean;
+  tier?: 'diamond' | 'gold' | 'silver';
+  price?: string;
 }
 
 const tabLabels: Record<CatalogTabType, string> = {
   buttons: 'Buttons',
+  morphing: 'Morphing',
   cards: 'Card Spreads',
   carousels: '3D Carousels',
   loaders: 'Loaders',
+  'mono-charts': 'Mono Charts',
+  anime: 'Animations',
+  '3d': '3D',
+  'text-animations': 'Text Animations',
   'dither-charts': 'Dither Charts',
-  'simple-comp': 'Dither Charts',
 };
 
 const routeMap: Record<CatalogTabType, string> = {
   buttons: '/buttons',
+  morphing: '/morphing',
   cards: '/cards',
   carousels: '/carousels',
   loaders: '/loaders',
+  'mono-charts': '/mono-charts',
+  anime: '/animations',
+  '3d': '/3d',
+  'text-animations': '/text-animations',
   'dither-charts': '/dither-charts',
-  'simple-comp': '/dither-charts',
 };
 
-function LoadingFallback() {
+function LoadingFallback({ theme = 'dark' }: { theme?: 'dark' | 'light' }) {
   return (
-    <div className="w-full min-h-[50vh] flex flex-col items-center justify-center gap-3">
-      <div className="w-7 h-7 border-2 border-neutral-400 border-t-transparent rounded-full animate-spin" />
-      <span className="text-xs text-neutral-500 font-medium">Loading view...</span>
+    <div className="w-full py-8">
+      <SkeletonGrid count={6} theme={theme} />
     </div>
   );
-}
-
-function AnimatedNumber({ value }: { value: number | null }) {
-  const [displayValue, setDisplayValue] = useState(0);
-  const prevValueRef = useRef(0);
-
-  useEffect(() => {
-    if (value === null) return;
-    const startVal = prevValueRef.current;
-    const controls = animate(startVal, value, {
-      duration: 1.2,
-      ease: [0.16, 1, 0.3, 1], // easeOutExpo
-      onUpdate: (latest) => setDisplayValue(Math.round(latest)),
-      onComplete: () => { prevValueRef.current = value; }
-    });
-    return () => controls.stop();
-  }, [value]);
-
-  if (value === null) return null;
-  return <span className="tabular-nums">{displayValue.toLocaleString('en-US')}</span>;
 }
 
 export default function App() {
@@ -119,24 +116,28 @@ export default function App() {
   const [catalogTab, setCatalogTab] = useState<CatalogTabType>('buttons');
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
-  const POLAR_CHECKOUT_URL = "https://buy.polar.sh/polar_cl_kgaC0fUqnLvTlW7A7RrvGQRaHzmTKjezxWNaA19AyV4" as string;
+  const CHECKOUT_URL = POLAR_DEFAULT_URL;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [navMoreDropdownOpen, setNavMoreDropdownOpen] = useState(false);
-  const [componentsMenuOpen, setComponentsMenuOpen] = useState(false);
-  const componentsMenuRef = useRef<HTMLDivElement>(null);
-  const componentsCloseTimer = useRef<number | null>(null);
+  const [isScrolledPastHero, setIsScrolledPastHero] = useState(false);
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const { trigger: triggerHaptic } = useWebHaptics();
 
-  const openComponentsMenu = useCallback(() => {
-    if (componentsCloseTimer.current) window.clearTimeout(componentsCloseTimer.current);
-    setComponentsMenuOpen(true);
-    setNavMoreDropdownOpen(false);
-  }, []);
-
-  const scheduleCloseComponentsMenu = useCallback(() => {
-    if (componentsCloseTimer.current) window.clearTimeout(componentsCloseTimer.current);
-    componentsCloseTimer.current = window.setTimeout(() => setComponentsMenuOpen(false), 140);
-  }, []);
+  const handleNavigateToSponsors = useCallback(() => {
+    triggerHaptic('medium');
+    setCurrentPage('sponsors');
+    if (window.location.pathname !== '/sponsors' || window.location.hash !== '#sponsorship-tiers') {
+      window.history.pushState(null, '', '/sponsors#sponsorship-tiers');
+    }
+    const scrollToTiers = () => {
+      const elem = document.getElementById('sponsorship-tiers');
+      if (elem) {
+        elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    };
+    requestAnimationFrame(scrollToTiers);
+    setTimeout(scrollToTiers, 100);
+    setTimeout(scrollToTiers, 300);
+  }, [triggerHaptic]);
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -148,16 +149,30 @@ export default function App() {
     }
   }, [theme]);
 
+  // Auto-hiding scrollbar: adds .is-scrolling to html while scrolling, removes after 1s idle
+  const [isScrolled, setIsScrolled] = useState(false);
+
   useEffect(() => {
-    const onPointer = (e: MouseEvent) => {
-      if (!componentsMenuRef.current?.contains(e.target as Node)) {
-        setComponentsMenuOpen(false);
-      }
+    let scrollTimeout: ReturnType<typeof setTimeout>;
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+      setIsScrolledPastHero(window.scrollY > 380);
+      document.documentElement.classList.add('is-scrolling');
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        document.documentElement.classList.remove('is-scrolling');
+      }, 1000);
     };
-    document.addEventListener('mousedown', onPointer);
-    return () => document.removeEventListener('mousedown', onPointer);
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimeout);
+    };
   }, []);
-  const { trigger: triggerHaptic } = useWebHaptics();
+
+  const [successModalData, setSuccessModalData] = useState<{ sponsorshipId?: string; paymentId?: string }>({});
 
   const [sponsors, setSponsors] = useState<SponsorSlot[]>(() => {
     const defaultSponsors: SponsorSlot[] = [
@@ -168,10 +183,18 @@ export default function App() {
         logoType: 'maple',
         siteUrl: 'https://maple.dev/',
         isAvailable: false,
+        tier: 'diamond',
+        price: '$250/mo',
       },
-      { id: 2, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
-      { id: 3, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
-      { id: 4, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true },
+      { id: 2, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true, tier: 'diamond', price: '$250/mo' },
+      { id: 3, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true, tier: 'gold', price: '$150/mo' },
+      { id: 4, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true, tier: 'gold', price: '$150/mo' },
+      { id: 5, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true, tier: 'gold', price: '$150/mo' },
+      { id: 6, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true, tier: 'gold', price: '$150/mo' },
+      { id: 7, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true, tier: 'silver', price: '$99/mo' },
+      { id: 8, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true, tier: 'silver', price: '$99/mo' },
+      { id: 9, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true, tier: 'silver', price: '$99/mo' },
+      { id: 10, companyName: 'Available Slot', description: 'Advertise your product here.', isAvailable: true, tier: 'silver', price: '$99/mo' },
     ];
 
     if (typeof window !== 'undefined') {
@@ -179,10 +202,15 @@ export default function App() {
       if (cached) {
         try {
           const parsed = JSON.parse(cached);
-          if (parsed.length > 0) {
+          const hasTestArtifacts = Array.isArray(parsed) && parsed.some(
+            (s) => s.companyName === 'Polar Super Tool' || s.companyName?.toLowerCase().includes('asda')
+          );
+          if (hasTestArtifacts) {
+            localStorage.removeItem('amicro_sponsors');
+          } else if (Array.isArray(parsed) && parsed.length === defaultSponsors.length) {
             parsed[0] = defaultSponsors[0];
+            return parsed;
           }
-          return parsed;
         } catch (e) {
           console.error('Error parsing cached sponsors:', e);
         }
@@ -195,6 +223,25 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('amicro_sponsors', JSON.stringify(sponsors));
   }, [sponsors]);
+
+  // Fetch verified active sponsors from backend on load
+  const refreshSponsors = useCallback(async () => {
+    try {
+      const res = await fetch('/api/sponsors');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data.sponsors) && data.sponsors.length > 0) {
+          setSponsors(data.sponsors);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to load active sponsors:', err);
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshSponsors();
+  }, [refreshSponsors]);
 
   const [selectedChartId, setSelectedChartId] = useState<string | null>(null);
 
@@ -230,6 +277,38 @@ export default function App() {
         window.history.replaceState(null, '', cleanPath);
       }
 
+      const urlParams = new URLSearchParams(window.location.search);
+
+      // 1. Explicit Application Routes (MUST take precedence over dynamic component doc routes)
+      if (route.startsWith('sponsor/success')) {
+        setSelectedChartId(null);
+        setCurrentPage('sponsor-success');
+        return;
+      }
+
+      if (route.startsWith('admin/sponsors') || route === 'admin') {
+        setSelectedChartId(null);
+        setCurrentPage('admin-sponsors');
+        return;
+      }
+
+      if (
+        route.startsWith('sponsor-onboarding') ||
+        route.startsWith('sponsor/claim') ||
+        route.startsWith('sponsor-claim')
+      ) {
+        setSelectedChartId(null);
+        setCurrentPage('sponsor-onboarding');
+        return;
+      }
+
+      if (urlParams.has('checkout_id')) {
+        setSelectedChartId(null);
+        setCurrentPage('sponsor-onboarding');
+        return;
+      }
+
+      // 2. Dynamic Component Documentation / Detail Routes (e.g. /buttons/btn-1, /cards/card-arc-5, /components/success)
       if (route.includes('/')) {
         const parts = route.split('/').filter(Boolean);
         if (parts.length >= 2) {
@@ -247,18 +326,26 @@ export default function App() {
         setCurrentPage('cli');
       } else if (route.startsWith('skills')) {
         setCurrentPage('skills');
+      } else if (route.startsWith('blog') || route.startsWith('blogs')) {
+        setCurrentPage('blog');
+      } else if (route.startsWith('morphing') || route.startsWith('shapes') || route.startsWith('morph')) {
+        setCurrentPage('home');
+        setCatalogTab('morphing');
       } else if (route.startsWith('anime') || route.startsWith('css-animations') || route.startsWith('animations')) {
-        setCurrentPage('css-animations');
-      } else if (route.startsWith('mono-charts')) {
+        setCurrentPage('home');
+        setCatalogTab('anime');
+      } else if (route.startsWith('mono-charts') || route.startsWith('monocharts')) {
         setCurrentPage('mono-charts');
       } else if (route.startsWith('dither-charts') || route.startsWith('simple-comp')) {
-        setCurrentPage('dither-charts');
+        setCurrentPage('mono-charts');
       } else if (route.startsWith('3d')) {
-        setCurrentPage('3d-page');
+        setCurrentPage('home');
+        setCatalogTab('3d');
       } else if (route.startsWith('sponsors')) {
         setCurrentPage('sponsors');
       } else if (route.startsWith('text-animations')) {
-        setCurrentPage('text-animations');
+        setCurrentPage('home');
+        setCatalogTab('text-animations');
       } else if (route.startsWith('buttons')) {
         setCurrentPage('home');
         setCatalogTab('buttons');
@@ -273,6 +360,7 @@ export default function App() {
         setCatalogTab('loaders');
       } else {
         setCurrentPage('home');
+        setCatalogTab('buttons');
       }
     };
 
@@ -314,58 +402,62 @@ export default function App() {
       });
   }, []);
 
+  const toastTimeoutRef = useRef<number | null>(null);
+
   const showToast = useCallback((message: string) => {
-    setToastMessage(message);
-    setTimeout(() => {
+    let cleanMessage = message;
+    const lower = message.toLowerCase();
+    if (lower.includes('cli')) {
+      cleanMessage = 'CLI command copied';
+    } else if (lower.includes('copied')) {
+      cleanMessage = 'Copied to clipboard';
+    } else if (lower.includes('failed')) {
+      cleanMessage = 'Failed to copy';
+    } else if (lower.includes('theme')) {
+      cleanMessage = 'Theme updated';
+    }
+    setToastMessage(cleanMessage);
+    if (toastTimeoutRef.current) {
+      window.clearTimeout(toastTimeoutRef.current);
+    }
+    toastTimeoutRef.current = window.setTimeout(() => {
       setToastMessage(null);
-    }, 3000);
+    }, 1800);
   }, []);
 
-  // Listen for Polar checkout redirect parameter to dynamically apply paid sponsor slots
+  // Listen for checkout redirect parameter to dynamically handle paid sponsorships
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const paymentSuccess = params.get('payment_success');
-    const checkoutId = params.get('checkout_id');
-
-    if (paymentSuccess === 'true' && checkoutId) {
-      fetch(`/api/checkout-status?checkout_id=${checkoutId}`)
-        .then(async (res) => {
-          if (res.ok) {
-            const data = await res.json();
-            if (data.payment_success) {
-              setSponsors(prev => {
-                const firstAvailableIdx = prev.findIndex(s => s.isAvailable);
-                if (firstAvailableIdx !== -1) {
-                  const nextSponsors = [...prev];
-                  nextSponsors[firstAvailableIdx] = {
-                    id: prev[firstAvailableIdx].id,
-                    companyName: data.companyName,
-                    description: data.description,
-                    siteUrl: data.siteUrl.startsWith('http://') || data.siteUrl.startsWith('https://')
-                      ? data.siteUrl
-                      : `https://${data.siteUrl}`,
-                    isAvailable: false
-                  };
-                  return nextSponsors;
-                }
-                return prev;
-              });
-              showToast(`Sponsorship confirmed for ${data.companyName}!`);
-            }
-          }
-        })
-        .catch(err => console.error('Error fetching checkout status:', err))
-        .finally(() => {
-          window.history.replaceState({}, document.title, window.location.pathname);
-        });
+    if (window.location.pathname.startsWith('/sponsor/success')) {
+      return;
     }
-  }, [showToast]);
+    const params = new URLSearchParams(window.location.search);
+    const paymentSuccess = params.get('payment_success') === 'true' ||
+      params.get('status') === 'succeeded' ||
+      params.get('status') === 'successful' ||
+      params.get('status') === 'completed';
+    const paymentId = params.get('payment_id') || params.get('checkout_id') || params.get('id');
+    const sponsorshipId = params.get('sponsorship_id');
+
+    if (paymentSuccess || sponsorshipId || paymentId) {
+      if (paymentSuccess) {
+        setSuccessModalData({
+          sponsorshipId: sponsorshipId || undefined,
+          paymentId: paymentId || undefined,
+        });
+        setSuccessModalOpen(true);
+        // Clear params from address bar
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    }
+  }, []);
 
   const handleCopyCode = useCallback((button: typeof buttonsData[0]) => {
     const code = getComponentCode(button);
     navigator.clipboard.writeText(code)
       .then(() => {
         triggerHaptic('success');
+        setCopiedText(`btn-${button.id}`);
+        setTimeout(() => setCopiedText(null), 2000);
         showToast(`Copied ${button.label} component code!`);
       })
       .catch(() => {
@@ -379,6 +471,8 @@ export default function App() {
     navigator.clipboard.writeText(code)
       .then(() => {
         triggerHaptic('success');
+        setCopiedText(card.interactionType || card.id);
+        setTimeout(() => setCopiedText(null), 2000);
         showToast(`Copied ${card.label} component code!`);
       })
       .catch(() => {
@@ -458,49 +552,67 @@ export default function App() {
 
   const navigateTo = useCallback((page: PageMode, tab?: CatalogTabType) => {
     triggerHaptic('light');
+    setSelectedChartId(null);
     let targetPath = '/';
-    if (page === 'cli') {
+    if (page === 'home') {
+      targetPath = tab && tab !== 'buttons' ? (routeMap[tab] || '/') : '/';
+      setCurrentPage('home');
+      setCatalogTab(tab || 'buttons');
+    } else if (page === 'cli') {
       targetPath = '/cli';
+      setCurrentPage('cli');
     } else if (page === 'skills') {
       targetPath = '/skills';
+      setCurrentPage('skills');
     } else if (page === 'css-animations') {
-      targetPath = '/Anime';
+      targetPath = '/animations';
+      setCurrentPage('home');
+      setCatalogTab('anime');
     } else if (page === 'text-animations') {
       targetPath = '/text-animations';
-    } else if (page === 'dither-charts' || page === 'simple-comp') {
+      setCurrentPage('home');
+      setCatalogTab('text-animations');
+    } else if (page === 'dither-charts') {
       targetPath = '/dither-charts';
+      setCurrentPage('mono-charts');
     } else if (page === '3d-page') {
       targetPath = '/3d';
+      setCurrentPage('home');
+      setCatalogTab('3d');
     } else if (page === 'mono-charts') {
       targetPath = '/mono-charts';
+      setCurrentPage('mono-charts');
     } else if (page === 'sponsors') {
       targetPath = '/sponsors';
+      setCurrentPage('sponsors');
     } else {
       const activeTab = tab || catalogTab;
       targetPath = routeMap[activeTab] || '/';
+      if (tab) {
+        setCatalogTab(tab);
+      }
+      setCurrentPage(page);
     }
 
     if (window.location.pathname !== targetPath || window.location.hash) {
       window.history.pushState(null, '', targetPath);
     }
-    if (tab) {
-      setCatalogTab(tab);
-    }
-    setCurrentPage(page === 'simple-comp' ? 'dither-charts' : page);
     setMobileMenuOpen(false);
-    setNavMoreDropdownOpen(false);
-    setDropdownOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [catalogTab, triggerHaptic]);
 
   const handleTabChange = useCallback((tab: CatalogTabType) => {
     triggerHaptic('light');
+    if (tab === 'mono-charts') {
+      navigateTo('mono-charts');
+      return;
+    }
     setCatalogTab(tab);
     const targetPath = routeMap[tab] || '/';
     if (window.location.pathname !== targetPath) {
       window.history.pushState(null, '', targetPath);
     }
-  }, [triggerHaptic]);
+  }, [navigateTo, triggerHaptic]);
 
   const handleLinkClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, page: PageMode, tab?: CatalogTabType) => {
     if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
@@ -512,6 +624,10 @@ export default function App() {
   const handleTabLinkClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, tab: CatalogTabType) => {
     if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
       e.preventDefault();
+      if (tab === 'mono-charts') {
+        navigateTo('mono-charts');
+        return;
+      }
       if (currentPage !== 'home') {
         navigateTo('home', tab);
       } else {
@@ -520,585 +636,230 @@ export default function App() {
     }
   }, [currentPage, handleTabChange, navigateTo]);
 
-  const componentGroups = [
-    { id: 'buttons', label: 'Buttons', desc: 'Micro-interaction buttons', href: '/buttons', page: 'home' as PageMode, tab: 'buttons' as CatalogTabType, icon: Zap, tint: 'bg-amber-500/15 text-amber-400' },
-    { id: 'cards', label: 'Card Spreads', desc: 'Arc, fan, and scatter layouts', href: '/cards', page: 'home' as PageMode, tab: 'cards' as CatalogTabType, icon: Layers, tint: 'bg-sky-500/15 text-sky-400' },
-    { id: 'carousels', label: '3D Carousels', desc: 'Cover flow and time machine', href: '/carousels', page: 'home' as PageMode, tab: 'carousels' as CatalogTabType, icon: Box, tint: 'bg-violet-500/15 text-violet-400' },
-    { id: 'loaders', label: 'Loaders', desc: 'Physics and loop loaders', href: '/loaders', page: 'home' as PageMode, tab: 'loaders' as CatalogTabType, icon: RefreshCw, tint: 'bg-emerald-500/15 text-emerald-400' },
-    { id: 'dither-charts', label: 'Dither Charts', desc: 'Halftone data visuals', href: '/dither-charts', page: 'dither-charts' as PageMode, tab: 'dither-charts' as CatalogTabType, icon: BarChart2, tint: 'bg-rose-500/15 text-rose-400' },
-    { id: 'mono-charts', label: 'Mono Charts', desc: 'Single-ink chart system', href: '/mono-charts', page: 'mono-charts' as PageMode, icon: Activity, tint: 'bg-neutral-500/20 text-neutral-300' },
-    { id: 'text-animations', label: 'Text Animations', desc: 'Kinetic type sequences', href: '/text-animations', page: 'text-animations' as PageMode, icon: Sparkles, tint: 'bg-fuchsia-500/15 text-fuchsia-400' },
-    { id: '3d-page', label: '3D Page', desc: 'Spatial component demos', href: '/3d', page: '3d-page' as PageMode, icon: Cpu, tint: 'bg-cyan-500/15 text-cyan-400' },
-  ];
+  const activeNav: NavItemKey = useMemo(() => {
+    if (currentPage === 'cli') return 'cli';
+    if (currentPage === 'skills') return 'skills';
+    if (currentPage === 'sponsors' || currentPage === 'sponsor-onboarding' || currentPage === 'sponsor-success') return 'sponsors';
+    if (currentPage === 'blog') return 'blogs';
+    if (currentPage === 'home' && catalogTab === 'anime') return 'anime';
+    return 'components';
+  }, [currentPage, catalogTab]);
 
-  const isComponentsActive =
-    (currentPage === 'home' && catalogTab !== 'buttons' ? true : currentPage === 'home') ||
-    ['dither-charts', 'simple-comp', 'mono-charts', 'text-animations', '3d-page'].includes(currentPage);
+  const handleNavigateHome = useCallback(() => {
+    triggerHaptic('light');
+    setSelectedChartId(null);
+    setCurrentPage('home');
+    setCatalogTab('buttons');
+    setMobileMenuOpen(false);
+    if (window.location.pathname !== '/' || window.location.hash) {
+      window.history.pushState(null, '', '/');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [triggerHaptic]);
+
+  const handleSelectNav = useCallback((key: NavItemKey) => {
+    triggerHaptic('light');
+    setMobileMenuOpen(false);
+    setSelectedChartId(null);
+
+    if (key === 'components') {
+      if (currentPage === 'home') {
+        setCatalogTab('buttons');
+        if (window.location.pathname !== '/' && window.location.pathname !== '/buttons') {
+          window.history.pushState(null, '', '/');
+        }
+        const elem = document.getElementById('components');
+        if (elem) {
+          elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          window.scrollTo({ top: 500, behavior: 'smooth' });
+        }
+      } else {
+        setCurrentPage('home');
+        setCatalogTab('buttons');
+        if (window.location.pathname !== '/' && window.location.pathname !== '/buttons') {
+          window.history.pushState(null, '', '/');
+        }
+        setTimeout(() => {
+          const elem = document.getElementById('components');
+          if (elem) {
+            elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }, 180);
+      }
+    } else if (key === 'anime') {
+      if (currentPage === 'home') {
+        setCatalogTab('anime');
+        if (window.location.pathname !== '/Anime') {
+          window.history.pushState(null, '', '/Anime');
+        }
+        const elem = document.getElementById('components');
+        if (elem) {
+          elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } else {
+        setCurrentPage('home');
+        setCatalogTab('anime');
+        if (window.location.pathname !== '/Anime') {
+          window.history.pushState(null, '', '/Anime');
+        }
+        setTimeout(() => {
+          const elem = document.getElementById('components');
+          if (elem) {
+            elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 180);
+      }
+    } else if (key === 'cli') {
+      setCurrentPage('cli');
+      if (window.location.pathname !== '/cli') {
+        window.history.pushState(null, '', '/cli');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (key === 'skills') {
+      setCurrentPage('skills');
+      if (window.location.pathname !== '/skills') {
+        window.history.pushState(null, '', '/skills');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (key === 'blogs') {
+      setCurrentPage('blog');
+      if (window.location.pathname !== '/blog') {
+        window.history.pushState(null, '', '/blog');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (key === 'sponsors') {
+      setCurrentPage('sponsors');
+      if (window.location.pathname !== '/sponsors') {
+        window.history.pushState(null, '', '/sponsors');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [currentPage, triggerHaptic]);
 
   return (
-    <div className={`relative w-full min-h-dvh flex flex-col font-sans antialiased transition-colors duration-300 ${theme === 'dark' ? 'dark bg-[#121212] text-[#ffffff] selection:bg-neutral-850' : 'bg-[#f8f9fa] text-black selection:bg-neutral-200'}`}>
+    <div className={`relative w-full min-h-dvh flex flex-col font-sans antialiased transition-colors duration-300 ${theme === 'dark' ? 'dark bg-[#08080a] text-[#ededed] selection:bg-neutral-800' : 'bg-[#f8f9fa] text-[#0a0a0c] selection:bg-neutral-200'}`}>
       
-      {/* Site Navbar */}
-      <header className="sticky top-0 z-50 w-full pt-4 pb-4 px-6 border-b border-transparent pointer-events-none">
-        <div className="relative z-[3] flex items-center justify-between gap-4 max-w-[1240px] mx-auto pointer-events-auto">
-
-          {/* Logo Pill Island */}
-          <motion.a
-            href="/"
-            onClick={(e) => handleLinkClick(e, 'home')}
-            whileHover="hover"
-            initial="initial"
-            whileTap={{ scale: 0.96 }}
-            variants={{
-              hover: { scale: 1.03 }
-            }}
-            className={`inline-flex items-center gap-[7px] h-[40px] px-[10px] pr-[14px] rounded-full no-underline shrink-0 group cursor-pointer border transition-all duration-300 ${
-              theme === 'dark'
-                ? 'bg-[#181818] border-white/[0.07] text-white hover:bg-[#1f1f1f] hover:border-white/20 shadow-xs'
-                : 'bg-white border-neutral-200/80 text-black shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_14px_rgba(0,0,0,0.09)] hover:border-neutral-300'
-            }`}
-          >
-            <motion.span 
-              variants={{
-                hover: { rotate: [0, -18, 18, -8, 0], scale: 1.1 }
-              }}
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="inline-flex items-center justify-center w-[24px] h-[24px] rounded-full overflow-hidden shrink-0"
-            >
-              <img src="/favicon.jpg" alt="Amicro" className="w-full h-full object-cover" />
-            </motion.span>
-            <motion.span 
-              variants={{
-                hover: { letterSpacing: '-0.012em' }
-              }}
-              transition={{ duration: 0.25 }}
-              className="text-[15px] font-bold leading-none tracking-[-0.019em] transition-colors"
-            >
-              Amicro
-            </motion.span>
-          </motion.a>
-
-          {/* Nav Links Pill Island — exactly mathematically centered */}
-          <div className="hidden sm:flex absolute left-1/2 -translate-x-1/2 items-center justify-center pointer-events-auto">
-            <nav
-              className={`flex items-center p-[3px] rounded-full border transition-colors duration-300 ${
-                theme === 'dark'
-                  ? 'bg-[#181818] border-white/[0.07] shadow-inner'
-                  : 'bg-white/95 border-neutral-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.06)]'
-              }`}
-            >
-              {/* Components hub — same 36px action-pill language */}
-              <div
-                ref={componentsMenuRef}
-                className="relative"
-                onMouseEnter={openComponentsMenu}
-                onMouseLeave={scheduleCloseComponentsMenu}
-              >
-                <motion.button
-                  whileHover="hover"
-                  initial="initial"
-                  whileTap={{ scale: 0.96 }}
-                  onClick={() => {
-                    triggerHaptic('light');
-                    setComponentsMenuOpen((v) => !v);
-                  }}
-                  className={`inline-flex items-center justify-center gap-1.5 h-[34px] px-[12px] rounded-full text-[13px] font-medium leading-[16px] cursor-pointer whitespace-nowrap transition-all duration-200 border-0 ${
-                    isComponentsActive || componentsMenuOpen
-                      ? theme === 'dark'
-                        ? 'bg-[#2a2a2a] text-white font-semibold shadow-sm'
-                        : 'bg-neutral-100 text-black font-semibold shadow-sm'
-                      : theme === 'dark'
-                        ? 'text-[rgba(202,202,202,0.7)] hover:text-white hover:bg-white/[0.06]'
-                        : 'text-neutral-600 hover:text-black hover:bg-neutral-100/70'
-                  }`}
-                >
-                  <motion.span
-                    variants={{
-                      hover: { y: -1 }
-                    }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-                  >
-                    Components
-                  </motion.span>
-                  <motion.span
-                    animate={{ rotate: componentsMenuOpen ? 180 : 0 }}
-                    variants={{
-                      hover: { y: [0, -1, 1, 0] }
-                    }}
-                    transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                    className="inline-flex"
-                  >
-                    <ChevronDown className="w-3.5 h-3.5" />
-                  </motion.span>
-                </motion.button>
-
-                <AnimatePresence>
-                  {componentsMenuOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, scale: 0.92, filter: 'blur(6px)' }}
-                      animate={{ opacity: 1, y: 10, scale: 1, filter: 'blur(0px)' }}
-                      exit={{ opacity: 0, y: 8, scale: 0.94, filter: 'blur(4px)' }}
-                      transition={{ type: 'spring', stiffness: 420, damping: 28, mass: 0.7 }}
-                      style={{ originX: 0.2, originY: 0 }}
-                      className={`absolute left-0 top-[38px] w-[380px] sm:w-[440px] p-2 rounded-[22px] border shadow-2xl backdrop-blur-xl z-50 overflow-hidden ${
-                        theme === 'dark'
-                          ? 'bg-[#161616]/96 border-white/[0.08] shadow-black/60'
-                          : 'bg-white/96 border-neutral-200 shadow-neutral-300/50'
-                      }`}
-                    >
-                      <motion.div
-                        initial="hidden"
-                        animate="show"
-                        exit="hidden"
-                        variants={{
-                          hidden: {},
-                          show: { transition: { staggerChildren: 0.025, delayChildren: 0.03 } },
-                        }}
-                        className="grid grid-cols-2 gap-1"
-                      >
-                        {componentGroups.map((item) => {
-                          const active =
-                            (item.tab && currentPage === 'home' && catalogTab === item.tab) ||
-                            currentPage === item.page;
-                          return (
-                            <motion.a
-                              key={item.id}
-                              href={item.href}
-                              variants={{
-                                hidden: { opacity: 0, y: 6, scale: 0.98 },
-                                show: { opacity: 1, y: 0, scale: 1 },
-                              }}
-                              whileHover={{ scale: 1.02, x: 2 }}
-                              transition={{ type: 'spring', stiffness: 500, damping: 32 }}
-                              onClick={(e) => {
-                                if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
-                                  e.preventDefault();
-                                  if (item.tab) navigateTo(item.page, item.tab);
-                                  else navigateTo(item.page);
-                                  setComponentsMenuOpen(false);
-                                }
-                              }}
-                              className={`flex flex-col justify-center px-3 py-2 rounded-[14px] no-underline transition-colors group ${
-                                active
-                                  ? theme === 'dark'
-                                    ? 'bg-white/[0.08]'
-                                    : 'bg-neutral-100 shadow-xs'
-                                  : theme === 'dark'
-                                    ? 'hover:bg-white/[0.05]'
-                                    : 'hover:bg-neutral-100/70'
-                              }`}
-                            >
-                              <span className={`text-[13px] font-semibold leading-[17px] transition-colors ${
-                                theme === 'dark' ? 'text-white group-hover:text-white' : 'text-neutral-900 group-hover:text-black'
-                              }`}>
-                                {item.label}
-                              </span>
-                              <span className={`text-[11.5px] leading-[15px] mt-0.5 transition-colors ${
-                                theme === 'dark' ? 'text-neutral-400 group-hover:text-neutral-300' : 'text-neutral-500 group-hover:text-neutral-700'
-                              }`}>
-                                {item.desc}
-                              </span>
-                            </motion.a>
-                          );
-                        })}
-                      </motion.div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <motion.a
-                href="/Anime"
-                onClick={(e) => handleLinkClick(e, 'css-animations')}
-                whileHover="hover"
-                initial="initial"
-                whileTap={{ scale: 0.96 }}
-                className={`inline-flex items-center justify-center h-[34px] px-[12px] rounded-full text-[13px] font-medium leading-[16px] cursor-pointer no-underline whitespace-nowrap transition-all duration-200 border-0 ${
-                  currentPage === 'css-animations'
-                    ? theme === 'dark'
-                      ? 'bg-[#2a2a2a] text-white font-semibold shadow-sm'
-                      : 'bg-neutral-100 text-black font-semibold shadow-sm'
-                    : theme === 'dark'
-                      ? 'text-[rgba(202,202,202,0.7)] hover:text-white hover:bg-white/[0.06]'
-                      : 'text-neutral-600 hover:text-black hover:bg-neutral-100/70'
-                }`}
-              >
-                <motion.span
-                  variants={{ hover: { y: -1 } }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-                >
-                  Anime
-                </motion.span>
-              </motion.a>
-
-              <motion.a
-                href="/cli"
-                onClick={(e) => handleLinkClick(e, 'cli')}
-                whileHover="hover"
-                initial="initial"
-                whileTap={{ scale: 0.96 }}
-                className={`inline-flex items-center justify-center h-[34px] px-[12px] rounded-full text-[13px] font-medium leading-[16px] cursor-pointer no-underline whitespace-nowrap transition-all duration-200 border-0 ${
-                  currentPage === 'cli'
-                    ? theme === 'dark'
-                      ? 'bg-[#2a2a2a] text-white font-semibold shadow-sm'
-                      : 'bg-neutral-100 text-black font-semibold shadow-sm'
-                    : theme === 'dark'
-                      ? 'text-[rgba(202,202,202,0.7)] hover:text-white hover:bg-white/[0.06]'
-                      : 'text-neutral-600 hover:text-black hover:bg-neutral-100/70'
-                }`}
-              >
-                <motion.span
-                  variants={{ hover: { y: -1 } }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-                >
-                  CLI
-                </motion.span>
-              </motion.a>
-
-              <motion.a
-                href="/skills"
-                onClick={(e) => handleLinkClick(e, 'skills')}
-                whileHover="hover"
-                initial="initial"
-                whileTap={{ scale: 0.96 }}
-                className={`hidden md:inline-flex items-center justify-center h-[34px] px-[12px] rounded-full text-[13px] font-medium leading-[16px] cursor-pointer no-underline whitespace-nowrap transition-all duration-200 border-0 ${
-                  currentPage === 'skills'
-                    ? theme === 'dark'
-                      ? 'bg-[#2a2a2a] text-white font-semibold shadow-sm'
-                      : 'bg-neutral-100 text-black font-semibold shadow-sm'
-                    : theme === 'dark'
-                      ? 'text-[rgba(202,202,202,0.7)] hover:text-white hover:bg-white/[0.06]'
-                      : 'text-neutral-600 hover:text-black hover:bg-neutral-100/70'
-                }`}
-              >
-                <motion.span
-                  variants={{ hover: { y: -1 } }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-                >
-                  Skills
-                </motion.span>
-              </motion.a>
-
-              {/* Sponsors link */}
-              <motion.a
-                href="/sponsors"
-                onClick={(e) => handleLinkClick(e, 'sponsors')}
-                whileHover="hover"
-                initial="initial"
-                whileTap={{ scale: 0.96 }}
-                className={`inline-flex items-center justify-center gap-1.5 h-[34px] px-[12px] rounded-full text-[13px] font-medium leading-[16px] cursor-pointer no-underline whitespace-nowrap transition-all duration-200 border-0 ${
-                  currentPage === 'sponsors'
-                    ? theme === 'dark'
-                      ? 'bg-[#2a2a2a] text-white font-semibold shadow-sm'
-                      : 'bg-neutral-100 text-black font-semibold shadow-sm'
-                    : theme === 'dark'
-                      ? 'text-[rgba(202,202,202,0.7)] hover:text-white hover:bg-white/[0.06]'
-                      : 'text-neutral-600 hover:text-black hover:bg-neutral-100/70'
-                }`}
-              >
-                <motion.span
-                  variants={{ hover: { y: -1 } }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-                >
-                  Sponsors
-                </motion.span>
-              </motion.a>
-            </nav>
-          </div>
-
-          {/* Navbar Actions with Theme Toggle */}
-          <div className="flex items-center gap-[8px]">
-            <motion.a
-              href="https://github.com/Subhan-code/Amicro--Micro-transitions-"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover="hover"
-              initial="initial"
-              whileTap={{ scale: 0.95 }}
-              variants={{
-                hover: { scale: 1.05 }
-              }}
-              className={`inline-flex items-center justify-center gap-1.5 h-[36px] px-[13px] rounded-full font-sans text-[13px] font-medium leading-[16px] no-underline transition-all duration-200 group border cursor-pointer ${
-                theme === 'dark'
-                  ? 'bg-[#181818] hover:bg-[#202020] border-white/[0.07] text-[rgba(237,237,237,0.7)] hover:text-white hover:border-white/20 shadow-xs'
-                  : 'bg-white hover:bg-neutral-50 border-neutral-200/80 text-black shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:border-neutral-300'
-              }`}
-            >
-              <motion.div
-                variants={{
-                  hover: { rotate: [0, -18, 18, -10, 0], scale: 1.2 }
-                }}
-                transition={{ duration: 0.45, ease: "easeInOut" }}
-                className="flex items-center shrink-0"
-              >
-                <svg viewBox="0 0 16 16" fill="currentColor" className="w-auto h-[16px] max-w-[16px] block">
-                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
-                </svg>
-              </motion.div>
-              <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">
-                <AnimatedNumber value={stars} />
-              </span>
-            </motion.a>
-            <motion.a
-              href="https://x.com/SubhanHQ"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover="hover"
-              initial="initial"
-              whileTap={{ scale: 0.92 }}
-              variants={{
-                hover: { scale: 1.08 }
-              }}
-              className={`hidden sm:inline-flex items-center justify-center w-[36px] h-[36px] rounded-full transition-all duration-150 border ${
-                theme === 'dark'
-                  ? 'bg-[#181818] hover:bg-[#1f1f1f] border-white/[0.07] text-[rgba(237,237,237,0.7)] hover:text-white hover:border-white/20'
-                  : 'bg-white hover:bg-neutral-50 border-neutral-200/80 text-black shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:border-neutral-300'
-              }`}
-            >
-              <motion.div
-                variants={{
-                  hover: { rotate: [0, -10, 10, -5, 0], scale: 1.15 }
-                }}
-                transition={{ duration: 0.4 }}
-                className="flex items-center shrink-0"
-              >
-                <svg viewBox="0 0 16 17" fill="currentColor" className="w-[15px] h-[16px] block">
-                  <path d="M12.4041 1.39726H14.6953L9.69087 7.2591L15.5781 15.2368H10.9696L7.35741 10.3996L3.22921 15.2368H0.934687L6.28641 8.96575L0.642598 1.39726H5.36795L8.62962 5.81859L12.4041 1.39726ZM11.5992 13.8329H12.8682L4.67667 2.72798H3.31359L11.5992 13.8329Z"></path>
-                </svg>
-              </motion.div>
-            </motion.a>
-
-            {/* Theme Toggle Button */}
-            <motion.button
-              onClick={handleThemeToggle}
-              whileHover="hover"
-              initial="initial"
-              whileTap={{ scale: 0.9, rotate: 180 }}
-              variants={{
-                hover: { scale: 1.08 }
-              }}
-              className={`inline-flex items-center justify-center w-[36px] h-[36px] rounded-full transition-all duration-150 cursor-pointer border ${
-                theme === 'dark'
-                  ? 'bg-[#181818] hover:bg-[#1f1f1f] border-white/[0.07] text-[rgba(237,237,237,0.7)] hover:text-white hover:border-white/20'
-                  : 'bg-white hover:bg-neutral-50 border-neutral-200/80 text-black shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:border-neutral-300'
-              }`}
-              title="Toggle Theme (Copies ThemeToggle code)"
-            >
-              <motion.div
-                variants={{
-                  hover: { rotate: [0, 45, 90], scale: 1.15 }
-                }}
-                transition={{ duration: 0.35 }}
-                className="flex items-center shrink-0"
-              >
-                {theme === 'dark' ? <Sun className="w-[16px] h-[16px]" /> : <Moon className="w-[16px] h-[16px]" />}
-              </motion.div>
-            </motion.button>
-
-            {/* Mobile Menu Toggle */}
-            <motion.button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.92 }}
-              className={`inline-flex sm:hidden items-center justify-center w-[36px] h-[36px] rounded-full transition-all duration-150 cursor-pointer border ${
-                theme === 'dark'
-                  ? 'bg-[#181818] hover:bg-[#1f1f1f] border-white/[0.07] text-[rgba(237,237,237,0.7)] hover:text-white'
-                  : 'bg-white hover:bg-neutral-50 border-neutral-200/80 text-black shadow-[0_2px_8px_rgba(0,0,0,0.06)]'
-              }`}
-              aria-label="Toggle mobile menu"
-            >
-              {mobileMenuOpen ? <X className="w-[18px] h-[18px]" /> : <Menu className="w-[18px] h-[18px]" />}
-            </motion.button>
-          </div>
-        </div>
-
-        {/* Mobile menu dropdown */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2 }}
-              className={`absolute top-[64px] left-6 right-6 p-4 rounded-2xl border flex flex-col gap-2 z-[999] shadow-2xl sm:hidden backdrop-blur-xl ${
-                theme === 'dark' 
-                  ? 'bg-zinc-950/95 border-white/10 text-white' 
-                  : 'bg-white/95 border-neutral-200 text-black'
-              }`}
-            >
-              <a 
-                href="/buttons"
-                onClick={(e) => handleLinkClick(e, 'home', 'buttons')}
-                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent no-underline ${
-                  currentPage === 'home' && catalogTab === 'buttons'
-                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
-                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
-                }`}
-              >
-                Buttons
-              </a>
-              <a 
-                href="/cards"
-                onClick={(e) => handleLinkClick(e, 'home', 'cards')}
-                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent no-underline ${
-                  currentPage === 'home' && catalogTab !== 'buttons'
-                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
-                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
-                }`}
-              >
-                Components
-              </a>
-              <a 
-                href="/cli"
-                onClick={(e) => handleLinkClick(e, 'cli')}
-                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent no-underline ${
-                  currentPage === 'cli'
-                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
-                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
-                }`}
-              >
-                CLI Install
-              </a>
-              <a 
-                href="/skills"
-                onClick={(e) => handleLinkClick(e, 'skills')}
-                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent no-underline ${
-                  currentPage === 'skills'
-                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
-                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
-                }`}
-              >
-                Skills
-              </a>
-              <a 
-                href="/Anime"
-                onClick={(e) => handleLinkClick(e, 'css-animations')}
-                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent no-underline ${
-                  currentPage === 'css-animations'
-                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
-                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
-                }`}
-              >
-                Anime
-              </a>
-              <a 
-                href="/text-animations"
-                onClick={(e) => handleLinkClick(e, 'text-animations')}
-                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent no-underline ${
-                  currentPage === 'text-animations'
-                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
-                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
-                }`}
-              >
-                Text Animations
-              </a>
-              <a 
-                href="/mono-charts"
-                onClick={(e) => handleLinkClick(e, 'mono-charts')}
-                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent no-underline ${
-                  currentPage === 'mono-charts'
-                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
-                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
-                }`}
-              >
-                Mono Charts
-              </a>
-              <a 
-                href="/dither-charts"
-                onClick={(e) => handleLinkClick(e, 'dither-charts')}
-                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent no-underline ${
-                  currentPage === 'dither-charts' || currentPage === 'simple-comp'
-                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
-                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
-                }`}
-              >
-                Dither Charts
-              </a>
-              <a 
-                href="/3d"
-                onClick={(e) => handleLinkClick(e, '3d-page')}
-                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent no-underline ${
-                  currentPage === '3d-page'
-                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
-                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
-                }`}
-              >
-                3D Page
-              </a>
-              <a 
-                href="/sponsors"
-                onClick={(e) => handleLinkClick(e, 'sponsors')}
-                className={`flex items-center justify-start h-[40px] px-4 rounded-xl text-[14px] font-semibold cursor-pointer border-0 text-left bg-transparent no-underline ${
-                  currentPage === 'sponsors'
-                    ? (theme === 'dark' ? 'text-white bg-white/10' : 'text-black bg-neutral-100 font-bold')
-                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black')
-                }`}
-              >
-                <span>Sponsors</span>
-              </a>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </header>
+      {/* Site Minimal Floating Navbar */}
+      <MinimalNavbar
+        theme={theme}
+        activeItem={activeNav}
+        isScrolled={isScrolled}
+        stars={stars}
+        mobileMenuOpen={mobileMenuOpen}
+        onSelectNav={handleSelectNav}
+        onNavigateHome={handleNavigateHome}
+        onToggleTheme={handleThemeToggle}
+        onToggleMobileMenu={() => setMobileMenuOpen(!mobileMenuOpen)}
+        triggerHaptic={triggerHaptic}
+        onBack={currentPage === 'chart-detail' && selectedChartId ? () => {
+          const entry = getComponentEntry(selectedChartId);
+          const cat = entry ? entry.category : catalogTab;
+          setSelectedChartId(null);
+          if (cat === 'mono-charts') {
+            navigateTo('mono-charts');
+          } else if (cat === 'dither-charts') {
+            navigateTo('dither-charts');
+          } else {
+            handleTabChange(cat as CatalogTabType);
+            setCurrentPage('home');
+          }
+        } : undefined}
+      />
 
       {/* Render subpages or HomePage */}
       <AnimatePresence mode="wait">
         {currentPage === 'cli' ? (
           <motion.div
             key="cli-page"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
           >
             <Suspense fallback={<LoadingFallback />}>
-              <CliPage theme={theme} onNavigateHome={() => navigateTo('home')} />
+              <CliPage
+                theme={theme}
+                sponsors={sponsors}
+                checkoutUrl={CHECKOUT_URL}
+                onNavigateHome={handleNavigateHome}
+                onNavigateSponsors={handleNavigateToSponsors}
+              />
             </Suspense>
           </motion.div>
         ) : currentPage === 'skills' ? (
           <motion.div
             key="skills-page"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
           >
             <Suspense fallback={<LoadingFallback />}>
-              <SkillsPage theme={theme} onNavigateHome={() => navigateTo('home')} />
+              <SkillsPage
+                theme={theme}
+                sponsors={sponsors}
+                checkoutUrl={CHECKOUT_URL}
+                onNavigateHome={handleNavigateHome}
+                onNavigateSponsors={handleNavigateToSponsors}
+              />
             </Suspense>
           </motion.div>
         ) : currentPage === 'sponsors' ? (
           <motion.div
             key="sponsors-page"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
           >
             <Suspense fallback={<LoadingFallback />}>
               <SponsorsPage
                 theme={theme}
                 sponsors={sponsors}
-                checkoutUrl={POLAR_CHECKOUT_URL}
-                onNavigateHome={() => navigateTo('home')}
+                checkoutUrl={CHECKOUT_URL}
+                onNavigateHome={handleNavigateHome}
                 showToast={showToast}
+                stars={stars}
               />
             </Suspense>
           </motion.div>
         ) : currentPage === 'chart-detail' && selectedChartId ? (
           <motion.div
             key="chart-detail-page"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
           >
             <Suspense fallback={<LoadingFallback />}>
               <ChartDetailPage
                 chartId={selectedChartId}
                 theme={theme}
+                sponsors={sponsors}
+                checkoutUrl={CHECKOUT_URL}
                 showToast={showToast}
                 triggerHaptic={triggerHaptic}
+                onToggleTheme={handleThemeToggle}
+                onSelectComponent={(id, cat) => {
+                  navigateToChartDetail(id, cat);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                onNavigateTab={(cat) => {
+                  setSelectedChartId(null);
+                  if (cat === 'mono-charts') {
+                    navigateTo('mono-charts');
+                  } else if (cat === 'dither-charts') {
+                    navigateTo('dither-charts');
+                  } else if (cat === 'anime') {
+                    handleSelectNav('anime');
+                  } else {
+                    handleTabChange(cat as CatalogTabType);
+                    setCurrentPage('home');
+                  }
+                }}
                 onBack={() => {
                   const entry = getComponentEntry(selectedChartId);
                   const cat = entry ? entry.category : catalogTab;
@@ -1118,1097 +879,651 @@ export default function App() {
         ) : currentPage === 'mono-charts' ? (
           <motion.div
             key="mono-charts-page"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
           >
             <Suspense fallback={<LoadingFallback />}>
               <MonoChartsPage
                 theme={theme}
                 sponsors={sponsors}
-                checkoutUrl={POLAR_CHECKOUT_URL}
+                checkoutUrl={CHECKOUT_URL}
                 showToast={showToast}
                 triggerHaptic={triggerHaptic}
-                onNavigateHome={() => navigateTo('home')}
+                onNavigateHome={handleNavigateHome}
                 onSelectChart={(id) => navigateToChartDetail(id)}
-              />
-            </Suspense>
-          </motion.div>
-        ) : currentPage === 'dither-charts' || currentPage === 'simple-comp' ? (
-          <motion.div
-            key="dither-charts-page"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25 }}
-          >
-            <Suspense fallback={<LoadingFallback />}>
-              <DitherChartsPage 
-                theme={theme} 
-                showToast={showToast} 
-                triggerHaptic={triggerHaptic} 
-                onNavigateHome={() => navigateTo('home')} 
-                onNavigate3D={() => navigateTo('3d-page')} 
-                onSelectChart={(id) => navigateToChartDetail(id)} 
               />
             </Suspense>
           </motion.div>
         ) : currentPage === '3d-page' ? (
           <motion.div
             key="3d-page"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
           >
             <Suspense fallback={<LoadingFallback />}>
-              <ThreeDPage theme={theme} showToast={showToast} triggerHaptic={triggerHaptic} onNavigateHome={() => navigateTo('home')} />
+              <ThreeDPage theme={theme} showToast={showToast} triggerHaptic={triggerHaptic} onNavigateHome={handleNavigateHome} />
             </Suspense>
           </motion.div>
         ) : currentPage === 'css-animations' ? (
           <motion.div
             key="css-animations-page"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
           >
             <Suspense fallback={<LoadingFallback />}>
               <CssAnimationsPage
                 theme={theme}
                 showToast={showToast}
                 triggerHaptic={triggerHaptic}
-                onNavigateHome={() => navigateTo('home')}
+                onNavigateHome={handleNavigateHome}
               />
             </Suspense>
           </motion.div>
         ) : currentPage === 'text-animations' ? (
           <motion.div
             key="text-animations-page"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
           >
             <Suspense fallback={<LoadingFallback />}>
               <TextAnimationsPage
                 theme={theme}
                 showToast={showToast}
                 triggerHaptic={triggerHaptic}
-                onNavigateHome={() => navigateTo('home')}
+                onNavigateHome={handleNavigateHome}
+              />
+            </Suspense>
+          </motion.div>
+        ) : currentPage === 'blog' ? (
+          <motion.div
+            key="blog-page"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+          >
+            <Suspense fallback={<LoadingFallback />}>
+              <BlogPage
+                theme={theme}
+                showToast={showToast}
+                triggerHaptic={triggerHaptic}
+                onNavigateHome={handleNavigateHome}
+              />
+            </Suspense>
+          </motion.div>
+        ) : currentPage === 'sponsor-onboarding' ? (
+          <motion.div
+            key="sponsor-onboarding-page"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+          >
+            <Suspense fallback={<LoadingFallback />}>
+              <SponsorOnboardingPage
+                theme={theme}
+                onNavigateHome={handleNavigateHome}
+                onNavigateSponsors={() => {
+                  setCurrentPage('sponsors');
+                  window.history.pushState(null, '', '/sponsors');
+                }}
+                showToast={showToast}
+              />
+            </Suspense>
+          </motion.div>
+        ) : currentPage === 'sponsor-success' ? (
+          <motion.div
+            key="sponsor-success-page"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+          >
+            <Suspense fallback={<LoadingFallback />}>
+              <SponsorSuccessPage
+                theme={theme}
+                onNavigateHome={handleNavigateHome}
+                onNavigateSponsors={() => {
+                  setCurrentPage('sponsors');
+                  window.history.pushState(null, '', '/sponsors');
+                }}
+                showToast={showToast}
+              />
+            </Suspense>
+          </motion.div>
+        ) : currentPage === 'admin-sponsors' ? (
+          <motion.div
+            key="admin-sponsors-page"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+          >
+            <Suspense fallback={<LoadingFallback />}>
+              <AdminSponsorsPage
+                theme={theme}
+                onNavigateHome={handleNavigateHome}
+                showToast={showToast}
               />
             </Suspense>
           </motion.div>
         ) : (
           <motion.div
             key="home-page"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
             className="w-full flex flex-col"
           >
-            {/* Main Content */}
-            <div className="relative z-10 flex-1 w-full max-w-[1240px] mx-auto px-6 flex flex-col items-center">
-              
-              <div className="mt-8 sm:mt-12 mb-16 sm:mb-20 text-center w-full flex flex-col items-center">
-                
-                {/* Hero Speech Bubble Attribution Badge (Subtle & Low Priority) */}
-                <motion.div
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  whileHover={{ y: -1.5 }}
-                  transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
-                  className={`relative inline-flex items-center gap-2 py-1 pl-3 pr-1.5 mb-6 rounded-[11px] text-[12.5px] font-medium border transition-all select-none ${
-                    theme === 'dark'
-                      ? 'bg-[#151515]/70 border-white/[0.05] shadow-[0_4px_16px_rgba(0,0,0,0.3)] text-neutral-400'
-                      : 'bg-neutral-100/70 border-neutral-200/70 shadow-[0_2px_10px_rgba(0,0,0,0.03)] text-neutral-500'
-                  }`}
-                >
-                  <span className="text-[12px] tracking-tight opacity-75">Layout from</span>
+            {/* Hero Section */}
+            <HeroSection
+              theme={theme}
+              stars={stars}
+              onBrowseComponents={() => {
+                const elem = document.getElementById('components');
+                if (elem) {
+                  elem.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              triggerHaptic={triggerHaptic}
+            />
 
-                  {/* Inner secondary chip */}
-                  <a
-                    href="https://transition.dev"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`inline-flex items-center px-2 py-0.5 rounded-[6px] text-[11.5px] font-medium transition-colors no-underline ${
-                      theme === 'dark'
-                        ? 'bg-white/[0.04] hover:bg-white/[0.08] text-neutral-300 hover:text-white border border-white/[0.03]'
-                        : 'bg-black/[0.03] hover:bg-black/[0.06] text-neutral-600 hover:text-neutral-900 border border-black/[0.03]'
-                    }`}
+            {/* Sponsored by 4-card Bar beneath Hero Section */}
+            <HeroSponsorBar
+              theme={theme}
+              sponsors={sponsors}
+              onNavigateSponsors={handleNavigateToSponsors}
+              triggerHaptic={triggerHaptic}
+            />
+
+            {/* Component Cards Gallery & Discovery Playground */}
+            <section id="components" className="mx-auto max-w-[1800px] w-full px-4 sm:px-8 lg:px-12 pt-2 pb-16">
+              <div className="space-y-6">
+                {/* Minimalist Stadium Category Filter Bar */}
+                <CategoryPillBar
+                  theme={theme}
+                  selectedCategory={catalogTab as CatalogCategory}
+                  onSelectCategory={(cat) => handleTabChange(cat)}
+                  triggerHaptic={triggerHaptic}
+                />
+
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={catalogTab}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                    className="w-full"
                   >
-                    transition.dev
-                  </a>
 
-                  <ChevronRight className="w-3 h-3 opacity-30 shrink-0 -mx-1 text-current" />
-
-                  {/* Inner muted accent badge */}
-                  <a
-                    href="https://x.com/Jakubantalik"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`inline-flex items-center px-2 py-0.5 rounded-[6px] text-[11.5px] font-medium transition-colors no-underline ${
-                      theme === 'dark'
-                        ? 'bg-white/[0.08] hover:bg-white/[0.14] text-neutral-200 hover:text-white border border-white/[0.06]'
-                        : 'bg-black/[0.06] hover:bg-black/[0.1] text-neutral-700 hover:text-black border border-black/[0.06]'
-                    }`}
+                  {/* Component Grid */}
+                  <div 
+                    id="component-grid"
+                    className={`
+                      w-full scroll-mt-24 transition-opacity duration-200
+                      ${['loaders', 'mono-charts', 'anime', '3d', 'text-animations', 'morphing'].includes(catalogTab)
+                        ? 'w-full' 
+                        : 'grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:gap-x-6 lg:gap-y-10 xl:grid-cols-3 xl:gap-x-8'
+                      }
+                    `}
                   >
-                    @Jakubantalik
-                  </a>
-
-                  {/* Downward speech bubble tail */}
-                  <div className="absolute -bottom-[5.5px] left-1/2 -translate-x-1/2 pointer-events-none flex items-center justify-center">
-                    <svg
-                      width="11"
-                      height="6"
-                      viewBox="0 0 11 6"
-                      fill="none"
-                      className="block"
-                    >
-                      <path
-                        d="M0 0 C2.5 0, 4 4.5, 5.5 5.5 C7 4.5, 8.5 0, 11 0 Z"
-                        fill={theme === 'dark' ? '#151515' : '#f5f5f5'}
-                        stroke={theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.06)'}
-                        strokeWidth="1"
-                        strokeLinejoin="round"
-                      />
-                      <line
-                        x1="0.5"
-                        y1="0"
-                        x2="10.5"
-                        y2="0"
-                        stroke={theme === 'dark' ? '#151515' : '#f5f5f5'}
-                        strokeWidth="1.5"
-                      />
-                    </svg>
-                  </div>
-                </motion.div>
-
-                <h1 className={`text-[32px] sm:text-[46px] font-medium leading-[38px] sm:leading-[52px] tracking-[-0.01em] mb-4 sm:mb-5 font-sans transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                  Amicro — Micro-transitions
-                </h1>
-                <p className={`text-[14px] sm:text-[17px] leading-[20px] sm:leading-[25px] max-w-[530px] transition-colors duration-300 ${theme === 'dark' ? 'text-[#767676]' : 'text-black'}`}>
-                  A curated library of premium micro-interactions and transition components. Built with React and Motion.
-                </p>
-
-                {/* Hero CTAs */}
-                <div className="flex flex-wrap items-center justify-center gap-3 mt-9 sm:mt-10">
-                  <motion.a 
-                    href="https://github.com/Subhan-code/Amicro--Micro-transitions-" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    whileHover="hover"
-                    initial="initial"
-                    whileTap={{ scale: 0.98 }}
-                    variants={{
-                      hover: { 
-                        scale: 1.04,
-                        boxShadow: theme === 'dark' ? '0 10px 25px -5px rgba(255,255,255,0.1)' : '0 10px 25px -5px rgba(0,0,0,0.15)'
-                      }
-                    }}
-                    className={`inline-flex items-center justify-center gap-1.5 h-[36px] px-[16px] rounded-full text-[13px] font-medium no-underline transition-colors cursor-pointer border-0 ${theme === 'dark' ? 'bg-white text-black hover:bg-neutral-200' : 'bg-neutral-950 text-white hover:bg-neutral-800'}`}
-                  >
-                    <motion.div 
-                      variants={{
-                        hover: { rotate: [0, -15, 15, -15, 0], scale: 1.15 }
-                      }}
-                      transition={{ duration: 0.4 }}
-                      className="flex items-center shrink-0"
-                    >
-                      <svg viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 block">
-                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
-                      </svg>
-                    </motion.div>
-                    <span>GitHub Repo</span>
-                    {stars !== null && (
-                      <span className={`text-[10.5px] px-1.5 py-0.5 rounded-full font-semibold ml-1 ${theme === 'dark' ? 'bg-black/10 text-black/70' : 'bg-white/20 text-white/90'}`}>
-                        <AnimatedNumber value={stars} />
-                      </span>
-                    )}
-                  </motion.a>
-                  
-                  <motion.button 
-                    onClick={() => {
-                      const element = document.getElementById('component-grid');
-                      if (element) {
-                        element.scrollIntoView({ behavior: 'smooth' });
-                      }
-                    }}
-                    whileHover="hover"
-                    initial="initial"
-                    whileTap={{ scale: 0.98 }}
-                    variants={{
-                      hover: { 
-                        scale: 1.04,
-                        boxShadow: theme === 'dark' ? '0 10px 25px -5px rgba(0,0,0,0.3)' : '0 10px 25px -5px rgba(0,0,0,0.05)'
-                      }
-                    }}
-                    className={`inline-flex items-center justify-center h-[36px] px-[16px] rounded-full text-[13px] font-medium border cursor-pointer transition-colors ${theme === 'dark' ? 'bg-[#181818] border-neutral-800 text-white hover:bg-neutral-800' : 'bg-white border-neutral-200 text-black hover:bg-neutral-50 shadow-sm'}`}
-                  >
-                    <motion.div
-                      variants={{
-                        hover: { rotate: [0, -8, 8, 0], scale: 1.15 }
-                      }}
-                      transition={{ duration: 0.45 }}
-                      className="flex items-center shrink-0 mr-1.5"
-                    >
-                      <svg viewBox="0 0 24 24" className="w-[15px] h-[15px] block shrink-0" fill="currentColor" aria-hidden="true">
-                        <mask id="browse-components-mask">
-                          <rect width="24" height="24" rx="6.5" fill="white" />
-                          <rect x="5.5" y="6" width="7" height="2.5" rx="1.25" fill="black" />
-                          <rect x="5.5" y="10.75" width="13" height="2.5" rx="1.25" fill="black" />
-                          <rect x="5.5" y="15.5" width="7" height="2.5" rx="1.25" fill="black" />
-                        </mask>
-                        <rect width="24" height="24" rx="6.5" mask="url(#browse-components-mask)" fill="currentColor" />
-                      </svg>
-                    </motion.div>
-                    <span>Browse Components</span>
-                  </motion.button>
-                </div>
-
-                {/* Sponsor Ad Grid */}
-                <div className="w-full max-w-3xl mx-auto mt-10 px-4 sm:px-0 flex flex-col items-center">
-                  <div className={`text-[10px] font-bold uppercase tracking-widest mb-3.5 ${theme === 'dark' ? 'text-neutral-500' : 'text-neutral-400'}`}>
-                    Sponsored by
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full">
-                    {sponsors.map((slot) => {
-                      if (!slot.isAvailable) {
-                        const isMaple = slot.logoType === 'maple';
-                        return (
-                          <a
-                            key={slot.id}
-                            href={slot.siteUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => triggerHaptic('light')}
-                            className={`group relative flex flex-col items-center justify-center text-center p-3 sm:p-3.5 min-h-[78px] rounded-xl border transition-all duration-300 hover:scale-[1.02] ${
-                              isMaple
-                                ? (theme === 'dark'
-                                    ? 'bg-[#1a1410] border-[#E86F00]/30 hover:border-[#E86F00]/50 hover:bg-[#231a14] text-white shadow-[inset_0_1px_0_rgba(232,111,0,0.15)]'
-                                    : 'bg-[#FFF7ED] border-[#FDBA74]/80 hover:border-[#FB923C] hover:bg-[#FFEDD5] text-[#7C2D12] shadow-[0_2px_12px_rgba(232,111,0,0.06)]')
-                                : (theme === 'dark'
-                                    ? 'bg-[#181818] border-neutral-800/80 hover:bg-[#1e1e1e] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]'
-                                    : 'bg-white border-neutral-200 hover:shadow-xs text-black shadow-2xs')
-                            }`}
-                          >
-                            <div className="flex flex-col items-center justify-center w-full">
-                              {isMaple ? (
-                                <div className="flex items-center gap-2 font-bold tracking-tight text-[13.5px] text-neutral-900 dark:text-orange-200">
-                                  <MapleLogo className="w-5 h-5 shrink-0" />
-                                  <span>Maple</span>
-                                </div>
-                              ) : (
-                                <div className="flex items-center justify-center font-bold tracking-tight text-[13.5px] text-emerald-500 w-full px-1">
-                                  <span className="truncate max-w-[120px]">{slot.companyName}</span>
-                                </div>
-                              )}
-                              <p className={`text-[10.5px] sm:text-[11px] leading-[14px] sm:leading-[15px] mt-1 font-medium line-clamp-2 w-full px-0.5 transition-colors ${
-                                isMaple
-                                    ? (theme === 'dark' ? 'text-orange-200/80 group-hover:text-orange-100' : 'text-[#9A3412] group-hover:text-[#7C2D12]')
-                                    : (theme === 'dark' ? 'text-neutral-400 group-hover:text-neutral-300' : 'text-neutral-600 group-hover:text-neutral-800')
-                              }`} title={slot.description}>
-                                {slot.description}
-                              </p>
-                            </div>
-                          </a>
-                        );
-                      } else {
-                        return (
-                          <button
-                            key={slot.id}
-                            onClick={() => {
-                              triggerHaptic('medium');
-                              window.open(POLAR_CHECKOUT_URL, '_blank');
-                            }}
-                            className={`group flex flex-col items-center justify-center text-center p-3 sm:p-3.5 rounded-xl border border-dashed transition-all duration-300 hover:scale-[1.02] cursor-pointer bg-transparent min-h-[78px] ${
-                              theme === 'dark'
-                                ? 'border-neutral-800 hover:border-neutral-700 text-neutral-500 hover:text-neutral-300 hover:bg-neutral-900/10'
-                                : 'border-neutral-300 hover:border-neutral-400 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-50/30'
-                            }`}
-                          >
-                            <span className="text-[12px] font-bold tracking-tight flex items-center gap-1">
-                              <span>+</span> Sponsor
-                            </span>
-                            <span className={`text-[9.5px] mt-1 transition-colors ${theme === 'dark' ? 'text-neutral-500 group-hover:text-neutral-400' : 'text-neutral-500 group-hover:text-neutral-600'}`}>
-                              $49/mo
-                            </span>
-                          </button>
-                        );
-                      }
-                    })}
-                  </div>
-                </div>
-
-                {/* Filter and layout controls */}
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 w-full max-w-xl mx-auto px-4 sm:px-0">
-                  {/* Category Switcher: Dropdown on Mobile */}
-                  <div className="relative block sm:hidden w-full max-w-[260px] mx-auto z-40">
-                    <button
-                      onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className={`w-full flex items-center justify-between px-5 py-2.5 rounded-full border text-[13px] font-semibold cursor-pointer transition-all duration-300 shadow-sm border-0 focus-visible:outline-none ${
-                        theme === 'dark' 
-                          ? 'bg-[#181818] border-white/5 text-white hover:bg-[#222]' 
-                          : 'bg-white border-neutral-200 text-black hover:bg-neutral-50'
-                      }`}
-                    >
-                      <span>
-                        {tabLabels[catalogTab]}
-                      </span>
-                      <ChevronRight className={`w-4 h-4 transition-transform duration-300 ${dropdownOpen ? 'rotate-90 text-white' : 'text-neutral-400'}`} />
-                    </button>
-
-                    <AnimatePresence>
-                      {dropdownOpen && (
-                        <>
-                          <div 
-                            className="fixed inset-0 z-40 bg-transparent" 
-                            onClick={() => setDropdownOpen(false)} 
+                    {catalogTab === 'morphing' ? (
+                      <div className="col-span-full w-full">
+                        <Suspense fallback={<LoadingFallback />}>
+                          <MorphingShapesPage
+                            theme={theme}
+                            embedded={true}
+                            showToast={showToast}
+                            triggerHaptic={triggerHaptic}
+                            onNavigateHome={handleNavigateHome}
+                            onSelectComponent={(id) => navigateToChartDetail(id, 'morphing')}
                           />
-                          <motion.div
-                            initial={{ opacity: 0, y: -8, scale: 0.96 }}
-                            animate={{ opacity: 1, y: 6, scale: 1 }}
-                            exit={{ opacity: 0, y: -8, scale: 0.96 }}
-                            transition={{ duration: 0.15, ease: "easeOut" }}
-                            className={`absolute top-full left-0 right-0 z-50 rounded-[20px] border p-1.5 shadow-xl flex flex-col gap-0.5 max-h-[300px] overflow-y-auto backdrop-blur-xl ${
-                              theme === 'dark' 
-                                ? 'bg-[#181818]/95 border-white/5 text-[#ededed] shadow-black/50' 
-                                : 'bg-white/95 border-neutral-200 text-black shadow-neutral-200/50'
-                            }`}
-                          >
-                            {[
-                              { id: 'buttons', label: 'Buttons', href: '/buttons' },
-                              { id: 'cards', label: 'Card Spreads', href: '/cards' },
-                              { id: 'carousels', label: '3D Carousels', href: '/carousels' },
-                              { id: 'loaders', label: 'Loaders', href: '/loaders' },
-                              { id: 'dither-charts', label: 'Dither Charts', href: '/dither-charts' }
-                            ].map((tab) => (
-                              <a
-                                key={tab.id}
-                                href={tab.href}
-                                onClick={(e) => {
-                                  handleTabLinkClick(e, tab.id as CatalogTabType);
-                                  setDropdownOpen(false);
-                                }}
-                                className={`w-full text-left px-4 py-2 rounded-xl text-[13px] font-medium cursor-pointer border-0 transition-colors no-underline block ${
-                                  catalogTab === tab.id
-                                    ? (theme === 'dark' ? 'bg-white/10 text-white font-semibold' : 'bg-neutral-100 text-black font-semibold')
-                                    : (theme === 'dark' ? 'text-neutral-400 hover:text-white hover:bg-white/[0.04]' : 'text-neutral-600 hover:text-black hover:bg-neutral-50')
-                                }`}
-                              >
-                                {tab.label}
-                              </a>
-                            ))}
-                          </motion.div>
-                        </>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  {/* Desktop Category Switcher (Pills) */}
-                  <div className={`hidden sm:flex items-center p-1.5 rounded-full border shadow-inner transition-colors duration-300 max-w-full overflow-x-visible ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
-                    <div className="flex items-center gap-2 pr-1">
-                      <a
-                        href="/buttons"
-                        onClick={(e) => handleTabLinkClick(e, 'buttons')}
-                        className={`flex-none flex items-center justify-center h-[36px] px-4.5 sm:px-5 rounded-full text-[13px] font-medium leading-none transition-colors cursor-pointer border-0 whitespace-nowrap no-underline ${
-                          catalogTab === 'buttons' 
-                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                        }`}
-                      >
-                        Buttons
-                      </a>
-                      <a
-                        href="/cards"
-                        onClick={(e) => handleTabLinkClick(e, 'cards')}
-                        className={`flex-none flex items-center justify-center h-[36px] px-4.5 sm:px-5 rounded-full text-[13px] font-medium leading-none transition-colors cursor-pointer border-0 whitespace-nowrap no-underline ${
-                          catalogTab === 'cards' 
-                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                        }`}
-                      >
-                        Card Spreads
-                      </a>
-                      <a
-                        href="/carousels"
-                        onClick={(e) => handleTabLinkClick(e, 'carousels')}
-                        className={`flex-none flex items-center justify-center h-[36px] px-4.5 sm:px-5 rounded-full text-[13px] font-medium leading-none transition-colors cursor-pointer border-0 whitespace-nowrap no-underline ${
-                          catalogTab === 'carousels' 
-                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                        }`}
-                      >
-                        3D Carousels
-                      </a>
-                      <a
-                        href="/loaders"
-                        onClick={(e) => handleTabLinkClick(e, 'loaders')}
-                        className={`flex-none flex items-center justify-center h-[36px] px-4.5 sm:px-5 rounded-full text-[13px] font-medium leading-none transition-colors cursor-pointer border-0 whitespace-nowrap no-underline ${
-                          catalogTab === 'loaders' 
-                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                        }`}
-                      >
-                        Loaders
-                      </a>
-                      <a
-                        href="/dither-charts"
-                        onClick={(e) => handleTabLinkClick(e, 'dither-charts')}
-                        className={`flex-none flex items-center justify-center h-[36px] px-4.5 sm:px-5 rounded-full text-[13px] font-medium leading-none transition-colors cursor-pointer border-0 whitespace-nowrap no-underline ${
-                          catalogTab === 'dither-charts' || catalogTab === 'simple-comp'
-                            ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                            : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                        }`}
-                      >
-                        Dither Charts
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Secondary controls row */}
-                  {catalogTab !== 'loaders' && (
-                    <div className="flex items-center justify-center gap-3 shrink-0">
-                      {/* Sort */}
-                      <div className={`flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
-                        <button
-                          onClick={() => setSortBy(sortBy === 'default' ? 'alphabetical' : 'default')}
-                          className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[13px] font-medium transition-colors cursor-pointer border-0 ${
-                            sortBy === 'alphabetical' 
-                              ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                              : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                          }`}
-                        >
-                          <ArrowDownAZ className="w-3.5 h-3.5" />
-                          <span>A-Z</span>
-                        </button>
+                        </Suspense>
                       </div>
+                    ) : catalogTab === 'buttons' ? (
+                      displayedButtons.map((button, index) => (
+                        <motion.div
+                          key={button.id}
+                          initial={{ opacity: 0, y: 14 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{
+                            duration: 0.32,
+                            delay: Math.min(index * 0.02, 0.3),
+                            ease: [0.16, 1, 0.3, 1],
+                          }}
+                          className="w-full"
+                        >
+                          <article className="group/card relative">
+                            <div 
+                              onClick={(e) => {
+                                if (triggerHaptic) triggerHaptic('light');
+                                navigateToChartDetail(`btn-${button.id}`, 'buttons');
+                              }}
+                              className="block focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 rounded-3xl no-underline text-inherit cursor-pointer"
+                            >
+                              <div className={`relative aspect-[16/10] w-full overflow-hidden rounded-2xl sm:rounded-3xl border transition-all duration-300 flex items-center justify-center p-6 ${
+                                theme === 'dark'
+                                  ? 'bg-black border-white/[0.07] group-hover/card:border-white/[0.18] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]'
+                                  : 'bg-[#f5f6f8] border-neutral-200/80 group-hover/card:border-neutral-300 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]'
+                              }`}>
+                                <div
+                                  onClick={(e) => {
+                                    // On mobile: clicking the component directly triggers its hover/micro-interaction without navigating
+                                    const isTouch = typeof window !== 'undefined' && (window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768);
+                                    if (isTouch) {
+                                      e.stopPropagation();
+                                    }
+                                  }}
+                                  className="cursor-default"
+                                >
+                                  <AnimatedButton config={button} layoutMode="grid" theme={theme} />
+                                </div>
+                              </div>
 
-                      {/* Layout */}
-                      <div className={`hidden sm:flex items-center p-1 rounded-full border shadow-inner transition-colors duration-300 ${theme === 'dark' ? 'bg-[#181818] border-white/5' : 'bg-neutral-200/50 border-neutral-300/30'}`}>
-                        <button
-                          onClick={() => setLayout('list')}
-                          className={`p-1.5 rounded-full transition-colors cursor-pointer border-0 ${
-                            layout === 'list' 
-                              ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                              : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                          }`}
-                          aria-label="List layout"
-                        >
-                          <List className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => setLayout('grid')}
-                          className={`p-1.5 rounded-full transition-colors cursor-pointer border-0 ${
-                            layout === 'grid' 
-                              ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                              : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                          }`}
-                          aria-label="Grid layout"
-                        >
-                          <LayoutGrid className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => setLayout('matrix')}
-                          className={`p-1.5 rounded-full transition-colors cursor-pointer border-0 ${
-                            layout === 'matrix' 
-                              ? (theme === 'dark' ? 'bg-[#2a2a2a] text-white' : 'bg-white text-black shadow-sm') 
-                              : `${theme === 'dark' ? 'text-[#767676] hover:text-white' : 'text-black opacity-70 hover:opacity-100'}`
-                          }`}
-                          aria-label="Matrix layout"
-                        >
-                          <LayoutTemplate className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div 
-                id="component-grid"
-                className={`
-                  w-full mb-16 mx-auto scroll-mt-24 px-4 sm:px-0
-                  ${catalogTab === 'loaders' ? 'flex flex-col items-center w-full max-w-[1060px]' : `
-                    ${layout === 'list' ? 'flex flex-col items-center gap-4 max-w-md' : ''}
-                    ${layout === 'grid' ? (
-                      catalogTab === 'buttons' 
-                        ? 'flex flex-col items-center gap-6 w-full sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-10 lg:gap-12 max-w-[1060px] sm:justify-items-center' 
-                        : 'flex flex-col items-center gap-6 w-full sm:flex-row sm:flex-wrap sm:justify-center sm:gap-6 sm:max-w-6xl'
-                    ) : ''}
-                    ${layout === 'matrix' ? (
-                      catalogTab === 'buttons'
-                        ? 'flex flex-wrap justify-center gap-3 w-full max-w-[1400px] sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 sm:gap-2 sm:justify-items-center'
-                        : 'flex flex-col items-center gap-4 w-full sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4 sm:max-w-6xl'
-                    ) : ''}
-                  `}
-                `}
-              >
-                <AnimatePresence mode="popLayout">
-                  {catalogTab === 'buttons' ? (
-                    displayedButtons.map((button) => (
-                      <motion.div 
-                        layout 
-                        key={button.id}
-                        transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                        className={`${layout === 'list' ? 'w-full' : ''} ${layout === 'grid' ? 'w-full flex justify-center sm:w-auto sm:block' : ''}`}
-                      >
-                        {layout === 'grid' ? (
-                          <div 
-                            onClick={() => {
-                              if (triggerHaptic) triggerHaptic('light');
-                              navigateToChartDetail(`btn-${button.id}`, 'buttons');
-                            }}
-                            className={`relative w-full max-w-[320px] sm:w-[320px] h-[220px] sm:h-[268px] rounded-[24px] transition-all duration-300 group cursor-pointer ${theme === 'dark' ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] border border-neutral-100/85 hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] text-black'}`}
-                          >
-                            <div className={`absolute left-[12px] top-[12px] right-[12px] bottom-[68px] rounded-[14px] overflow-hidden flex items-center justify-center transition-colors duration-300 ${theme === 'dark' ? 'bg-[#131313]' : 'bg-[#f4f4f6]'}`}>
-                              <div className={`absolute inset-0 rounded-[14px] pointer-events-none z-10 ${theme === 'dark' ? 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]' : 'shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)]'}`} />
-                              <AnimatedButton config={button} layoutMode={layout} theme={theme} />
-                            </div>
-                            <div className="absolute left-[20px] bottom-[14px] w-[calc(100%-80px)] flex flex-col gap-[2px]">
-                              <a 
-                                href={`/buttons/btn-${button.id}`}
-                                onClick={(e) => {
-                                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
+                              <div className="flex items-center justify-between gap-3 pt-3 px-1">
+                                <div className="min-w-0 flex-1">
+                                  <h3 className="text-base sm:text-[17px] font-semibold tracking-[-0.015em] text-foreground truncate">
+                                    {button.label}
+                                  </h3>
+                                  <p className="text-xs sm:text-[13px] font-medium text-muted-foreground truncate capitalize mt-0.5">
+                                    {button.interactionType.replace('-', ' ')} interaction
+                                  </p>
+                                </div>
+                                <motion.button 
+                                  whileHover={{ scale: 1.08 }}
+                                  whileTap={{ scale: 0.92 }}
+                                  onClick={(e) => {
                                     e.preventDefault();
-                                    navigateToChartDetail(`btn-${button.id}`, 'buttons');
-                                  }
-                                }}
-                                className={`text-[13px] font-semibold leading-[18px] transition-colors no-underline ${theme === 'dark' ? 'text-[#ededed] hover:text-white' : 'text-black hover:text-neutral-700'}`}
-                              >
-                                {button.label}
-                              </a>
-                              <div className={`text-[11px] font-normal leading-[13px] transition-colors ${theme === 'dark' ? 'text-[#767676]' : 'text-black opacity-70'} capitalize`}>{button.interactionType.replace('-', ' ')} interaction</div>
+                                    e.stopPropagation();
+                                    handleCopyCode(button);
+                                  }}
+                                  type="button" 
+                                  className={`size-8 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer border border-border/80 bg-card hover:bg-muted text-muted-foreground hover:text-foreground shrink-0 opacity-80 sm:opacity-0 sm:group-hover/card:opacity-100 focus-visible:opacity-100 ${
+                                    copiedText === `btn-${button.id}` ? 'opacity-100 bg-emerald-500/10 border-emerald-500/30 text-emerald-500' : ''
+                                  }`}
+                                  aria-label="Copy interaction code"
+                                  title="Copy interaction code"
+                                >
+                                  <IconSwap>
+                                    <IconSwapItem key={copiedText === `btn-${button.id}` ? "check" : "copy"}>
+                                      {copiedText === `btn-${button.id}` ? (
+                                        <Check className="w-3.5 h-3.5 text-emerald-500" />
+                                      ) : (
+                                        <Copy className="w-3.5 h-3.5" />
+                                      )}
+                                    </IconSwapItem>
+                                  </IconSwap>
+                                </motion.button>
+                              </div>
                             </div>
-                            <button 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleCopyCode(button);
-                              }}
-                              type="button" 
-                              className={`absolute right-[20px] bottom-[12px] w-[32px] h-[32px] rounded-full flex items-center justify-center transition-colors cursor-pointer border-0 focus-visible:outline focus-visible:outline-2 ${theme === 'dark' ? 'bg-white/[0.08] hover:bg-white/[0.12] text-[#ededed]/60 hover:text-[#ededed]' : 'bg-neutral-100 hover:bg-neutral-200 text-black hover:text-black'}`} 
-                              aria-label="Copy interaction code"
-                            >
-                              <Copy className="w-3.5 h-3.5 transition-transform duration-300 group-hover:scale-110" />
-                            </button>
-                          </div>
-                        ) : (
-                          <AnimatedButton config={button} layoutMode={layout} theme={theme} />
-                        )}
-                      </motion.div>
-                    ))
-                  ) : catalogTab === 'loaders' ? (
-                    <div className="w-full flex flex-col gap-16 max-w-[1060px] mx-auto text-left">
-                      {loaderGroups.map((group, groupIdx) => {
-                        const isPhysicsGroup = group.title === 'Physics & Simulation';
-                        return (
-                          <div key={groupIdx} className="flex flex-col gap-6 w-full">
-                            <div className="flex items-center gap-3 px-2">
-                              <h2 className={`text-[17px] font-semibold tracking-tight transition-colors ${theme === 'dark' ? 'text-[#ededed]' : 'text-black'}`}>
-                                {group.title}
-                              </h2>
-                              <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium transition-colors ${theme === 'dark' ? 'bg-white/[0.06] text-neutral-400' : 'bg-neutral-200/60 text-neutral-600'}`}>
-                                {group.loaders.length} items
-                              </span>
-                            </div>
-                            
-                            {isPhysicsGroup ? (
-                              <div className="w-full">
+                          </article>
+                        </motion.div>
+                      ))
+                      ) : catalogTab === 'loaders' ? (
+                        <div className="col-span-full w-full flex flex-col gap-12 text-left">
+                          {loaderGroups.map((group, groupIdx) => (
+                            <div key={groupIdx} className="flex flex-col gap-6 w-full">
+                              <div className="flex items-center gap-3 px-1">
+                                <h2 className="text-xl sm:text-2xl font-semibold tracking-heading text-foreground">
+                                  {group.title}
+                                </h2>
+                                <span className="text-xs px-2.5 py-0.5 rounded-full bg-secondary border border-border text-muted-foreground font-medium">
+                                  {group.loaders.length} items
+                                </span>
+                              </div>
+
+                              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3.5 sm:gap-4">
                                 {group.loaders.map((loader, loaderIdx) => {
                                   const LoaderComponent = loader.component;
-                                  const isCopied = copiedText === loader.kebabName || copiedText === loader.name;
+                                  const isWavePhysics = loader.name === 'Wave Physics' || group.title === 'Physics & Simulation';
                                   return (
-                                    <div 
+                                    <motion.article 
                                       key={loaderIdx} 
-                                      onClick={() => {
-                                        if (triggerHaptic) triggerHaptic('light');
-                                        navigateToChartDetail(loader.kebabName, 'loaders');
+                                      initial={{ opacity: 0, y: 12 }}
+                                      animate={{ opacity: 1, y: 0 }}
+                                      transition={{
+                                        duration: 0.3,
+                                        delay: Math.min(loaderIdx * 0.02, 0.25),
+                                        ease: [0.16, 1, 0.3, 1],
                                       }}
-                                      className={`relative group rounded-[24px] flex flex-col items-center justify-center p-6 md:p-8 transition-all duration-300 border h-64 md:h-80 w-full overflow-hidden cursor-pointer ${
-                                        theme === 'dark' 
-                                          ? 'bg-[#181818] border-white/5 hover:bg-[#1f1f1f] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]' 
-                                          : 'bg-white border-neutral-100 hover:shadow-[0_4px_20px_rgba(0,0,0,0.03)]'
-                                      }`}
+                                      className={`group/card relative ${isWavePhysics ? 'col-span-full' : ''}`}
                                     >
-                                      <div className="flex-1 flex items-center justify-center w-full">
-                                        <InViewRender>
-                                          <LoaderComponent theme={theme} />
-                                        </InViewRender>
-                                      </div>
-
-                                      <div className="w-full flex items-center justify-between mt-4 px-2">
-                                        <span className={`text-[13px] font-semibold transition-colors ${
-                                          theme === 'dark' ? 'text-neutral-350' : 'text-neutral-700'
+                                      <div 
+                                        onClick={() => {
+                                          if (triggerHaptic) triggerHaptic('light');
+                                          navigateToChartDetail(loader.kebabName, 'loaders');
+                                        }}
+                                        className="block focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 rounded-2xl sm:rounded-3xl cursor-pointer"
+                                      >
+                                        <div className={`relative w-full overflow-hidden rounded-2xl sm:rounded-3xl bg-black flex items-center justify-center ${
+                                          isWavePhysics 
+                                            ? 'h-44 sm:h-48 md:h-52 p-4 sm:p-5' 
+                                            : 'aspect-[16/10] p-3 sm:p-4'
                                         }`}>
-                                          {loader.name}
-                                        </span>
-                                        
-                                        <motion.button
-                                          whileHover={{ scale: 1.08 }}
-                                          whileTap={{ scale: 0.92 }}
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleCopyLoaderCode(loader);
-                                          }}
-                                          className={`p-2 rounded-xl transition-all cursor-pointer border flex items-center justify-center ${
-                                            isCopied
-                                              ? (theme === 'dark' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-emerald-100 text-emerald-600 border-emerald-300')
-                                              : (theme === 'dark' ? 'bg-white/[0.08] border-transparent hover:bg-white/[0.14] text-neutral-300 hover:text-white' : 'bg-neutral-100 border-transparent hover:bg-neutral-200 text-neutral-650 hover:text-black')
-                                          }`}
-                                          title="Copy loader code"
-                                        >
-                                          <IconSwap>
-                                            <IconSwapItem key={isCopied ? "check" : "copy"}>
-                                              {isCopied ? (
-                                                <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
-                                              ) : (
-                                                <Copy className="w-4 h-4" />
-                                              )}
-                                            </IconSwapItem>
-                                          </IconSwap>
-                                        </motion.button>
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            ) : (
-                              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 w-full">
-                                {group.loaders.map((loader, loaderIdx) => {
-                                  const LoaderComponent = loader.component;
-                                  const isCopied = copiedText === loader.kebabName || copiedText === loader.name;
-                                  return (
-                                    <div 
-                                      key={loaderIdx} 
-                                      onClick={() => {
-                                        if (triggerHaptic) triggerHaptic('light');
-                                        navigateToChartDetail(loader.kebabName, 'loaders');
-                                      }}
-                                      className={`relative group aspect-square rounded-2xl flex flex-col items-center justify-center p-4 transition-all duration-300 border cursor-pointer ${
-                                        theme === 'dark' 
-                                          ? 'bg-[#181818] border-white/5 hover:bg-[#1f1f1f] shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]' 
-                                          : 'bg-white border-neutral-100 hover:shadow-[0_4px_12px_rgba(0,0,0,0.03)] hover:border-neutral-200/50'
-                                      }`}
-                                    >
-                                      <div className="flex-1 flex items-center justify-center w-full min-h-[64px]">
-                                        <InViewRender>
-                                          <LoaderComponent theme={theme} />
-                                        </InViewRender>
-                                      </div>
+                                          <div
+                                            onClick={(e) => {
+                                              const isTouch = typeof window !== 'undefined' && (window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768);
+                                              if (isTouch) {
+                                                e.stopPropagation();
+                                              }
+                                            }}
+                                            className="cursor-default"
+                                          >
+                                            <InViewRender>
+                                              <div className={`origin-center flex items-center justify-center ${
+                                                isWavePhysics
+                                                  ? 'scale-95 sm:scale-100 md:scale-105'
+                                                  : 'scale-[0.8] sm:scale-90'
+                                              }`}>
+                                                <LoaderComponent theme={theme} />
+                                              </div>
+                                            </InViewRender>
+                                          </div>
+                                        </div>
 
-                                      <div className="w-full flex items-center justify-between mt-3 px-1 gap-1">
-                                        <span className={`text-[12px] font-medium truncate transition-colors ${
-                                          theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
-                                        }`} title={loader.name}>
-                                          {loader.name}
-                                        </span>
-                                        
-                                        <motion.button
-                                          whileHover={{ scale: 1.1 }}
-                                          whileTap={{ scale: 0.9 }}
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleCopyLoaderCode(loader);
-                                          }}
-                                          className={`p-1.5 rounded-lg transition-all cursor-pointer border flex items-center justify-center ${
-                                            isCopied
-                                              ? (theme === 'dark' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-emerald-100 text-emerald-600 border-emerald-300')
-                                              : (theme === 'dark' ? 'bg-white/[0.08] border-transparent text-neutral-300 hover:text-white hover:bg-white/[0.14]' : 'bg-neutral-100/90 border-transparent text-neutral-600 hover:text-black hover:bg-neutral-200')
-                                          }`}
-                                          title="Copy loader code"
-                                        >
-                                          <IconSwap>
-                                            <IconSwapItem key={isCopied ? "check" : "copy"}>
-                                              {isCopied ? (
-                                                <Check className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
-                                              ) : (
-                                                <Copy className="w-3.5 h-3.5" />
-                                              )}
-                                            </IconSwapItem>
-                                          </IconSwap>
-                                        </motion.button>
+                                        <div className="flex items-center justify-between gap-2 pt-2.5 px-1">
+                                          <div className="min-w-0 flex-1">
+                                            <h3 className="text-sm sm:text-[15px] font-semibold tracking-[-0.015em] text-foreground truncate">
+                                              {loader.name}
+                                            </h3>
+                                          </div>
+                                          <motion.button 
+                                            whileHover={{ scale: 1.08 }}
+                                            whileTap={{ scale: 0.92 }}
+                                            onClick={(e) => {
+                                              e.preventDefault();
+                                              e.stopPropagation();
+                                              handleCopyLoaderCode(loader);
+                                            }}
+                                            type="button" 
+                                            className={`size-7 sm:size-8 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer border border-border/80 bg-card hover:bg-muted text-muted-foreground hover:text-foreground shrink-0 opacity-0 group-hover/card:opacity-100 focus-visible:opacity-100 ${
+                                              copiedText === (loader.kebabName || loader.name) ? 'opacity-100 bg-white/10 border-white/30 text-white' : ''
+                                            }`}
+                                            aria-label={`Copy ${loader.name} code`}
+                                            title={`Copy ${loader.name} code`}
+                                          >
+                                            <IconSwap>
+                                              <IconSwapItem key={copiedText === (loader.kebabName || loader.name) ? "check" : "copy"}>
+                                                {copiedText === (loader.kebabName || loader.name) ? (
+                                                  <Check className="w-3.5 h-3.5 text-white" />
+                                                ) : (
+                                                  <Copy className="w-3.5 h-3.5" />
+                                                )}
+                                              </IconSwapItem>
+                                            </IconSwap>
+                                          </motion.button>
+                                        </div>
                                       </div>
-                                    </div>
+                                    </motion.article>
                                   );
                                 })}
                               </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : catalogTab === 'dither-charts' || catalogTab === 'simple-comp' ? (
-                    <DitherChartsGrid theme={theme} showToast={showToast} triggerHaptic={triggerHaptic} />
-                  ) : (
-                    displayedCards.map((card) => (
-                      <motion.div 
-                        layout 
-                        key={card.id}
-                        transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                        className={`${layout === 'list' ? 'w-full' : ''} ${layout === 'grid' || layout === 'matrix' ? 'w-full flex justify-center sm:w-auto sm:block' : ''}`}
-                      >
-                        {layout === 'grid' || layout === 'matrix' ? (
-                          <div 
-                            onClick={() => {
-                              if (triggerHaptic) triggerHaptic('light');
-                              navigateToChartDetail(card.interactionType || card.id, card.category === 'carousels' ? 'carousels' : 'cards');
+                            </div>
+                          ))}
+                        </div>
+                      ) : catalogTab === 'mono-charts' ? (
+                        <div className="col-span-full w-full">
+                          <Suspense fallback={<LoadingFallback />}>
+                            <MonoChartsPage
+                              theme={theme}
+                              embedded={true}
+                              sponsors={sponsors}
+                              checkoutUrl={CHECKOUT_URL}
+                              showToast={showToast}
+                              triggerHaptic={triggerHaptic}
+                              onNavigateHome={() => navigateTo('home')}
+                              onSelectChart={(id) => navigateToChartDetail(id)}
+                            />
+                          </Suspense>
+                        </div>
+                      ) : catalogTab === 'anime' ? (
+                        <div className="col-span-full w-full">
+                          <Suspense fallback={<LoadingFallback />}>
+                            <CssAnimationsPage
+                              theme={theme}
+                              embedded={true}
+                              showToast={showToast}
+                              triggerHaptic={triggerHaptic}
+                              onNavigateHome={() => navigateTo('home')}
+                            />
+                          </Suspense>
+                        </div>
+                      ) : catalogTab === '3d' ? (
+                        <div className="col-span-full w-full">
+                          <Suspense fallback={<LoadingFallback />}>
+                            <ThreeDPage
+                              theme={theme}
+                              embedded={true}
+                              showToast={showToast}
+                              triggerHaptic={triggerHaptic}
+                              onNavigateHome={() => navigateTo('home')}
+                            />
+                          </Suspense>
+                        </div>
+                      ) : catalogTab === 'text-animations' ? (
+                        <div className="col-span-full w-full">
+                          <Suspense fallback={<LoadingFallback />}>
+                            <TextAnimationsPage
+                              theme={theme}
+                              embedded={true}
+                              showToast={showToast}
+                              triggerHaptic={triggerHaptic}
+                              onNavigateHome={() => navigateTo('home')}
+                            />
+                          </Suspense>
+                        </div>
+                      ) : (
+                        displayedCards.map((card, index) => (
+                          <motion.div
+                            key={card.id}
+                            initial={{ opacity: 0, y: 14 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{
+                              duration: 0.32,
+                              delay: Math.min(index * 0.025, 0.35),
+                              ease: [0.16, 1, 0.3, 1],
                             }}
-                            onMouseEnter={() => setHoveredCardId(card.id)}
-                            onMouseLeave={() => setHoveredCardId(null)}
-                            className={`relative w-full max-w-[480px] sm:w-[480px] h-[300px] sm:h-[390px] rounded-[24px] transition-all duration-300 group cursor-pointer ${hoveredCardId === card.id ? 'overflow-visible z-20' : 'overflow-hidden z-1'} ${theme === 'dark' ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] border border-neutral-100/85 hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] text-black'}`}
+                            className="w-full"
                           >
-                            <div className={`absolute left-[12px] top-[12px] right-[12px] h-[200px] sm:h-[290px] rounded-[14px] flex items-center justify-center ${hoveredCardId === card.id ? 'overflow-visible' : 'overflow-hidden'} transition-colors duration-300 ${theme === 'dark' ? 'bg-[#131313]' : 'bg-[#f4f4f6]'}`}>
-                              <div className={`absolute inset-0 rounded-[14px] pointer-events-none z-10 ${theme === 'dark' ? 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]' : 'shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)]'}`} />
-                              {card.interactionType === 'card-arc-5' && <CardArc5 hovered={hoveredCardId === card.id} className="scale-[0.55] sm:scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-arc-7' && <CardArc7 hovered={hoveredCardId === card.id} className="scale-[0.5] sm:scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-long-arc-5' && <CardLongArc5 hovered={hoveredCardId === card.id} className="scale-[0.5] sm:scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-linear-spread' && <CardLinearSpread hovered={hoveredCardId === card.id} className="scale-[0.55] sm:scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-corner-fan' && <CardCornerFan hovered={hoveredCardId === card.id} className="scale-[0.55] sm:scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-stamp-arc' && <CardStampArc hovered={hoveredCardId === card.id} className="scale-[0.55] sm:scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-cascade-stagger' && <CardCascadeStagger hovered={hoveredCardId === card.id} className="scale-[0.55] sm:scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-scatter-spread' && <CardScatterSpread hovered={hoveredCardId === card.id} className="scale-[0.55] sm:scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-wheel-fan' && <CardWheelFan hovered={hoveredCardId === card.id} className="scale-[0.55] sm:scale-[1.2] origin-center" />}
-                              {card.interactionType === 'card-carousel' && <CardCarousel hovered={hoveredCardId === card.id} className="scale-[0.45] sm:scale-[1.0] origin-center" />}
-                              {card.interactionType === 'card-cover-flow' && <CardCoverFlow hovered={hoveredCardId === card.id} className="scale-[0.45] sm:scale-[1.0] origin-center" />}
-                              {card.interactionType === 'card-time-machine' && <CardTimeMachine hovered={hoveredCardId === card.id} className="scale-[0.45] sm:scale-[1.0] origin-center" />}
-                              {card.interactionType === 'card-carousel-mono' && <CardCarousel hovered={hoveredCardId === card.id} isMonochrome={true} className="scale-[0.45] sm:scale-[1.0] origin-center" />}
-                              {card.interactionType === 'card-cover-flow-mono' && <CardCoverFlow hovered={hoveredCardId === card.id} isMonochrome={true} className="scale-[0.45] sm:scale-[1.0] origin-center" />}
-                              {card.interactionType === 'card-time-machine-mono' && <CardTimeMachine hovered={hoveredCardId === card.id} isMonochrome={true} className="scale-[0.45] sm:scale-[1.0] origin-center" />}
-                            </div>
-                            <div className="absolute left-[20px] bottom-[12px] right-[65px] flex flex-col justify-end gap-[3px]">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <a 
-                                  href={`/${card.category === 'carousels' ? 'carousels' : 'cards'}/${card.interactionType || card.id}`}
+                            <article className="group/card relative">
+                              <div className="block focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 rounded-3xl no-underline text-inherit">
+                                <div
                                   onClick={(e) => {
-                                    if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
-                                      e.preventDefault();
+                                    const isFine = typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches;
+                                    if (isFine) {
+                                      if (triggerHaptic) triggerHaptic('light');
                                       navigateToChartDetail(card.interactionType || card.id, card.category === 'carousels' ? 'carousels' : 'cards');
+                                    } else {
+                                      e.stopPropagation();
+                                      setHoveredCardId(prev => (prev === card.id ? null : card.id));
+                                      if (triggerHaptic) triggerHaptic('light');
                                     }
                                   }}
-                                  className={`text-[13px] font-semibold leading-[18px] transition-colors no-underline ${theme === 'dark' ? 'text-[#ededed] hover:text-white' : 'text-black hover:text-neutral-700'}`}
+                                  onTouchEnd={(e) => {
+                                    // Single tap on mobile touch screens immediately spreads or closes the cards
+                                    e.stopPropagation();
+                                    setHoveredCardId(prev => (prev === card.id ? null : card.id));
+                                    if (triggerHaptic) triggerHaptic('light');
+                                  }}
+                                  onMouseEnter={() => {
+                                    if (typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches) {
+                                      setHoveredCardId(card.id);
+                                    }
+                                  }}
+                                  onMouseLeave={() => {
+                                    if (typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches) {
+                                      setHoveredCardId(null);
+                                    }
+                                  }}
+                                  className={`relative aspect-[16/10] w-full rounded-2xl sm:rounded-3xl bg-black border border-white/[0.07] group-hover/card:border-white/[0.18] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] flex items-center justify-center transition-all duration-300 cursor-pointer ${hoveredCardId === card.id ? 'overflow-visible z-20' : 'overflow-hidden z-1'}`}
                                 >
-                                  {card.label}
-                                </a>
-                                {card.inspiration && (
-                                  <a
-                                    href={card.inspiration.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 transition-colors font-medium whitespace-nowrap"
+                                  <div className="relative h-full w-full flex items-center justify-center pointer-events-none">
+                                    {card.interactionType === 'card-arc-5' && <CardArc5 hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
+                                    {card.interactionType === 'card-arc-7' && <CardArc7 hovered={hoveredCardId === card.id} className="scale-[0.55] sm:scale-[0.85] origin-center" />}
+                                    {card.interactionType === 'card-long-arc-5' && <CardLongArc5 hovered={hoveredCardId === card.id} className="scale-[0.55] sm:scale-[0.85] origin-center" />}
+                                    {card.interactionType === 'card-linear-spread' && <CardLinearSpread hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
+                                    {card.interactionType === 'card-corner-fan' && <CardCornerFan hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
+                                    {card.interactionType === 'card-stamp-arc' && <CardStampArc hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
+                                    {card.interactionType === 'card-cascade-stagger' && <CardCascadeStagger hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
+                                    {card.interactionType === 'card-scatter-spread' && <CardScatterSpread hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
+                                    {card.interactionType === 'card-wheel-fan' && <CardWheelFan hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
+                                    {card.interactionType === 'card-carousel' && <CardCarousel hovered={hoveredCardId === card.id} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
+                                    {card.interactionType === 'card-cover-flow' && <CardCoverFlow hovered={hoveredCardId === card.id} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
+                                    {card.interactionType === 'card-time-machine' && <CardTimeMachine hovered={hoveredCardId === card.id} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
+                                    {card.interactionType === 'card-carousel-mono' && <CardCarousel hovered={hoveredCardId === card.id} isMonochrome={true} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
+                                    {card.interactionType === 'card-cover-flow-mono' && <CardCoverFlow hovered={hoveredCardId === card.id} isMonochrome={true} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
+                                    {card.interactionType === 'card-time-machine-mono' && <CardTimeMachine hovered={hoveredCardId === card.id} isMonochrome={true} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
+                                  </div>
+                                </div>
+                                <div
+                                  onClick={(e) => {
+                                    if (triggerHaptic) triggerHaptic('light');
+                                    navigateToChartDetail(card.interactionType || card.id, card.category === 'carousels' ? 'carousels' : 'cards');
+                                  }}
+                                  className="flex items-center justify-between gap-3 pt-3 px-1 cursor-pointer"
+                                >
+                                  <div className="min-w-0 flex-1">
+                                    <div className="flex items-center gap-2">
+                                      <h3 className="text-base sm:text-[17px] font-semibold tracking-[-0.015em] text-foreground truncate">
+                                        {card.label}
+                                      </h3>
+                                      {card.inspiration && (
+                                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-medium whitespace-nowrap">
+                                          by {card.inspiration.name}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <p className="text-xs sm:text-[13px] font-medium text-muted-foreground truncate mt-0.5">
+                                      {card.description}
+                                    </p>
+                                  </div>
+                                  <motion.button 
+                                    whileHover={{ scale: 1.08 }}
+                                    whileTap={{ scale: 0.92 }}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      handleCopyCardCode(card);
+                                    }}
+                                    type="button" 
+                                    className={`size-8 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer border border-border/80 bg-card hover:bg-muted text-muted-foreground hover:text-foreground shrink-0 opacity-80 sm:opacity-0 sm:group-hover/card:opacity-100 focus-visible:opacity-100 ${
+                                      copiedText === (card.interactionType || card.id) ? 'opacity-100 bg-white/10 border-white/30 text-white' : ''
+                                    }`}
+                                    aria-label="Copy card code"
+                                    title="Copy card code"
                                   >
-                                    by {card.inspiration.name}
-                                  </a>
-                                )}
+                                    <IconSwap>
+                                      <IconSwapItem key={copiedText === (card.interactionType || card.id) ? "check" : "copy"}>
+                                        {copiedText === (card.interactionType || card.id) ? (
+                                          <Check className="w-3.5 h-3.5 text-white" />
+                                        ) : (
+                                          <Copy className="w-3.5 h-3.5" />
+                                        )}
+                                      </IconSwapItem>
+                                    </IconSwap>
+                                  </motion.button>
+                                </div>
                               </div>
-                              <div className={`text-[11px] font-normal leading-[14px] line-clamp-2 transition-colors ${theme === 'dark' ? 'text-[#767676]' : 'text-black opacity-70'}`}>
-                                {card.description}
-                              </div>
-                            </div>
-                            <button 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleCopyCardCode(card);
-                              }}
-                              type="button" 
-                              className={`absolute right-[20px] bottom-[14px] w-[32px] h-[32px] rounded-full flex items-center justify-center transition-colors cursor-pointer border-0 focus-visible:outline focus-visible:outline-2 ${theme === 'dark' ? 'bg-white/[0.08] hover:bg-white/[0.12] text-[#ededed]/60 hover:text-[#ededed]' : 'bg-neutral-100 hover:bg-neutral-200 text-black hover:text-black'}`} 
-                              aria-label="Copy card code"
-                            >
-                              <Copy className="w-3.5 h-3.5 transition-transform duration-300 group-hover:scale-110" />
-                            </button>
-                          </div>
-                        ) : (
-                          // List view for cards
-                          <div className={`w-full max-w-[500px] flex items-center justify-between p-4 rounded-xl border transition-colors ${theme === 'dark' ? 'bg-[#181818] border-neutral-850 text-white' : 'bg-white border-neutral-200 shadow-sm text-black'}`}>
-                            <div className="flex items-center gap-4">
-                              <div className={`w-12 h-12 rounded-lg flex items-center justify-center shrink-0 ${theme === 'dark' ? 'bg-[#131313]' : 'bg-neutral-100'}`}>
-                                <LayoutTemplate className="w-5 h-5 text-neutral-400" />
-                              </div>
-                              <div>
-                                <a 
-                                  href={`/${card.category === 'carousels' ? 'carousels' : 'cards'}/${card.interactionType || card.id}`}
-                                  onClick={(e) => {
-                                    if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) {
-                                      e.preventDefault();
-                                      navigateToChartDetail(card.interactionType || card.id, card.category === 'carousels' ? 'carousels' : 'cards');
-                                    }
-                                  }}
-                                  className={`text-[14px] font-semibold no-underline ${theme === 'dark' ? 'text-white' : 'text-black'}`}
-                                >
-                                  {card.label}
-                                </a>
-                                <div className={`text-[11px] ${theme === 'dark' ? 'text-neutral-500' : 'text-neutral-400'}`}>{card.description}</div>
-                              </div>
-                            </div>
-                            <button 
-                              onClick={() => handleCopyCardCode(card)}
-                              className={`p-2 rounded-lg cursor-pointer border-0 ${theme === 'dark' ? 'bg-white/[0.06] text-neutral-300 hover:bg-white/[0.1]' : 'bg-neutral-150 text-neutral-750 hover:bg-neutral-200'}`}
-                            >
-                              <Copy className="w-4 h-4" />
-                            </button>
-                          </div>
-                        )}
-                      </motion.div>
-                    ))
-                  )}
+                            </article>
+                          </motion.div>
+                        ))
+                      )}
+                    </div>
+                  </motion.div>
                 </AnimatePresence>
               </div>
-            </div>
+            </section>
 
-            {/* Recommended Partner Card */}
-            <div className="relative z-10 w-full max-w-[1240px] mx-auto mt-8 mb-14 px-4 sm:px-6">
-              <div
-                className={`relative w-full rounded-[24px] sm:rounded-[28px] p-6 sm:p-8 transition-all duration-300 border ${
-                  theme === 'dark'
-                    ? 'bg-[#181818] border-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] text-white'
-                    : 'bg-white border-neutral-200/80 shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] text-black'
-                }`}
-              >
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                  <div className="flex-1 min-w-0 flex flex-col gap-2 max-w-[700px]">
-                    <p className={`m-0 text-[15px] sm:text-[16px] leading-[25px] font-normal transition-colors ${
-                      theme === 'dark' ? 'text-neutral-200' : 'text-neutral-800'
-                    }`}>
-                      If you want to use beautiful ready-to-use UI components, I highly recommend{' '}
-                      <a
-                        href="https://oxygen-ui.vercel.app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`font-semibold underline underline-offset-4 decoration-current transition-opacity hover:opacity-80 ${
-                          theme === 'dark' ? 'text-white' : 'text-black'
-                        }`}
-                      >
-                        Oxygen UI
-                      </a>
-                      .
-                    </p>
+            {/* Sponsors Section - Visible but Secondary */}
+            <SponsorSection
+              theme={theme}
+              sponsors={sponsors}
+              checkoutUrl={CHECKOUT_URL}
+              onNavigateSponsors={handleNavigateToSponsors}
+              triggerHaptic={triggerHaptic}
+            />
 
-                    <div className="flex items-center gap-2 text-[13px] leading-[18px]">
-                      <a
-                        href="https://x.com/SubhanHQ"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`font-semibold hover:underline no-underline transition-colors ${
-                          theme === 'dark' ? 'text-white' : 'text-black'
-                        }`}
-                      >
-                        Syed Subhan
-                      </a>
-                      <span className={theme === 'dark' ? 'text-neutral-500' : 'text-neutral-400'}>·</span>
-                      <span className={theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'}>
-                        Creator of Oxygen UI
-                      </span>
-                    </div>
-                  </div>
-
-                  <motion.a
-                    href="https://oxygen-ui.vercel.app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.04 }}
-                    whileTap={{ scale: 0.96 }}
-                    className={`inline-flex items-center justify-center gap-2 h-[42px] px-6 rounded-full font-medium text-[13px] leading-none no-underline transition-all duration-200 shrink-0 self-start md:self-center group cursor-pointer border ${
-                      theme === 'dark'
-                        ? 'bg-white text-black hover:bg-neutral-200 border-white/10 shadow-sm'
-                        : 'bg-neutral-950 text-white hover:bg-neutral-800 border-neutral-800 shadow-sm'
-                    }`}
-                  >
-                    <span>Get Oxygen UI</span>
-                    <span className="inline-flex w-[14px] h-[14px]">
-                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
-                        <path d="M7.5 2.5H4.5C3.39543 2.5 2.5 3.39543 2.5 4.5V11.5C2.5 12.6046 3.39543 13.5 4.5 13.5H11.5C12.6046 13.5 13.5 12.6046 13.5 11.5V8.5"></path>
-                        <g className="transition-transform duration-250 group-hover:translate-x-[2px] group-hover:-translate-y-[2px]">
-                          <path d="M8.5 7.5L13.5 2.5M10 2.5H13.5V6"></path>
-                        </g>
-                      </svg>
-                    </span>
-                  </motion.a>
-                </div>
-              </div>
-            </div>
+            {/* CTA Section - Rounded rectangle card above footer */}
+            <CtaSection
+              theme={theme}
+              stars={stars}
+              onBrowseComponents={() => {
+                const elem = document.getElementById('components');
+                if (elem) {
+                  elem.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              showToast={showToast}
+              triggerHaptic={triggerHaptic}
+            />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Crawlable Semantic Footer Hub as a Rounded Floating Card */}
-      <footer className="relative z-10 w-full px-4 sm:px-6 mt-auto pb-8 pt-4">
-        <div
-          className={`w-full max-w-[1240px] mx-auto rounded-[28px] sm:rounded-[36px] p-6 sm:p-10 transition-all duration-300 border ${
-            theme === 'dark'
-              ? 'bg-[#181818] border-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_12px_40px_rgba(0,0,0,0.36)] text-white'
-              : 'bg-white border-neutral-200/80 shadow-[0_4px_24px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] text-black'
-          }`}
-        >
-          {/* Top 3-Column Info Area */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
-            {/* Column 1: Navigation / Directory */}
-            <div className="flex flex-col gap-3">
-              <span className={`text-[11px] font-bold uppercase tracking-[0.14em] ${
-                theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'
-              }`}>
-                Directory
-              </span>
-              <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-[13px] font-medium">
-                <a href="/buttons" onClick={(e) => handleLinkClick(e, 'home', 'buttons')} className={`no-underline hover:underline transition-colors ${theme === 'dark' ? 'text-neutral-300 hover:text-white' : 'text-neutral-700 hover:text-black'}`}>Buttons</a>
-                <a href="/cards" onClick={(e) => handleLinkClick(e, 'home', 'cards')} className={`no-underline hover:underline transition-colors ${theme === 'dark' ? 'text-neutral-300 hover:text-white' : 'text-neutral-700 hover:text-black'}`}>Card Spreads</a>
-                <a href="/carousels" onClick={(e) => handleLinkClick(e, 'home', 'carousels')} className={`no-underline hover:underline transition-colors ${theme === 'dark' ? 'text-neutral-300 hover:text-white' : 'text-neutral-700 hover:text-black'}`}>3D Carousels</a>
-                <a href="/loaders" onClick={(e) => handleLinkClick(e, 'home', 'loaders')} className={`no-underline hover:underline transition-colors ${theme === 'dark' ? 'text-neutral-300 hover:text-white' : 'text-neutral-700 hover:text-black'}`}>Loaders</a>
-                <a href="/Anime" onClick={(e) => handleLinkClick(e, 'css-animations')} className={`no-underline hover:underline transition-colors ${theme === 'dark' ? 'text-neutral-300 hover:text-white' : 'text-neutral-700 hover:text-black'}`}>Anime</a>
-                <a href="/text-animations" onClick={(e) => handleLinkClick(e, 'text-animations')} className={`no-underline hover:underline transition-colors ${theme === 'dark' ? 'text-neutral-300 hover:text-white' : 'text-neutral-700 hover:text-black'}`}>Text</a>
-                <a href="/mono-charts" onClick={(e) => handleLinkClick(e, 'mono-charts')} className={`no-underline hover:underline transition-colors ${theme === 'dark' ? 'text-neutral-300 hover:text-white' : 'text-neutral-700 hover:text-black'}`}>Mono Charts</a>
-                <a href="/dither-charts" onClick={(e) => handleLinkClick(e, 'dither-charts')} className={`no-underline hover:underline transition-colors ${theme === 'dark' ? 'text-neutral-300 hover:text-white' : 'text-neutral-700 hover:text-black'}`}>Dither Charts</a>
-                <a href="/3d" onClick={(e) => handleLinkClick(e, '3d-page')} className={`no-underline hover:underline transition-colors ${theme === 'dark' ? 'text-neutral-300 hover:text-white' : 'text-neutral-700 hover:text-black'}`}>3D Spatial</a>
-                <a href="/cli" onClick={(e) => handleLinkClick(e, 'cli')} className={`no-underline hover:underline transition-colors ${theme === 'dark' ? 'text-neutral-300 hover:text-white' : 'text-neutral-700 hover:text-black'}`}>CLI</a>
-                <a href="/skills" onClick={(e) => handleLinkClick(e, 'skills')} className={`no-underline hover:underline transition-colors ${theme === 'dark' ? 'text-neutral-300 hover:text-white' : 'text-neutral-700 hover:text-black'}`}>Skills</a>
-                <a href="/sponsors" onClick={(e) => handleLinkClick(e, 'sponsors')} className={`no-underline hover:underline transition-colors ${theme === 'dark' ? 'text-neutral-300 hover:text-white' : 'text-neutral-700 hover:text-black'}`}>Sponsors</a>
-              </div>
-            </div>
+      {/* Minimal Footer */}
+      <MinimalFooter
+        theme={theme}
+        onNavigate={handleSelectNav}
+        onNavigateHome={handleNavigateHome}
+        showToast={showToast}
+        triggerHaptic={triggerHaptic}
+      />
 
-            {/* Column 2: Credits & Craft */}
-            <div className="flex flex-col gap-3">
-              <span className={`text-[11px] font-bold uppercase tracking-[0.14em] ${
-                theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'
-              }`}>
-                Craft & Credits
-              </span>
-              <div className="flex flex-col gap-2 text-[13px] leading-[22px]">
-                <p className="m-0">
-                  <span className={theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}>Created by </span>
-                  <a href="https://x.com/SubhanHQ" target="_blank" rel="noopener noreferrer" className={`font-semibold no-underline hover:underline ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Syed Subhan</a>
-                </p>
-                <p className="m-0">
-                  <span className={theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}>Layout from </span>
-                  <a href="https://transition.dev" target="_blank" rel="noopener noreferrer" className={`font-semibold no-underline hover:underline ${theme === 'dark' ? 'text-white' : 'text-black'}`}>transition.dev</a>
-                  <span className={theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}> by </span>
-                  <a href="https://x.com/Jakubantalik" target="_blank" rel="noopener noreferrer" className={`font-semibold no-underline hover:underline ${theme === 'dark' ? 'text-white' : 'text-black'}`}>@Jakubantalik</a>
-                </p>
-                <div className="flex items-center gap-2.5 pt-2">
-                  <a
-                    href="https://x.com/SubhanHQ"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`inline-flex items-center justify-center w-[34px] h-[34px] rounded-full border transition-all ${
-                      theme === 'dark' ? 'border-white/10 hover:border-white/30 text-white hover:bg-white/[0.06]' : 'border-neutral-200 hover:border-black text-black hover:bg-black/[0.04]'
-                    }`}
-                    title="Twitter / X"
-                  >
-                    <svg viewBox="0 0 16 17" fill="currentColor" className="w-[13px] h-[14px]">
-                      <path d="M12.4041 1.39726H14.6953L9.69087 7.2591L15.5781 15.2368H10.9696L7.35741 10.3996L3.22921 15.2368H0.934687L6.28641 8.96575L0.642598 1.39726H5.36795L8.62962 5.81859L12.4041 1.39726ZM11.5992 13.8329H12.8682L4.67667 2.72798H3.31359L11.5992 13.8329Z"></path>
-                    </svg>
-                  </a>
-                  <a
-                    href="https://github.com/Subhan-code/Amicro--Micro-transitions-"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`inline-flex items-center justify-center w-[34px] h-[34px] rounded-full border transition-all ${
-                      theme === 'dark' ? 'border-white/10 hover:border-white/30 text-white hover:bg-white/[0.06]' : 'border-neutral-200 hover:border-black text-black hover:bg-black/[0.04]'
-                    }`}
-                    title="GitHub Repository"
-                  >
-                    <svg viewBox="0 0 16 16" fill="currentColor" className="w-[14px] h-[14px]">
-                      <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
+      {/* Sticky Sponsor Ad Banner on bottom right - appears on desktop/scroll past hero */}
+      <AnimatePresence>
+        {currentPage !== 'sponsors' && isScrolledPastHero && (
+          <StickySponsorBanner
+            sponsors={sponsors}
+            checkoutUrl={CHECKOUT_URL}
+            onNavigateSponsors={handleNavigateToSponsors}
+            triggerHaptic={triggerHaptic}
+          />
+        )}
+      </AnimatePresence>
 
-            {/* Column 3: CLI Install Quick-Copy */}
-            <div className="flex flex-col gap-3">
-              <span className={`text-[11px] font-bold uppercase tracking-[0.14em] ${
-                theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'
-              }`}>
-                Command Line
-              </span>
-              <p className={`m-0 text-[13px] leading-[21px] ${
-                theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
-              }`}>
-                Add any micro-interaction or transition directly to your React project with a single command.
-              </p>
-              <div className="pt-1">
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText('npx @subhanhq/amicro@latest add');
-                    triggerHaptic('success');
-                    showToast('Copied CLI command: npx @subhanhq/amicro@latest add');
-                  }}
-                  className={`group flex items-center justify-between w-full h-[40px] px-3.5 rounded-xl border text-[12px] font-mono cursor-pointer transition-all ${
-                    theme === 'dark'
-                      ? 'bg-[#121212] border-white/10 hover:border-white/20 text-neutral-300 hover:text-white'
-                      : 'bg-neutral-50 border-neutral-200 hover:border-neutral-300 text-neutral-800'
-                  }`}
-                  title="Click to copy CLI command"
-                >
-                  <span className="truncate">npx @subhanhq/amicro add</span>
-                  <Copy className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 shrink-0 ml-2" />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Giant Wordmark Display matching reference layout */}
-          <div className="w-full overflow-hidden select-none pointer-events-none mt-10 sm:mt-14 pt-6 border-t border-black/[0.06] dark:border-white/[0.07]">
-            <div className={`w-full text-center font-black tracking-[-0.04em] leading-[0.78] transition-colors ${
-              theme === 'dark' ? 'text-white' : 'text-black'
-            } text-[20vw] sm:text-[18vw] md:text-[160px] lg:text-[200px]`}>
-              AMICRO
-            </div>
-          </div>
-
-          {/* Bottom Sub-bar */}
-          <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-3 pt-5 mt-2 text-[12px] transition-colors border-t border-black/[0.04] dark:border-white/[0.05]">
-            <span className={theme === 'dark' ? 'text-neutral-500' : 'text-neutral-400'}>
-              © {new Date().getFullYear()} Amicro. All rights reserved.
-            </span>
-            <div className="flex items-center gap-3 text-[12px]">
-              <a
-                href="https://github.com/Subhan-code/Amicro--Micro-transitions-#readme"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`no-underline hover:underline transition-colors ${
-                  theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black'
-                }`}
-              >
-                Terms & License
-              </a>
-              <span className={theme === 'dark' ? 'text-neutral-600' : 'text-neutral-300'}>·</span>
-              <a
-                href="https://x.com/SubhanHQ"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`no-underline hover:underline transition-colors ${
-                  theme === 'dark' ? 'text-neutral-400 hover:text-white' : 'text-neutral-600 hover:text-black'
-                }`}
-              >
-                @SubhanHQ
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
-
-      {/* Copy-Success Toast Alert */}
-      <div className="fixed bottom-6 right-6 z-[100] pointer-events-none">
+      {/* Toast Alert */}
+      <div className="fixed bottom-6 left-6 z-[100] pointer-events-none">
         <AnimatePresence>
           {toastMessage && (
             <motion.div
-              initial={{ opacity: 0, y: 50, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.9 }}
-              className={`px-4 py-3 rounded-xl border flex items-center gap-2.5 text-[13px] font-medium shadow-lg pointer-events-auto ${
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 6 }}
+              transition={{ duration: 0.15, ease: 'easeOut' }}
+              className={`px-3.5 py-2 rounded-xl border text-[13px] font-medium shadow-md pointer-events-auto select-none ${
                 theme === 'dark' 
-                  ? 'bg-[#181818] border-neutral-800 text-white shadow-black/20' 
-                  : 'bg-white border-neutral-200 text-black shadow-neutral-200/50'
+                  ? 'bg-zinc-900 border-white/10 text-white shadow-black/40' 
+                  : 'bg-white border-neutral-200 text-neutral-900 shadow-neutral-200/60'
               }`}
             >
-              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>{toastMessage}</span>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
+
+      {/* Sponsor Success Confirmation Modal */}
+      <SponsorSuccessModal
+        isOpen={successModalOpen}
+        theme={theme}
+        onClose={() => setSuccessModalOpen(false)}
+        sponsorshipId={successModalData.sponsorshipId}
+        paymentId={successModalData.paymentId}
+        onActivationSuccess={() => {
+          refreshSponsors();
+          showToast('Your sponsorship is live!');
+        }}
+      />
 
       <Analytics />
     </div>

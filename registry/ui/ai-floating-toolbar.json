@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "ai-floating-toolbar",
+  "type": "registry:component",
+  "title": "AI Floating Action Pill",
+  "description": "Glassmorphic floating quick-action pill dock for instant generative prompts and actions.",
+  "dependencies": [
+    "motion",
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "src/components/ai/AiFloatingToolbar.tsx",
+      "type": "registry:component",
+      "target": "components/amicro/AiFloatingToolbar.tsx",
+      "content": "import React, { useState } from 'react';\nimport { motion } from 'motion/react';\nimport { Sparkles, Wand2, Terminal, Zap, Check } from 'lucide-react';\nimport { useWebHaptics } from '../../hooks/useWebHaptics';\n\nexport interface AiFloatingToolbarProps {\n  theme?: 'dark' | 'light';\n  onAction?: (actionId: string) => void;\n}\n\nexport function AiFloatingToolbar({\n  theme = 'dark',\n  onAction,\n}: AiFloatingToolbarProps) {\n  const [activeAction, setActiveAction] = useState<string | null>(null);\n  const { trigger: triggerHaptic } = useWebHaptics();\n  const isDark = theme === 'dark';\n\n  const actions = [\n    { id: 'motion', label: 'Add Spring Motion', icon: Sparkles },\n    { id: 'refactor', label: 'Refactor TSX', icon: Wand2 },\n    { id: 'haptics', label: 'Add Haptics', icon: Zap },\n    { id: 'cli', label: 'Generate CLI', icon: Terminal },\n  ];\n\n  const handleSelect = (id: string) => {\n    triggerHaptic('medium');\n    setActiveAction(id);\n    if (onAction) onAction(id);\n    setTimeout(() => setActiveAction(null), 1500);\n  };\n\n  return (\n    <div className=\"w-full flex items-center justify-center py-2 select-none\">\n      <div \n        className={`flex items-center gap-1 p-1 rounded-full border shadow-xl backdrop-blur-xl ${\n          isDark \n            ? 'bg-[#18181c]/90 border-white/10 text-white' \n            : 'bg-white/90 border-neutral-200 text-black shadow-lg'\n        }`}\n      >\n        {actions.map((act) => {\n          const Icon = act.icon;\n          const isDone = activeAction === act.id;\n\n          return (\n            <motion.button\n              key={act.id}\n              type=\"button\"\n              whileHover={{ scale: 1.05 }}\n              whileTap={{ scale: 0.95 }}\n              onClick={() => handleSelect(act.id)}\n              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium cursor-pointer border-0 transition-colors ${\n                isDone\n                  ? 'bg-emerald-500 text-white font-semibold'\n                  : isDark\n                  ? 'bg-transparent hover:bg-white/10 text-neutral-300 hover:text-white'\n                  : 'bg-transparent hover:bg-neutral-100 text-neutral-700 hover:text-black'\n              }`}\n            >\n              {isDone ? <Check className=\"w-3.5 h-3.5\" /> : <Icon className=\"w-3.5 h-3.5\" />}\n              <span>{isDone ? 'Applied!' : act.label}</span>\n            </motion.button>\n          );\n        })}\n      </div>\n    </div>\n  );\n}\n"
+    }
+  ]
+}

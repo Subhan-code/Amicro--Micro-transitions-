@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { motion } from 'motion/react';
 
 interface TileNode {
   label: string;
   share: number;
+  size: string;
   flex: string;
   opacity: number;
 }
 
 const TREEMAP_TILES: TileNode[] = [
-  { label: 'Storage', share: 45, flex: 'col-span-2 row-span-2', opacity: 1 },
-  { label: 'Compute', share: 30, flex: 'col-span-1 row-span-2', opacity: 0.6 },
-  { label: 'Network', share: 15, flex: 'col-span-2 row-span-1', opacity: 0.35 },
-  { label: 'Cache', share: 10, flex: 'col-span-1 row-span-1', opacity: 0.2 },
+  { label: 'Accounts DB', share: 48, size: '1.21 TB', flex: 'col-span-2 row-span-2', opacity: 1 },
+  { label: 'Snapshots', share: 28, size: '720 GB', flex: 'col-span-1 row-span-2', opacity: 0.65 },
+  { label: 'Index Cache', share: 14, size: '360 GB', flex: 'col-span-2 row-span-1', opacity: 0.38 },
+  { label: 'Mempool', share: 10, size: '250 GB', flex: 'col-span-1 row-span-1', opacity: 0.2 },
 ];
 
 interface MonoRoundedTreemapChartProps {
@@ -21,42 +23,52 @@ interface MonoRoundedTreemapChartProps {
 
 export function MonoRoundedTreemapChart({ theme = 'dark', compact = false }: MonoRoundedTreemapChartProps) {
   const isDark = theme === 'dark';
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
+  const activeTile = hoveredIdx !== null ? TREEMAP_TILES[hoveredIdx] : null;
 
   return (
-    <div
-      className={`relative w-full rounded-[24px] transition-all duration-300 group flex flex-col justify-between overflow-hidden p-4 sm:p-5 ${
-        compact ? 'h-[220px] sm:h-[268px]' : 'min-h-[290px]'
+    <motion.div
+      initial={{ opacity: 0, scale: 0.98, y: 6 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      className={`relative w-full rounded-3xl transition-all duration-300 group flex flex-col justify-between overflow-hidden p-3.5 sm:p-4 ${
+        compact ? 'aspect-[16/10] min-h-[220px] w-full' : 'min-h-[290px]'
       } ${
-        isDark
-          ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]'
-          : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-neutral-100 text-black hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)]'
+        isDark ? 'bg-[#141414] border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:border-white/20' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-neutral-200 text-black hover:border-neutral-300'
       }`}
     >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-1">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className={`text-xs font-semibold tracking-wider uppercase ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
-              Tile Treemap
-            </span>
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-mono bg-white/10 text-white border border-white/20">
-              Allocation
-            </span>
+      {/* Metric Header */}
+      <div className="flex items-center justify-between mb-1.5">
+        <div className="flex items-baseline gap-2">
+          <div className="text-xl sm:text-2xl font-bold tracking-tight tabular-nums font-sans">
+            {activeTile ? activeTile.size : '2.54 TB'}
           </div>
-          <div className="text-xl font-bold tracking-tight tabular-nums mt-0.5 font-sans">
-            100% <span className="text-xs font-normal opacity-70">partitioned</span>
-          </div>
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            {activeTile ? `${activeTile.label} (${activeTile.share}%)` : 'NVMe Ledger State'}
+          </span>
+        </div>
+
+        <div className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-mono ${
+          isDark ? 'bg-white/5 text-neutral-400' : 'bg-neutral-100 text-neutral-600'
+        }`}>
+          4 Partitions
         </div>
       </div>
 
       {/* Main Stage Grid */}
-      <div className={`relative w-full flex-1 rounded-[14px] overflow-hidden p-2 transition-colors duration-300 grid grid-cols-3 grid-rows-3 gap-1.5 ${
+      <div className={`relative w-full flex-1 rounded-[14px] overflow-hidden p-2 transition-colors min-h-0 duration-300 grid grid-cols-3 grid-rows-3 gap-1.5 ${
         isDark ? 'bg-[#131313]' : 'bg-[#f4f4f6]'
       }`}>
         {TREEMAP_TILES.map((tile, idx) => (
-          <div
+          <motion.div
             key={idx}
-            className={`${tile.flex} rounded-xl p-2 flex flex-col justify-between transition-all hover:scale-[1.02] cursor-pointer border ${
+            initial={{ scale: 0.92, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: idx * 0.05, duration: 0.3 }}
+            onMouseEnter={() => setHoveredIdx(idx)}
+            onMouseLeave={() => setHoveredIdx(null)}
+            className={`${tile.flex} rounded-xl p-2.5 flex flex-col justify-between transition-all duration-200 hover:scale-[1.02] cursor-pointer border ${
               isDark ? 'border-white/10' : 'border-black/10'
             }`}
             style={{
@@ -66,17 +78,14 @@ export function MonoRoundedTreemapChart({ theme = 'dark', compact = false }: Mon
               color: isDark ? (tile.opacity > 0.5 ? '#000000' : '#FFFFFF') : (tile.opacity > 0.5 ? '#FFFFFF' : '#000000'),
             }}
           >
-            <span className="text-[11px] font-bold tracking-tight font-sans">{tile.label}</span>
-            <span className="text-[10px] font-mono opacity-80">{tile.share}%</span>
-          </div>
+            <span className="text-[11px] font-bold tracking-tight font-sans truncate">{tile.label}</span>
+            <div className="flex items-center justify-between text-[10px] font-mono opacity-85">
+              <span>{tile.size}</span>
+              <span>{tile.share}%</span>
+            </div>
+          </motion.div>
         ))}
       </div>
-
-      {/* Footer */}
-      <div className="flex items-center justify-between mt-3 pt-1 border-t border-white/5 text-[11px] font-mono">
-        <span className={isDark ? 'text-neutral-400' : 'text-neutral-600'}>Rounded Corner Tiles</span>
-        <span className={isDark ? 'text-white font-medium' : 'text-black font-medium'}>4 Resource Partitions</span>
-      </div>
-    </div>
+    </motion.div>
   );
 }

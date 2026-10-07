@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import {
   ResponsiveContainer,
   RadarChart,
@@ -16,11 +17,11 @@ interface RadarPoint {
 }
 
 const RADAR_DATA: RadarPoint[] = [
-  { subject: 'Speed', metric: 90 },
-  { subject: 'Memory', metric: 75 },
-  { subject: 'Scale', metric: 85 },
-  { subject: 'Latency', metric: 95 },
-  { subject: 'IOPS', metric: 80 },
+  { subject: 'Finality', metric: 95 },
+  { subject: 'Uptime', metric: 99 },
+  { subject: 'Peer Quality', metric: 88 },
+  { subject: 'SigVerify', metric: 92 },
+  { subject: 'Stake Weight', metric: 86 },
 ];
 
 interface MonoRoundedRadarChartProps {
@@ -32,61 +33,57 @@ export function MonoRoundedRadarChart({ theme = 'dark', compact = false }: MonoR
   const isDark = theme === 'dark';
 
   return (
-    <div
-      className={`relative w-full rounded-[24px] transition-all duration-300 group flex flex-col justify-between overflow-hidden p-4 sm:p-5 ${
-        compact ? 'h-[220px] sm:h-[268px]' : 'min-h-[290px]'
+    <motion.div
+      initial={{ opacity: 0, scale: 0.98, y: 6 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      className={`relative w-full rounded-3xl transition-all duration-300 group flex flex-col justify-between overflow-hidden p-3.5 sm:p-4 ${
+        compact ? 'aspect-[16/10] min-h-[220px] w-full' : 'min-h-[290px]'
       } ${
-        isDark
-          ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]'
-          : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-neutral-100 text-black hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)]'
+        isDark ? 'bg-[#141414] border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:border-white/20' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-neutral-200 text-black hover:border-neutral-300'
       }`}
     >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-1">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className={`text-xs font-semibold tracking-wider uppercase ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
-              Polygon Web
-            </span>
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-mono bg-white/10 text-white border border-white/20">
-              Radar
-            </span>
+      {/* Metric Header */}
+      <div className="flex items-center justify-between mb-1.5">
+        <div className="flex items-baseline gap-2">
+          <div className="text-xl sm:text-2xl font-bold tracking-tight tabular-nums font-sans">
+            94.2 <span className="text-xs font-normal opacity-70">/ 100</span>
           </div>
-          <div className="text-xl font-bold tracking-tight tabular-nums mt-0.5 font-sans">
-            85 <span className="text-xs font-normal opacity-70">score</span>
-          </div>
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            Tier-1 Grade
+          </span>
+        </div>
+
+        <div className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-mono ${
+          isDark ? 'bg-white/5 text-neutral-400' : 'bg-neutral-100 text-neutral-600'
+        }`}>
+          5 Vectors
         </div>
       </div>
 
       {/* Main Stage */}
-      <div className={`relative w-full flex-1 rounded-[14px] overflow-hidden p-2 transition-colors duration-300 flex items-center justify-center ${
+      <div className={`relative w-full flex-1 rounded-[14px] overflow-hidden p-2 transition-colors min-h-0 duration-300 flex items-center justify-center ${
         isDark ? 'bg-[#131313]' : 'bg-[#f4f4f6]'
       }`}>
-        <ResponsiveContainer width="100%" height={compact ? 130 : 160}>
-          <RadarChart cx="50%" cy="50%" outerRadius={compact ? 42 : 52} data={RADAR_DATA}>
+        <ResponsiveContainer width="100%" height="100%">
+          <RadarChart cx="50%" cy="50%" outerRadius={compact ? 44 : 54} data={RADAR_DATA}>
             <PolarGrid stroke={isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'} />
-            <PolarAngleAxis dataKey="subject" tick={{ fontSize: 9, fill: isDark ? '#71717A' : '#A1A1AA' }} />
+            <PolarAngleAxis dataKey="subject" tick={{ fontSize: 9.5, fill: isDark ? '#A1A1AA' : '#52525B' }} />
             <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
             <Tooltip content={<DitherChartTooltipContent theme={theme} indicator="dot" />} />
             <Radar
-              name="Metric"
+              name="Benchmark Score"
               dataKey="metric"
               stroke={isDark ? '#FFFFFF' : '#09090B'}
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
-              fill={isDark ? 'rgba(255,255,255,0.15)' : 'rgba(9,9,11,0.15)'}
-              animationDuration={800}
+              fill={isDark ? 'rgba(255,255,255,0.2)' : 'rgba(9,9,11,0.18)'}
+              animationDuration={700}
             />
           </RadarChart>
         </ResponsiveContainer>
       </div>
-
-      {/* Footer */}
-      <div className="flex items-center justify-between mt-3 pt-1 border-t border-white/5 text-[11px] font-mono">
-        <span className={isDark ? 'text-neutral-400' : 'text-neutral-600'}>5 Multi-Axis Nodes</span>
-        <span className={isDark ? 'text-white font-medium' : 'text-black font-medium'}>Polygon Net</span>
-      </div>
-    </div>
+    </motion.div>
   );
 }

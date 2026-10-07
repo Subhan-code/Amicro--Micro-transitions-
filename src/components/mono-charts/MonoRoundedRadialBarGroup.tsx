@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { motion } from 'motion/react';
 import { ResponsiveContainer, RadialBarChart, RadialBar, Tooltip } from 'recharts';
 import { DitherChartTooltipContent } from '../dither-charts/lib/recharts-tooltip';
 
 interface GroupPoint {
   name: string;
   val: number;
+  alloc: string;
 }
 
 const RADIAL_GROUP_DATA: GroupPoint[] = [
-  { name: 'System', val: 85 },
-  { name: 'Network', val: 62 },
-  { name: 'Storage', val: 45 },
-  { name: 'Memory', val: 30 },
+  { name: 'Compute (CPU)', val: 88, alloc: '28/32 Cores' },
+  { name: 'Memory Pool', val: 72, alloc: '92/128 GB' },
+  { name: 'NVMe Bandwidth', val: 56, alloc: '3.4/6.0 GB/s' },
+  { name: 'Network Buffer', val: 42, alloc: '4.2/10 Gbps' },
 ];
 
 interface MonoRoundedRadialBarGroupProps {
@@ -21,60 +23,68 @@ interface MonoRoundedRadialBarGroupProps {
 
 export function MonoRoundedRadialBarGroup({ theme = 'dark', compact = false }: MonoRoundedRadialBarGroupProps) {
   const isDark = theme === 'dark';
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
+  const activeItem = hoveredIdx !== null ? RADIAL_GROUP_DATA[hoveredIdx] : null;
 
   return (
-    <div
-      className={`relative w-full rounded-[24px] transition-all duration-300 group flex flex-col justify-between overflow-hidden p-4 sm:p-5 ${
-        compact ? 'h-[220px] sm:h-[268px]' : 'min-h-[290px]'
+    <motion.div
+      initial={{ opacity: 0, scale: 0.98, y: 6 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      className={`relative w-full rounded-3xl transition-all duration-300 group flex flex-col justify-between overflow-hidden p-3.5 sm:p-4 ${
+        compact ? 'aspect-[16/10] min-h-[220px] w-full' : 'min-h-[290px]'
       } ${
-        isDark
-          ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]'
-          : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-neutral-100 text-black hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)]'
+        isDark ? 'bg-[#141414] border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:border-white/20' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-neutral-200 text-black hover:border-neutral-300'
       }`}
     >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-1">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className={`text-xs font-semibold tracking-wider uppercase ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
-              Radial Group
-            </span>
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-mono bg-white/10 text-white border border-white/20">
-              Multi-Arc
-            </span>
+      {/* Metric Header */}
+      <div className="flex items-center justify-between mb-1.5">
+        <div className="flex items-baseline gap-2">
+          <div className="text-xl sm:text-2xl font-bold tracking-tight tabular-nums font-sans">
+            {activeItem ? `${activeItem.val}%` : '74.5%'}
           </div>
-          <div className="text-xl font-bold tracking-tight tabular-nums mt-0.5 font-sans">
-            4 Rings <span className="text-xs font-normal opacity-70">active</span>
-          </div>
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-mono bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            {activeItem ? activeItem.name : 'Cluster Saturation'}
+          </span>
+        </div>
+
+        <div className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-mono ${
+          isDark ? 'bg-white/5 text-neutral-400' : 'bg-neutral-100 text-neutral-600'
+        }`}>
+          {activeItem ? activeItem.alloc : 'Peak 88%'}
         </div>
       </div>
 
       {/* Main Stage */}
-      <div className={`relative w-full flex-1 rounded-[14px] overflow-hidden p-2 transition-colors duration-300 flex items-center justify-center ${
+      <div className={`relative w-full flex-1 rounded-[14px] overflow-hidden p-2 transition-colors min-h-0 duration-300 flex items-center justify-center ${
         isDark ? 'bg-[#131313]' : 'bg-[#f4f4f6]'
       }`}>
-        <ResponsiveContainer width="100%" height={compact ? 130 : 160}>
+        <ResponsiveContainer width="100%" height="100%">
           <RadialBarChart
             cx="50%"
             cy="50%"
             innerRadius="20%"
             outerRadius="95%"
-            barSize={8}
+            barSize={compact ? 8 : 10}
             data={RADIAL_GROUP_DATA}
             startAngle={180}
             endAngle={0}
           >
             <Tooltip content={<DitherChartTooltipContent theme={theme} indicator="dot" />} />
-            {RADIAL_GROUP_DATA.map((_, idx) => (
+            {RADIAL_GROUP_DATA.map((item, idx) => (
               <RadialBar
                 key={idx}
-                background={{ fill: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }}
+                background={{ fill: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)' }}
                 dataKey="val"
+                name={item.name}
                 cornerRadius={8}
+                onMouseEnter={() => setHoveredIdx(idx)}
+                onMouseLeave={() => setHoveredIdx(null)}
                 fill={
                   isDark
-                    ? idx === 0 ? '#FFFFFF' : idx === 1 ? 'rgba(255,255,255,0.7)' : idx === 2 ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.2)'
-                    : idx === 0 ? '#09090B' : idx === 1 ? 'rgba(9,9,11,0.7)' : idx === 2 ? 'rgba(9,9,11,0.4)' : 'rgba(9,9,11,0.2)'
+                    ? idx === 0 ? '#FFFFFF' : idx === 1 ? 'rgba(255,255,255,0.72)' : idx === 2 ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.22)'
+                    : idx === 0 ? '#09090B' : idx === 1 ? 'rgba(9,9,11,0.72)' : idx === 2 ? 'rgba(9,9,11,0.45)' : 'rgba(9,9,11,0.22)'
                 }
                 animationDuration={800}
               />
@@ -82,12 +92,6 @@ export function MonoRoundedRadialBarGroup({ theme = 'dark', compact = false }: M
           </RadialBarChart>
         </ResponsiveContainer>
       </div>
-
-      {/* Footer */}
-      <div className="flex items-center justify-between mt-3 pt-1 border-t border-white/5 text-[11px] font-mono">
-        <span className={isDark ? 'text-neutral-400' : 'text-neutral-600'}>Rounded 180° Radial Caps</span>
-        <span className={isDark ? 'text-white font-medium' : 'text-black font-medium'}>4 Gauge Arcs</span>
-      </div>
-    </div>
+    </motion.div>
   );
 }

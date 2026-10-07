@@ -9,7 +9,6 @@ import {
   ArrowLeft,
   ArrowDownAZ,
 } from 'lucide-react';
-import { MapleLogo } from './MapleLogo';
 
 import { MonoActivityHeatmap } from './mono-charts/MonoActivityHeatmap';
 import { MonoRoundedLineChart } from './mono-charts/MonoRoundedLineChart';
@@ -42,6 +41,7 @@ import { MonoRoundedRangeChart } from './mono-charts/MonoRoundedRangeChart';
 
 import { InViewRender } from './InViewRender';
 import { IconSwap, IconSwapItem } from './IconSwap';
+import { SponsorSection, SponsorItem } from './SponsorSection';
 
 export interface SponsorSlot {
   id: number;
@@ -50,15 +50,18 @@ export interface SponsorSlot {
   logoType?: string;
   siteUrl?: string;
   isAvailable: boolean;
+  tier?: 'diamond' | 'gold' | 'silver';
+  price?: string;
 }
 
 interface MonoChartsPageProps {
   theme: 'dark' | 'light';
+  embedded?: boolean;
   showToast?: (message: string) => void;
   triggerHaptic?: (type: 'success' | 'warning' | 'error' | 'light' | 'medium' | 'heavy') => void;
   onNavigateHome?: () => void;
   onSelectChart?: (id: string) => void;
-  sponsors?: SponsorSlot[];
+  sponsors?: SponsorItem[];
   checkoutUrl?: string;
 }
 
@@ -73,6 +76,7 @@ interface MonoCardDef {
 
 export function MonoChartsPage({ 
   theme, 
+  embedded = false,
   showToast, 
   triggerHaptic, 
   onNavigateHome,
@@ -117,7 +121,7 @@ export function MonoChartsPage({
       description: 'Ultra-clean emerald green contribution heatmap grid with 20-week activity telemetry.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-activity-green',
       codeSnippet: `import { MonoActivityHeatmap } from '@/components/ui/mono-activity-heatmap';\n\nexport default function Demo() {\n  return <MonoActivityHeatmap accentColor="green" theme="${theme}" />;\n}`,
-      component: <MonoActivityHeatmap theme={theme} accentColor="green" />,
+      component: <MonoActivityHeatmap theme={theme} accentColor="green" compact={true} />,
     },
     {
       id: 'mono-activity-blue',
@@ -125,7 +129,7 @@ export function MonoChartsPage({
       description: 'Vibrant sky blue contribution activity matrix with cell tooltips and minimalist month headers.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-activity-blue',
       codeSnippet: `import { MonoActivityHeatmap } from '@/components/ui/mono-activity-heatmap';\n\nexport default function Demo() {\n  return <MonoActivityHeatmap accentColor="blue" theme="${theme}" />;\n}`,
-      component: <MonoActivityHeatmap theme={theme} accentColor="blue" />,
+      component: <MonoActivityHeatmap theme={theme} accentColor="blue" compact={true} />,
     },
     {
       id: 'mono-activity-purple',
@@ -133,7 +137,7 @@ export function MonoChartsPage({
       description: 'Deep violet pulse contribution activity grid with rounded node cells and telemetry.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-activity-purple',
       codeSnippet: `import { MonoActivityHeatmap } from '@/components/ui/mono-activity-heatmap';\n\nexport default function Demo() {\n  return <MonoActivityHeatmap accentColor="purple" theme="${theme}" />;\n}`,
-      component: <MonoActivityHeatmap theme={theme} accentColor="purple" />,
+      component: <MonoActivityHeatmap theme={theme} accentColor="purple" compact={true} />,
     },
     {
       id: 'mono-rounded-line',
@@ -141,7 +145,7 @@ export function MonoChartsPage({
       description: 'Minimalist monochromatic line chart with smooth rounded spline curves and rounded stroke caps.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-line',
       codeSnippet: `import { MonoRoundedLineChart } from '@/components/ui/mono-rounded-line';\n\nexport default function Demo() {\n  return <MonoRoundedLineChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedLineChart theme={theme} />,
+      component: <MonoRoundedLineChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-bar',
@@ -149,7 +153,7 @@ export function MonoChartsPage({
       description: 'Minimalist monochromatic bar chart with full corner radii pill columns and vertical/horizontal layout switches.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-bar',
       codeSnippet: `import { MonoRoundedBarChart } from '@/components/ui/mono-rounded-bar';\n\nexport default function Demo() {\n  return <MonoRoundedBarChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedBarChart theme={theme} />,
+      component: <MonoRoundedBarChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-area',
@@ -157,7 +161,7 @@ export function MonoChartsPage({
       description: 'Smooth monochromatic curved area wave visualizer with rounded stroke joins and soft opacity gradient shading.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-area',
       codeSnippet: `import { MonoRoundedAreaChart } from '@/components/ui/mono-rounded-area';\n\nexport default function Demo() {\n  return <MonoRoundedAreaChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedAreaChart theme={theme} />,
+      component: <MonoRoundedAreaChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-donut',
@@ -165,7 +169,7 @@ export function MonoChartsPage({
       description: 'Minimalist monochromatic donut chart with rounded segment endcaps, generous spacing, and center metric numbers.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-donut',
       codeSnippet: `import { MonoRoundedDonutChart } from '@/components/ui/mono-rounded-donut';\n\nexport default function Demo() {\n  return <MonoRoundedDonutChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedDonutChart theme={theme} />,
+      component: <MonoRoundedDonutChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-composed',
@@ -173,7 +177,7 @@ export function MonoChartsPage({
       description: 'Minimalist hybrid visualizer pairing rounded pill columns with a smooth curved spline line overlay.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-composed',
       codeSnippet: `import { MonoRoundedComposedChart } from '@/components/ui/mono-rounded-composed';\n\nexport default function Demo() {\n  return <MonoRoundedComposedChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedComposedChart theme={theme} />,
+      component: <MonoRoundedComposedChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-scatter',
@@ -181,7 +185,7 @@ export function MonoChartsPage({
       description: 'Minimalist monochromatic scatter node matrix with rounded circle nodes and hover trace callouts.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-scatter',
       codeSnippet: `import { MonoRoundedScatterChart } from '@/components/ui/mono-rounded-scatter';\n\nexport default function Demo() {\n  return <MonoRoundedScatterChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedScatterChart theme={theme} />,
+      component: <MonoRoundedScatterChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-candlestick',
@@ -189,7 +193,7 @@ export function MonoChartsPage({
       description: 'Monochromatic candlestick financial price bars with rounded wick caps and solid/hollow candles.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-candlestick',
       codeSnippet: `import { MonoRoundedCandlestickChart } from '@/components/ui/mono-rounded-candlestick';\n\nexport default function Demo() {\n  return <MonoRoundedCandlestickChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedCandlestickChart theme={theme} />,
+      component: <MonoRoundedCandlestickChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-kpi',
@@ -197,7 +201,7 @@ export function MonoChartsPage({
       description: 'Minimalist KPI stat metric card featuring an embedded rounded spline sparkline indicator.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-kpi',
       codeSnippet: `import { MonoRoundedKpiCardChart } from '@/components/ui/mono-rounded-kpi';\n\nexport default function Demo() {\n  return <MonoRoundedKpiCardChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedKpiCardChart theme={theme} />,
+      component: <MonoRoundedKpiCardChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-pyramid',
@@ -205,7 +209,7 @@ export function MonoChartsPage({
       description: 'Monochromatic pyramid level bar chart featuring rounded corner tier geometry.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-pyramid',
       codeSnippet: `import { MonoRoundedPyramidChart } from '@/components/ui/mono-rounded-pyramid';\n\nexport default function Demo() {\n  return <MonoRoundedPyramidChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedPyramidChart theme={theme} />,
+      component: <MonoRoundedPyramidChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-radial-group',
@@ -213,7 +217,7 @@ export function MonoChartsPage({
       description: 'Multi-ring radial progress bar group with rounded arc endcaps and layered utilization metrics.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-radial-group',
       codeSnippet: `import { MonoRoundedRadialBarGroup } from '@/components/ui/mono-rounded-radial-group';\n\nexport default function Demo() {\n  return <MonoRoundedRadialBarGroup theme="${theme}" />;\n}`,
-      component: <MonoRoundedRadialBarGroup theme={theme} />,
+      component: <MonoRoundedRadialBarGroup theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-gauge-arc',
@@ -221,7 +225,7 @@ export function MonoChartsPage({
       description: 'Semi-circle arc speedometer gauge dial with rounded stroke endcaps and center score callout.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-gauge-arc',
       codeSnippet: `import { MonoRoundedGaugeArc } from '@/components/ui/mono-rounded-gauge-arc';\n\nexport default function Demo() {\n  return <MonoRoundedGaugeArc theme="${theme}" />;\n}`,
-      component: <MonoRoundedGaugeArc theme={theme} />,
+      component: <MonoRoundedGaugeArc theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-bullet',
@@ -229,7 +233,7 @@ export function MonoChartsPage({
       description: 'Monochromatic performance bullet bar chart featuring target benchmark markers.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-bullet',
       codeSnippet: `import { MonoRoundedBulletChart } from '@/components/ui/mono-rounded-bullet';\n\nexport default function Demo() {\n  return <MonoRoundedBulletChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedBulletChart theme={theme} />,
+      component: <MonoRoundedBulletChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-sankey',
@@ -237,7 +241,7 @@ export function MonoChartsPage({
       description: 'Flow transfer channel visualizer featuring smooth curved SVG routing bands with rounded endcaps.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-sankey',
       codeSnippet: `import { MonoRoundedSankeyChart } from '@/components/ui/mono-rounded-sankey';\n\nexport default function Demo() {\n  return <MonoRoundedSankeyChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedSankeyChart theme={theme} />,
+      component: <MonoRoundedSankeyChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-step',
@@ -245,7 +249,7 @@ export function MonoChartsPage({
       description: 'Monochromatic discrete staircase step chart with rounded stroke joins and level callouts.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-step',
       codeSnippet: `import { MonoRoundedStepChart } from '@/components/ui/mono-rounded-step';\n\nexport default function Demo() {\n  return <MonoRoundedStepChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedStepChart theme={theme} />,
+      component: <MonoRoundedStepChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-stacked-bar',
@@ -253,7 +257,7 @@ export function MonoChartsPage({
       description: 'Monochromatic stacked bar visualizer with rounded end pill geometry and layered opacity tones.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-stacked-bar',
       codeSnippet: `import { MonoRoundedStackedBarChart } from '@/components/ui/mono-rounded-stacked-bar';\n\nexport default function Demo() {\n  return <MonoRoundedStackedBarChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedStackedBarChart theme={theme} />,
+      component: <MonoRoundedStackedBarChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-radar',
@@ -261,7 +265,7 @@ export function MonoChartsPage({
       description: 'Minimalist monochromatic multi-axis polygon radar web with smooth rounded stroke join geometry.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-radar',
       codeSnippet: `import { MonoRoundedRadarChart } from '@/components/ui/mono-rounded-radar';\n\nexport default function Demo() {\n  return <MonoRoundedRadarChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedRadarChart theme={theme} />,
+      component: <MonoRoundedRadarChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-radial-gauge',
@@ -269,7 +273,7 @@ export function MonoChartsPage({
       description: 'Monochromatic concentric progress rings with rounded arc caps and layered utilization metrics.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-radial-gauge',
       codeSnippet: `import { MonoRoundedRadialGaugeChart } from '@/components/ui/mono-rounded-radial-gauge';\n\nexport default function Demo() {\n  return <MonoRoundedRadialGaugeChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedRadialGaugeChart theme={theme} />,
+      component: <MonoRoundedRadialGaugeChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-funnel',
@@ -277,7 +281,7 @@ export function MonoChartsPage({
       description: 'Horizontal funnel stage visualizer using monochromatic pill bars with rounded endcaps.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-funnel',
       codeSnippet: `import { MonoRoundedFunnelChart } from '@/components/ui/mono-rounded-funnel';\n\nexport default function Demo() {\n  return <MonoRoundedFunnelChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedFunnelChart theme={theme} />,
+      component: <MonoRoundedFunnelChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-heatmap',
@@ -285,7 +289,7 @@ export function MonoChartsPage({
       description: 'Monochromatic activity matrix with rounded corner cells and density opacity shading.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-heatmap',
       codeSnippet: `import { MonoRoundedHeatmapChart } from '@/components/ui/mono-rounded-heatmap';\n\nexport default function Demo() {\n  return <MonoRoundedHeatmapChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedHeatmapChart theme={theme} />,
+      component: <MonoRoundedHeatmapChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-sparkline',
@@ -293,7 +297,7 @@ export function MonoChartsPage({
       description: 'Compact telemetry row suite featuring rounded micro splines and live metric readouts.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-sparkline',
       codeSnippet: `import { MonoRoundedSparklineChart } from '@/components/ui/mono-rounded-sparkline';\n\nexport default function Demo() {\n  return <MonoRoundedSparklineChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedSparklineChart theme={theme} />,
+      component: <MonoRoundedSparklineChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-bubble',
@@ -301,7 +305,7 @@ export function MonoChartsPage({
       description: 'Scaled circle bubble distribution with rounded stroke outlines and monochromatic opacity fills.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-bubble',
       codeSnippet: `import { MonoRoundedBubbleChart } from '@/components/ui/mono-rounded-bubble';\n\nexport default function Demo() {\n  return <MonoRoundedBubbleChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedBubbleChart theme={theme} />,
+      component: <MonoRoundedBubbleChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-treemap',
@@ -309,7 +313,7 @@ export function MonoChartsPage({
       description: 'Partition allocation treemap featuring rounded corner tiles and monochrome contrast shading.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-treemap',
       codeSnippet: `import { MonoRoundedTreemapChart } from '@/components/ui/mono-rounded-treemap';\n\nexport default function Demo() {\n  return <MonoRoundedTreemapChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedTreemapChart theme={theme} />,
+      component: <MonoRoundedTreemapChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-stream',
@@ -317,7 +321,7 @@ export function MonoChartsPage({
       description: 'Multi-layer fluid stream wave area visualizer with rounded stroke joins and soft monochrome gradients.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-stream',
       codeSnippet: `import { MonoRoundedStreamChart } from '@/components/ui/mono-rounded-stream';\n\nexport default function Demo() {\n  return <MonoRoundedStreamChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedStreamChart theme={theme} />,
+      component: <MonoRoundedStreamChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-meter',
@@ -325,7 +329,7 @@ export function MonoChartsPage({
       description: 'Monochromatic semi-circle arc meter gauge with rounded stroke endcaps and center indicator.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-meter',
       codeSnippet: `import { MonoRoundedMeterChart } from '@/components/ui/mono-rounded-meter';\n\nexport default function Demo() {\n  return <MonoRoundedMeterChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedMeterChart theme={theme} />,
+      component: <MonoRoundedMeterChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-waterfall',
@@ -333,7 +337,7 @@ export function MonoChartsPage({
       description: 'Sequential delta step bar chart featuring floating pillars with rounded corner geometry.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-waterfall',
       codeSnippet: `import { MonoRoundedWaterfallChart } from '@/components/ui/mono-rounded-waterfall';\n\nexport default function Demo() {\n  return <MonoRoundedWaterfallChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedWaterfallChart theme={theme} />,
+      component: <MonoRoundedWaterfallChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-polar',
@@ -341,7 +345,7 @@ export function MonoChartsPage({
       description: 'Polar angle radial bar chart with 360-degree rounded arc pillars.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-polar',
       codeSnippet: `import { MonoRoundedPolarChart } from '@/components/ui/mono-rounded-polar';\n\nexport default function Demo() {\n  return <MonoRoundedPolarChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedPolarChart theme={theme} />,
+      component: <MonoRoundedPolarChart theme={theme} compact={true} />,
     },
     {
       id: 'mono-rounded-range',
@@ -349,145 +353,144 @@ export function MonoChartsPage({
       description: 'Min-Max floating variance area band with smooth rounded spline boundary strokes.',
       cliCommand: 'npx @subhanhq/amicro@latest add mono-rounded-range',
       codeSnippet: `import { MonoRoundedRangeChart } from '@/components/ui/mono-rounded-range';\n\nexport default function Demo() {\n  return <MonoRoundedRangeChart theme="${theme}" />;\n}`,
-      component: <MonoRoundedRangeChart theme={theme} />,
+      component: <MonoRoundedRangeChart theme={theme} compact={true} />,
     },
   ], [theme]);
 
   return (
-    <div className="w-full max-w-[1240px] mx-auto px-4 sm:px-6 pt-1 pb-8 flex flex-col items-center font-sans relative">
+    <div className={`w-full max-w-[1240px] mx-auto ${embedded ? 'px-0 pt-0 pb-2' : 'px-4 sm:px-6 pt-0 pb-12'} flex flex-col items-center font-sans relative`}>
       
-      {/* Top Header Row with Back Button on Left */}
-      <div className="w-full relative flex items-center justify-center pt-2 mb-1">
-        {onNavigateHome && (
-          <div className="absolute left-0 top-1/2 -translate-y-1/2">
-            <button
-              onClick={() => {
-                if (triggerHaptic) triggerHaptic('light');
-                onNavigateHome();
-              }}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border ${
-                isDark 
-                  ? 'bg-white/5 border-white/10 text-neutral-300 hover:bg-white/10 hover:text-white' 
-                  : 'bg-neutral-100 border-neutral-200 text-neutral-700 hover:bg-neutral-200 hover:text-black'
-              }`}
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back</span>
-            </button>
+      {!embedded && (
+        <>
+          {/* Top Header Row with Back Button on Left */}
+          {onNavigateHome && (
+            <div className="w-full flex items-center justify-start pt-1 mb-0.5">
+              <button
+                onClick={() => {
+                  if (triggerHaptic) triggerHaptic('light');
+                  onNavigateHome();
+                }}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border ${
+                  isDark 
+                    ? 'bg-white/5 border-white/10 text-neutral-300 hover:bg-white/10 hover:text-white' 
+                    : 'bg-neutral-100 border-neutral-200 text-neutral-700 hover:bg-neutral-200 hover:text-black'
+                }`}
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Back</span>
+              </button>
+            </div>
+          )}
+
+          {/* Hero Header matching main page simplicity with decreased top margin */}
+          <div className="mt-1 sm:mt-2 mb-7 sm:mb-9 text-center w-full max-w-[1240px] mx-auto px-4 flex flex-col items-center">
+            {/* Hero Heading */}
+            <h1 className={`text-[34px] sm:text-[52px] lg:text-[58px] font-bold tracking-[-0.03em] leading-[1.1] mb-3 sm:mb-4 font-sans max-w-4xl mx-auto transition-colors duration-300 ${
+              isDark ? 'text-white' : 'text-neutral-900'
+            }`}>
+              Mono Charts.
+            </h1>
+
+            {/* Hero Subtitle */}
+            <p className={`text-[15px] sm:text-[18px] leading-[24px] sm:leading-[28px] max-w-[620px] mx-auto font-normal tracking-[-0.012em] transition-colors duration-300 ${
+              isDark ? 'text-neutral-400' : 'text-neutral-600'
+            }`}>
+              A unified collection of 30 single-ink chart visualizers built with rounded geometry and minimalist typography.
+            </p>
+
+            {/* Hero CTAs matching main page buttons and spring physics */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mt-7 sm:mt-8">
+              <motion.a 
+                href="https://github.com/Subhan-code/Amicro--Micro-transitions-" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                whileHover="hover"
+                initial="initial"
+                animate="initial"
+                whileTap={{ scale: 0.98 }}
+                variants={{
+                  initial: { 
+                    scale: 1,
+                    boxShadow: '0 0 0 0 rgba(0,0,0,0)'
+                  },
+                  hover: { 
+                    scale: 1.04,
+                    boxShadow: isDark ? '0 10px 25px -5px rgba(255,255,255,0.1)' : '0 10px 25px -5px rgba(0,0,0,0.15)'
+                  }
+                }}
+                className={`inline-flex items-center justify-center gap-1.5 h-[36px] px-[16px] rounded-full text-[13px] font-medium no-underline transition-colors cursor-pointer border-0 ${
+                  isDark ? 'bg-white text-black hover:bg-neutral-200' : 'bg-neutral-950 text-white hover:bg-neutral-800'
+                }`}
+              >
+                <motion.div 
+                  variants={{
+                    initial: { rotate: 0, scale: 1 },
+                    hover: { rotate: -12, scale: 1.15 }
+                  }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+                  className="flex items-center shrink-0"
+                >
+                  <svg viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 block">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+                  </svg>
+                </motion.div>
+                <span>GitHub Repo</span>
+              </motion.a>
+
+              <motion.button 
+                onClick={() => {
+                  const element = document.getElementById('mono-charts-grid');
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                whileHover="hover"
+                initial="initial"
+                animate="initial"
+                whileTap={{ scale: 0.98 }}
+                variants={{
+                  initial: { 
+                    scale: 1,
+                    boxShadow: '0 0 0 0 rgba(0,0,0,0)'
+                  },
+                  hover: { 
+                    scale: 1.04,
+                    boxShadow: isDark ? '0 10px 25px -5px rgba(0,0,0,0.3)' : '0 10px 25px -5px rgba(0,0,0,0.05)'
+                  }
+                }}
+                className={`inline-flex items-center justify-center h-[36px] px-[16px] rounded-full text-[13px] font-medium border cursor-pointer transition-colors ${
+                  isDark 
+                    ? 'bg-[#181818] border-neutral-800 text-white hover:bg-neutral-800' 
+                    : 'bg-white border-neutral-200 text-black hover:bg-neutral-50 shadow-sm'
+                }`}
+              >
+                <motion.div
+                  variants={{
+                    initial: { rotate: 0, scale: 1 },
+                    hover: { rotate: 8, scale: 1.12 }
+                  }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+                  className="flex items-center shrink-0 mr-1.5"
+                >
+                  <svg viewBox="0 0 24 24" className="w-[15px] h-[15px] block shrink-0" fill="currentColor" aria-hidden="true">
+                    <mask id="browse-mono-charts-mask">
+                      <rect width="24" height="24" rx="6.5" fill="white" />
+                      <rect x="5.5" y="6" width="7" height="2.5" rx="1.25" fill="black" />
+                      <rect x="5.5" y="10.75" width="13" height="2.5" rx="1.25" fill="black" />
+                      <rect x="5.5" y="15.5" width="7" height="2.5" rx="1.25" fill="black" />
+                    </mask>
+                    <rect width="24" height="24" rx="6.5" fill="currentColor" mask="url(#browse-mono-charts-mask)" />
+                  </svg>
+                </motion.div>
+                <span>Browse Charts</span>
+              </motion.button>
+            </div>
           </div>
-        )}
-      </div>
-
-      {/* Hero Header - Earlier Style, Moved Up */}
-      <div className="flex flex-col items-center text-center gap-2.5 max-w-2xl mx-auto mt-0 mb-6">
-        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase transition-all shadow-sm ${
-          isDark ? 'bg-white/10 text-neutral-200 border border-white/20' : 'bg-neutral-900 text-white border border-neutral-700'
-        }`}>
-          <Circle className="w-3.5 h-3.5 fill-current" />
-          <span>30 Minimalist Visualizers</span>
-        </div>
-
-        <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
-          Mono Charts
-        </h1>
-
-        <p className={`text-sm sm:text-base max-w-lg ${isDark ? 'text-neutral-400' : 'text-neutral-600'}`}>
-          A collection of 30 monochromatic chart visualizers built with rounded corner geometry and minimalist typography.
-        </p>
-
-        {/* GitHub Repository CTA Link */}
-        <a
-          href="https://github.com/Subhan-code/Monocharts"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`mt-1 inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all shadow-md cursor-pointer border ${
-            isDark
-              ? 'bg-white text-black border-white hover:bg-neutral-200 hover:scale-105'
-              : 'bg-black text-white border-black hover:bg-neutral-800 hover:scale-105'
-          }`}
-        >
-          <Github className="w-4 h-4 shrink-0" />
-          <span>View GitHub Repository</span>
-          <ExternalLink className="w-3.5 h-3.5 opacity-70 ml-0.5" />
-        </a>
-      </div>
-
-      {/* Sponsor Ad Grid */}
-      <div className="w-full max-w-3xl mx-auto mb-8 px-4 sm:px-0 flex flex-col items-center">
-        <div className={`text-[10px] font-bold uppercase tracking-widest mb-3.5 ${isDark ? 'text-neutral-500' : 'text-neutral-400'}`}>
-          Sponsored by
-        </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full">
-            {activeSponsors.map((slot) => {
-              if (!slot.isAvailable) {
-                const isMaple = slot.logoType === 'maple';
-                return (
-                  <a
-                    key={slot.id}
-                    href={slot.siteUrl}
-                    target="_blank"
-                    onClick={() => triggerHaptic?.('light')}
-                    className={`group relative flex flex-col items-center justify-center text-center p-3 sm:p-3.5 min-h-[78px] rounded-xl border transition-all duration-300 hover:scale-[1.02] ${
-                      isMaple
-                        ? (isDark
-                            ? 'bg-[#1a1410] border-[#E86F00]/30 hover:border-[#E86F00]/50 hover:bg-[#231a14] text-white shadow-[inset_0_1px_0_rgba(232,111,0,0.15)]'
-                            : 'bg-[#FFF7ED] border-[#FDBA74]/80 hover:border-[#FB923C] hover:bg-[#FFEDD5] text-[#7C2D12] shadow-[0_2px_12px_rgba(232,111,0,0.06)]')
-                        : (isDark
-                            ? 'bg-[#181818] border-neutral-800/80 hover:bg-[#1e1e1e] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]'
-                            : 'bg-white border-neutral-200 hover:shadow-xs text-black shadow-2xs')
-                    }`}
-                  >
-                    <div className="flex flex-col items-center justify-center w-full">
-                      {isMaple ? (
-                        <div className="flex items-center gap-2 font-bold tracking-tight text-[13.5px] text-neutral-900 dark:text-orange-200">
-                          <MapleLogo className="w-5 h-5 shrink-0" />
-                          <span>Maple</span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-center gap-1.5 font-bold tracking-tight text-[13.5px] text-emerald-500 w-full px-1">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0 animate-pulse" />
-                          <span className="truncate max-w-[120px]">{slot.companyName}</span>
-                        </div>
-                      )}
-                      <p className={`text-[10.5px] sm:text-[11px] leading-[14px] sm:leading-[15px] mt-1 font-medium line-clamp-2 w-full px-0.5 transition-colors ${
-                        isMaple
-                          ? (isDark ? 'text-orange-200/80 group-hover:text-orange-100' : 'text-[#9A3412] group-hover:text-[#7C2D12]')
-                          : (isDark ? 'text-neutral-400 group-hover:text-neutral-300' : 'text-neutral-600 group-hover:text-neutral-800')
-                      }`} title={slot.description}>
-                        {slot.description}
-                      </p>
-                    </div>
-                  </a>
-                );
-              } else {
-                return (
-                  <button
-                    key={slot.id}
-                    onClick={() => {
-                      triggerHaptic?.('medium');
-                      window.open(checkoutUrl || "https://buy.polar.sh/polar_cl_kgaC0fUqnLvTlW7A7RrvGQRaHzmTKjezxWNaA19AyV4", '_blank');
-                    }}
-                    className={`group flex flex-col items-center justify-center text-center p-3 sm:p-3.5 rounded-xl border border-dashed transition-all duration-300 hover:scale-[1.02] cursor-pointer bg-transparent min-h-[78px] ${
-                      isDark
-                        ? 'border-neutral-800 hover:border-neutral-700 text-neutral-500 hover:text-neutral-300 hover:bg-neutral-900/10'
-                        : 'border-neutral-300 hover:border-neutral-400 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-50/30'
-                    }`}
-                  >
-                    <span className="text-[12px] font-bold tracking-tight flex items-center gap-1">
-                      <span>+</span> Sponsor
-                    </span>
-                    <span className={`text-[9.5px] mt-1 transition-colors ${isDark ? 'text-neutral-500 group-hover:text-neutral-400' : 'text-neutral-500 group-hover:text-neutral-600'}`}>
-                      $49/mo
-                    </span>
-                  </button>
-                );
-              }
-            })}
-          </div>
-        </div>
+        </>
+      )}
 
       {/* Main Charts Showcase Grid */}
-      <div id="mono-charts-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+      <div id="mono-charts-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 w-full max-w-[1240px] mx-auto">
         <AnimatePresence mode="popLayout">
           {CARD_ITEMS.map((item) => (
             <motion.div
@@ -499,71 +502,93 @@ export function MonoChartsPage({
               transition={{ duration: 0.25 }}
               className="w-full flex justify-center"
             >
-              {/* Standard Card Architecture wrapper matching amicro design system */}
-              <div
-                onClick={() => {
-                  if (onSelectChart) {
-                    triggerHaptic?.('light');
-                    onSelectChart(item.id);
-                  }
-                }}
-                className={`relative w-full rounded-[24px] transition-all duration-300 group flex flex-col justify-between p-4 cursor-pointer ${
-                  isDark
-                    ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]'
-                    : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-neutral-100 text-black hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)]'
-                }`}
-              >
-                {/* Live Interactive Chart Component Stage */}
-                <div className="w-full mb-3">
-                  <InViewRender>{item.component}</InViewRender>
-                </div>
-
-                {/* Footer Action Bar */}
-                <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                  <div className="flex flex-col">
-                    <span className={`text-[13px] font-semibold tracking-tight group-hover:underline ${isDark ? 'text-white' : 'text-black'}`}>
-                      {item.title}
-                    </span>
-                    <span className={`text-[11px] truncate max-w-[200px] ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
-                      {item.description}
-                    </span>
+              {/* Standard Amicro Card Architecture */}
+              <article className="group/card relative w-full">
+                <div
+                  onClick={() => {
+                    if (onSelectChart) {
+                      triggerHaptic?.('light');
+                      onSelectChart(item.id);
+                    }
+                  }}
+                  className="block focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 rounded-3xl cursor-pointer text-inherit no-underline"
+                >
+                  {/* Live Interactive Chart Stage - Fits the whole card seamlessly */}
+                  <div className="w-full rounded-3xl overflow-hidden transition-all duration-300">
+                    <InViewRender>
+                      <div className="w-full">
+                        {item.component}
+                      </div>
+                    </InViewRender>
                   </div>
 
-                  {/* Copy CLI Button */}
-                  <motion.button
-                    whileHover={{ scale: 1.08 }}
-                    whileTap={{ scale: 0.92 }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCopy(item.id, item.cliCommand);
-                    }}
-                    title="Copy CLI install command"
-                    className={`p-2 rounded-xl transition-all cursor-pointer border flex items-center justify-center ${
-                      copiedId === item.id
-                        ? isDark
-                          ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                          : 'bg-emerald-100 text-emerald-600 border-emerald-300'
-                        : isDark
-                        ? 'bg-white/[0.08] border-transparent hover:bg-white/[0.14] text-neutral-300 hover:text-white'
-                        : 'bg-neutral-100 border-transparent hover:bg-neutral-200 text-neutral-700 hover:text-black'
-                    }`}
-                  >
-                    <IconSwap>
-                      <IconSwapItem key={copiedId === item.id ? 'check' : 'copy'}>
-                        {copiedId === item.id ? (
-                          <Check className="w-4 h-4 text-emerald-500" />
-                        ) : (
-                          <Copy className="w-4 h-4" />
-                        )}
-                      </IconSwapItem>
-                    </IconSwap>
-                  </motion.button>
+                  {/* Minimal Card Footer: Only Title & Description, Hover Copy Button */}
+                  <div className="flex items-center justify-between gap-3 pt-3 px-1">
+                    <div className="min-w-0 flex-1">
+                      <h3 className={`text-base sm:text-[17px] font-semibold tracking-[-0.015em] truncate transition-colors ${
+                        isDark ? 'text-white group-hover/card:text-neutral-200' : 'text-neutral-900 group-hover/card:text-black'
+                      }`}>
+                        {item.title}
+                      </h3>
+                      <p className={`text-xs sm:text-[13px] font-medium truncate mt-0.5 ${
+                        isDark ? 'text-neutral-400' : 'text-neutral-500'
+                      }`}>
+                        {item.description}
+                      </p>
+                    </div>
+
+                    {/* Action Copy Button - Fades in on card hover */}
+                    <motion.button
+                      whileHover={{ scale: 1.08 }}
+                      whileTap={{ scale: 0.92 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCopy(item.id, item.cliCommand);
+                      }}
+                      type="button"
+                      className={`size-8 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer border shrink-0 opacity-0 group-hover/card:opacity-100 focus-visible:opacity-100 ${
+                        copiedId === item.id
+                          ? 'opacity-100 bg-white/10 border-white/30 text-white'
+                          : isDark
+                          ? 'border-white/10 bg-[#181818] hover:bg-neutral-800 text-neutral-400 hover:text-white'
+                          : 'border-neutral-200 bg-white hover:bg-neutral-100 text-neutral-600 hover:text-black'
+                      }`}
+                      aria-label="Copy CLI install command"
+                      title="Copy CLI install command"
+                    >
+                      <IconSwap>
+                        <IconSwapItem key={copiedId === item.id ? 'check' : 'copy'}>
+                          {copiedId === item.id ? (
+                            <Check className="w-3.5 h-3.5 text-white" />
+                          ) : (
+                            <Copy className="w-3.5 h-3.5" />
+                          )}
+                        </IconSwapItem>
+                      </IconSwap>
+                    </motion.button>
+                  </div>
                 </div>
-              </div>
+              </article>
             </motion.div>
           ))}
         </AnimatePresence>
       </div>
+
+      {/* Sponsors Section - Last Section as the rest of the website */}
+      {!embedded && (
+        <div className="mt-16 sm:mt-24 w-full">
+          <SponsorSection
+            theme={theme}
+            sponsors={activeSponsors}
+            checkoutUrl={checkoutUrl || 'https://polar.sh/checkout/polar_c_aJ9w76csnccSI8uNxJ6rIopDFzVFJkzobaGNC17YNtS'}
+            onNavigateSponsors={() => {
+              if (triggerHaptic) triggerHaptic('light');
+              window.location.href = '/sponsors';
+            }}
+            triggerHaptic={triggerHaptic}
+          />
+        </div>
+      )}
     </div>
   );
 }

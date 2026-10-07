@@ -409,6 +409,62 @@ const extraCards = [
     description: 'GitHub-style activity heatmap with interactive dither dots.',
     dependencies: ['motion', 'lucide-react'],
     files: [{ path: 'src/components/dither-charts/ActivityHeatmap.tsx', type: 'registry:component', target: 'components/amicro/ActivityHeatmap.tsx' }]
+  },
+  {
+    name: 'use-web-haptics',
+    type: 'registry:hook' as const,
+    title: 'useWebHaptics',
+    description: 'Lightweight tactile haptic feedback hook for mobile web interactions using navigator.vibrate.',
+    dependencies: [],
+    files: [{ path: 'src/hooks/useWebHaptics.ts', type: 'registry:hook', target: 'hooks/useWebHaptics.ts' }]
+  },
+  {
+    name: 'ai-prompt-input',
+    type: 'registry:component' as const,
+    title: 'AI Prompt Input Studio',
+    description: 'Dynamic auto-expanding AI textarea with model switcher, live voice dictation wave pulse, web search & deep thinking toggles, and token counter.',
+    dependencies: ['motion', 'lucide-react'],
+    files: [{ path: 'src/components/ai/AiPromptInput.tsx', type: 'registry:component', target: 'components/amicro/AiPromptInput.tsx' }]
+  },
+  {
+    name: 'ai-reasoning-trace',
+    type: 'registry:component' as const,
+    title: 'AI Reasoning Trace Accordion',
+    description: 'Collapsible chain-of-thought reasoning trace with active thought timer, pulsating brain wave, and sequential step status nodes.',
+    dependencies: ['motion', 'lucide-react'],
+    files: [{ path: 'src/components/ai/AiReasoningTrace.tsx', type: 'registry:component', target: 'components/amicro/AiReasoningTrace.tsx' }]
+  },
+  {
+    name: 'ai-response-stream',
+    type: 'registry:component' as const,
+    title: 'AI Response Stream & Code Block',
+    description: 'Terminal-like AI code stream card featuring branch revision navigation, instant copy with tactile haptics, and response rating morphs.',
+    dependencies: ['motion', 'lucide-react'],
+    files: [{ path: 'src/components/ai/AiResponseStream.tsx', type: 'registry:component', target: 'components/amicro/AiResponseStream.tsx' }]
+  },
+  {
+    name: 'ai-prompt-chips',
+    type: 'registry:component' as const,
+    title: 'AI Prompt Suggestion Chips',
+    description: 'Categorized quick-prompt suggestion chips with spring physics bounce and one-tap populating.',
+    dependencies: ['motion', 'lucide-react'],
+    files: [{ path: 'src/components/ai/AiPromptChips.tsx', type: 'registry:component', target: 'components/amicro/AiPromptChips.tsx' }]
+  },
+  {
+    name: 'ai-floating-toolbar',
+    type: 'registry:component' as const,
+    title: 'AI Floating Action Pill',
+    description: 'Glassmorphic floating quick-action pill dock for instant generative prompts and actions.',
+    dependencies: ['motion', 'lucide-react'],
+    files: [{ path: 'src/components/ai/AiFloatingToolbar.tsx', type: 'registry:component', target: 'components/amicro/AiFloatingToolbar.tsx' }]
+  },
+  {
+    name: 'morphing-shapes-studio',
+    type: 'registry:block' as const,
+    title: 'Morphing Shapes Studio',
+    description: 'Interactive shape morphing laboratory with studio controls, continuous auto-looping, and spring tension adjustments.',
+    dependencies: ['motion', 'lucide-react'],
+    files: [{ path: 'src/components/morphing/MorphingShapesPage.tsx', type: 'registry:component', target: 'components/amicro/MorphingShapesPage.tsx' }]
   }
 ];
 

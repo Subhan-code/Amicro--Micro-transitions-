@@ -1,26 +1,20 @@
 export interface CssAnimationItem {
   id: string;
   name: string;
-  category: 'all' | 'whimsical' | 'ui-kit' | 'loaders';
+  category: 'all' | 'physics' | 'ui-kit' | 'loaders';
   description: string;
   cliCommand: string;
   componentCode: string;
 }
 
-export const CSS_ANIMATION_CATEGORIES = [
-  { id: 'all', label: 'Index Vault' },
-  { id: 'whimsical', label: 'Kinetic Physics' },
-  { id: 'ui-kit', label: 'Tactile Interface' },
-  { id: 'loaders', label: 'Orbital Pulses' },
-] as const;
 
 export const cssAnimationsData: CssAnimationItem[] = [
   // Full-Width Showcase: macOS Spring Dock
   {
     id: 'dock',
-    name: 'Physics Spring Dock',
+    name: 'macOS Spring Dock',
     category: 'all',
-    description: 'macOS-style spring-physics dock with dynamic item magnification and drag-to-reorder.',
+    description: 'Proximity magnification and smooth spring damping.',
     cliCommand: 'npx @subhanhq/amicro@latest add physics-dock',
     componentCode: `// Spring dock with useMotionValue, useSpring distance scaling, and reorderable elements.`
   },
@@ -29,7 +23,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-card-peel',
     name: 'Card Stack Peel',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Layered card index tab that peels down in 3D perspective to reveal underlay.',
     cliCommand: 'npx @subhanhq/amicro@latest add card-stack-peel',
     componentCode: `// 3D perspective card peel fold with spring easing.`
@@ -37,7 +31,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-bookmark-corner',
     name: 'Corner Dog-Ear Peel',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Folded paper corner peeling back to reveal underlying accent content.',
     cliCommand: 'npx @subhanhq/amicro@latest add bookmark-corner-peel',
     componentCode: `// Diagonal corner page peel fold with clip-path keyframe physics.`
@@ -45,7 +39,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-elastic-tag',
     name: 'Elastic Tag Snap',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Minimalist luggage tag with bungee spring snap and vertical recoil.',
     cliCommand: 'npx @subhanhq/amicro@latest add elastic-tag-snap',
     componentCode: `// Bungee elastic tag snap with harmonic vertical damping.`
@@ -55,7 +49,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-split-gate',
     name: 'Split Gate Reveal',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Precision vertical center-split security gate sliding apart.',
     cliCommand: 'npx @subhanhq/amicro@latest add split-gate-reveal',
     componentCode: `// Dual vertical sliding split gate panels.`
@@ -63,7 +57,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-shutter-slide',
     name: 'Horizontal Shutter Slide',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Dual horizontal panels sliding apart to reveal underlying action badge.',
     cliCommand: 'npx @subhanhq/amicro@latest add shutter-slide',
     componentCode: `// Dual horizontal sliding shutter panels with smooth ease.`
@@ -71,7 +65,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-origami-envelope',
     name: 'Origami Envelope Unfold',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Geometric triangular envelope flap opening with 3D perspective flip.',
     cliCommand: 'npx @subhanhq/amicro@latest add origami-envelope-unfold',
     componentCode: `// 3D perspective rotateX envelope flap unfold.`
@@ -81,7 +75,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-card-dispenser',
     name: 'Smart Card Dispenser',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Credit card dispensing slot ejecting smart pass upwards on trigger.',
     cliCommand: 'npx @subhanhq/amicro@latest add smart-card-dispenser',
     componentCode: `// Ejection slot pushing smart card with spring overshoot.`
@@ -89,7 +83,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-sticky-note',
     name: 'Sticky Note Peel',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Post-it memo note peeling upwards in 3D perspective from pad.',
     cliCommand: 'npx @subhanhq/amicro@latest add sticky-note-peel',
     componentCode: `// 3D perspective rotateX sheet peel with opacity transition.`
@@ -97,7 +91,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-receipt-tape',
     name: 'Receipt Ticker Print',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Stepped ticker tape printing smoothly out of top dispenser slot.',
     cliCommand: 'npx @subhanhq/amicro@latest add receipt-tape-print',
     componentCode: `// Stepped height expand ticker paper dispenser animation.`
@@ -107,7 +101,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-circuit-trace',
     name: 'Circuit Trace Draw',
-    category: 'whimsical',
+    category: 'physics',
     description: 'PCB electrical circuit trace self-drawing with terminal node pulse.',
     cliCommand: 'npx @subhanhq/amicro@latest add circuit-trace-draw',
     componentCode: `// SVG electrical circuit trace drawing with stroke-dashoffset.`
@@ -115,7 +109,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-hex-lattice',
     name: 'Hexagon Lattice Draw',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Self-assembling geometric hexagon wireframe stroke with loop wipe.',
     cliCommand: 'npx @subhanhq/amicro@latest add hex-lattice-draw',
     componentCode: `// Hexagon polygon drawing keyframe loop.`
@@ -123,7 +117,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-stroke-waveform',
     name: 'Waveform Pulse Line',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Kinetic audio/cardiac pulse line self-drawing across horizontal axis.',
     cliCommand: 'npx @subhanhq/amicro@latest add stroke-waveform',
     componentCode: `// SVG cardiac pulse polyline drawing sequence.`
@@ -133,7 +127,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-prism-stack',
     name: 'Prism Block Stack',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Geometric prism blocks dropping and stacking with weighted damping.',
     cliCommand: 'npx @subhanhq/amicro@latest add prism-block-stack',
     componentCode: `// Staggered falling prism blocks with spring settle.`
@@ -141,7 +135,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-modular-tile',
     name: 'Modular Tile Snap',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Interlocking geometric square & pill modules snapping into place.',
     cliCommand: 'npx @subhanhq/amicro@latest add modular-tile-snap',
     componentCode: `// Modular tile scale and rotational snap keyframes.`
@@ -149,7 +143,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-pyramid-build',
     name: 'Pyramid Block Build',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Triangular pyramid stacking base-to-peak with staggered spring pops.',
     cliCommand: 'npx @subhanhq/amicro@latest add pyramid-block-build',
     componentCode: `// Triangular staggered block scale-pop animation sequence.`
@@ -159,7 +153,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-roller-blind',
     name: 'Roller Blind Drop',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Minimalist architectural roller shade dropping smoothly from header.',
     cliCommand: 'npx @subhanhq/amicro@latest add roller-blind-drop',
     componentCode: `// Architectural roller blind expand keyframes.`
@@ -167,7 +161,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-scroll-canvas',
     name: 'Scroll Canvas Unroll',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Dual-sided wooden scroll unrolling outward to display center message.',
     cliCommand: 'npx @subhanhq/amicro@latest add scroll-canvas-unroll',
     componentCode: `// Dual roller canvas expand keyframe animation.`
@@ -175,7 +169,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-ribbon-banner',
     name: 'Ribbon Banner Slide',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Horizontal chevron badge sliding and unfolding from center.',
     cliCommand: 'npx @subhanhq/amicro@latest add ribbon-banner-slide',
     componentCode: `// Horizontal banner auto-width expansion keyframes.`
@@ -185,7 +179,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-tension-capsule',
     name: 'Kinetic Tension Capsule',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Dynamic rubber-band capsule stretching under high horizontal tension with nodal recoil.',
     cliCommand: 'npx @subhanhq/amicro@latest add kinetic-tension-capsule',
     componentCode: `// Horizontal tension stretch and rubber-band recoil keyframes with inner node separation.`
@@ -193,7 +187,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-droplet-squish',
     name: 'Liquid Droplet Squish',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Vertical liquid capsule squishing on impact with spring recovery.',
     cliCommand: 'npx @subhanhq/amicro@latest add droplet-squish',
     componentCode: `// Vertical scale compression and harmonic droplet bounce.`
@@ -201,7 +195,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-segmented-link',
     name: 'Segmented Link Stretch',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Multi-joint segmented pill chain expanding and snapping together.',
     cliCommand: 'npx @subhanhq/amicro@latest add segmented-link-stretch',
     componentCode: `// Gap stretch and recoil spring physics for segmented pills.`
@@ -211,7 +205,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-blind-pull',
     name: 'Accordion Blind Pull',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Horizontal slated blinds expanding downwards with tension cord pulling.',
     cliCommand: 'npx @subhanhq/amicro@latest add accordion-blind',
     componentCode: `// Accordion slat keyframes with variable translateY offsets.`
@@ -219,7 +213,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-rotating-louvers',
     name: 'Rotating Louver Slats',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Horizontal architectural louvers tilting 0° to 75° in smooth sequence.',
     cliCommand: 'npx @subhanhq/amicro@latest add rotating-louvers',
     componentCode: `// 3D rotateX slat rotation with staggered offsets.`
@@ -227,7 +221,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-iris-shutter',
     name: 'Geometric Iris Shutter',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Hexagonal camera shutter blades rotating and opening center aperture.',
     cliCommand: 'npx @subhanhq/amicro@latest add geometric-iris-shutter',
     componentCode: `// Interlocking iris blade rotation and expansion.`
@@ -237,7 +231,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-bubble-level',
     name: 'Pendulum Bubble Level',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Precision spirit/bubble level balancing horizontally with fluid damping.',
     cliCommand: 'npx @subhanhq/amicro@latest add pendulum-bubble-level',
     componentCode: `// Fluid bubble oscillation and level settling.`
@@ -245,7 +239,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-kinetic-metronome',
     name: 'Kinetic Metronome Tick',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Minimalist metronome pendulum ticking in harmonic angular rhythm.',
     cliCommand: 'npx @subhanhq/amicro@latest add kinetic-metronome-tick',
     componentCode: `// Inverted pendulum harmonic oscillation.`
@@ -253,7 +247,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-orbital-gimbal',
     name: 'Nested Orbital Gimbal',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Dual square & circular concentric gimbal rings spinning in counter-phase.',
     cliCommand: 'npx @subhanhq/amicro@latest add nested-orbital-gimbal',
     componentCode: `// Counter-rotating concentric gimbal rings.`
@@ -263,7 +257,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-gelatin-wobble',
     name: 'Gelatin Cube Wobble',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Squishy gelatin cube landing with vertical compression and harmonic bounce.',
     cliCommand: 'npx @subhanhq/amicro@latest add gelatin-wobble',
     componentCode: `// Multi-stage scale(1.4, 0.6) vertical compression and bouncing.`
@@ -271,7 +265,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-slinky-coil',
     name: 'Slinky Coil Spring',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Layered horizontal coil spring extending and compressing with spring tension.',
     cliCommand: 'npx @subhanhq/amicro@latest add slinky-coil',
     componentCode: `// Vertical scale compression and extension spring stack.`
@@ -279,7 +273,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-squash-sphere',
     name: 'Squash & Stretch Sphere',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Classic Disney 12-principles bouncy rubber ball with squash on impact.',
     cliCommand: 'npx @subhanhq/amicro@latest add squash-sphere',
     componentCode: `// Squash-and-stretch vertical bounce keyframe physics.`
@@ -289,7 +283,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-domino-chain',
     name: 'Domino Cascade Fall',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Staggered 5 domino tiles tipping over sequentially with rotational inertia.',
     cliCommand: 'npx @subhanhq/amicro@latest add domino-cascade',
     componentCode: `// Staggered domino tilt keyframe chain.`
@@ -297,7 +291,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-card-cascade',
     name: 'Card Deck Fan Cascade',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Fanning deck of 3 cards spreading out in radial hand formation.',
     cliCommand: 'npx @subhanhq/amicro@latest add card-deck-cascade',
     componentCode: `// Radial card fan rotation and translation keyframes.`
@@ -305,7 +299,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-gear-step',
     name: 'Interlocking Gear Step',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Dual interlocking mechanical gears rotating in synchronized counter-phase.',
     cliCommand: 'npx @subhanhq/amicro@latest add gear-tooth-step',
     componentCode: `// Synchronized CW and CCW mechanical gear rotations.`
@@ -315,7 +309,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-magnetic-disks',
     name: 'Magnetic Snap Disks',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Dual circular pills stretching toward each other before snapping together.',
     cliCommand: 'npx @subhanhq/amicro@latest add magnetic-disks',
     componentCode: `// Dual circular pill displacement and squishy scale collision.`
@@ -323,7 +317,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-dual-magnet',
     name: 'Dual Magnet Dipole',
-    category: 'whimsical',
+    category: 'physics',
     description: 'North/South magnetic dipole blocks attracting and snapping with tension.',
     cliCommand: 'npx @subhanhq/amicro@latest add dual-magnet-dipole',
     componentCode: `// Magnetic N/S dipole attraction gap animation.`
@@ -331,7 +325,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-compass-deflect',
     name: 'Compass Needle Deflect',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Magnetic compass needle swinging and deflecting with magnetic damping.',
     cliCommand: 'npx @subhanhq/amicro@latest add compass-needle-deflect',
     componentCode: `// Angular compass needle deflection and settling.`
@@ -341,7 +335,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-sudden-brake',
     name: 'Sudden Brake Skid',
-    category: 'whimsical',
+    category: 'physics',
     description: 'High-speed incoming deceleration with severe backward skid tilt and bumper settle.',
     cliCommand: 'npx @subhanhq/amicro@latest add sudden-brake',
     componentCode: `// Sudden deceleration keyframes with rotational skidding physics.`
@@ -349,7 +343,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-rolling-tumble',
     name: 'Rolling Tumble Physics',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Step-by-step rolling cube tumbling end over end with momentum rotation.',
     cliCommand: 'npx @subhanhq/amicro@latest add rolling-tumble',
     componentCode: `// Stepped 90-degree rolling cube translation and rotational physics.`
@@ -357,7 +351,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-inertia-skid',
     name: 'Inertia Skid Stop',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Skewing inertia block sliding in with heavy friction deceleration.',
     cliCommand: 'npx @subhanhq/amicro@latest add inertia-skid-stop',
     componentCode: `// Horizontal skew and slide deceleration keyframes.`
@@ -367,7 +361,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-neon-sign',
     name: 'Neon Sign Draw & Clear',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Self-drawing neon polyline stroke with progressive erase and clean reset.',
     cliCommand: 'npx @subhanhq/amicro@latest add neon-sign-draw',
     componentCode: `// SVG stroke-dasharray neon draw and clear keyframe animation.`
@@ -375,7 +369,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-page-turn',
     name: 'Page Turn Curl',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Rising paper sheet with dynamic corner curling border-radius transition.',
     cliCommand: 'npx @subhanhq/amicro@latest add page-turn-curl',
     componentCode: `// 3D perspective rising paper sheet with curling border-radius.`
@@ -383,7 +377,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
   {
     id: 'anim-shutter-blocks',
     name: 'Shutter Step Slices',
-    category: 'whimsical',
+    category: 'physics',
     description: 'Multi-tiered horizontal shutter blocks expanding in rapid staggered sequence.',
     cliCommand: 'npx @subhanhq/amicro@latest add shutter-step-slices',
     componentCode: `// Staggered horizontal scaleX shutter block slices.`
@@ -417,7 +411,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
 
   // ROW 16: SELECTS & MENUS (3 VARIATIONS)
   {
-    id: 'yui-category-select',
+    id: 'ui-category-select',
     name: 'Category Dropdown',
     category: 'ui-kit',
     description: 'Soft rounded dropdown menu with gentle downward slide and rotating arrow.',
@@ -425,7 +419,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
     componentCode: `// Rounded dropdown menu with AnimatePresence downward slide.`
   },
   {
-    id: 'yui-filter-tag-pill',
+    id: 'ui-filter-tag-pill',
     name: 'Floating Filter Tag Pill',
     category: 'ui-kit',
     description: 'Segmented filter tag pill selector with smooth sliding backdrop.',
@@ -433,7 +427,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
     componentCode: `// Segmented filter tag selector with layoutId spring sliding.`
   },
   {
-    id: 'yui-submenu-flyout',
+    id: 'ui-submenu-flyout',
     name: 'Submenu Flyout Panel',
     category: 'ui-kit',
     description: 'Flyout context panel expanding outward with horizontal spring slide.',
@@ -443,7 +437,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
 
   // ROW 17: BUTTONS & LINKS (3 VARIATIONS)
   {
-    id: 'yui-hover-link',
+    id: 'ui-hover-link',
     name: 'Hover Link Card',
     category: 'ui-kit',
     description: 'Rounded pill button labeled "Portfolio" with hover scale-up and floating URL.',
@@ -451,7 +445,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
     componentCode: `// Pill button with hover scale-up (1.05x) and floating tooltip.`
   },
   {
-    id: 'yui-magnetic-icon-btn',
+    id: 'ui-magnetic-icon-btn',
     name: 'Magnetic Slide Button',
     category: 'ui-kit',
     description: 'Arrow button that slides horizontally on hover with subtle tactile lift.',
@@ -459,7 +453,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
     componentCode: `// Magnetic arrow slide button with spring motion feedback.`
   },
   {
-    id: 'yui-morph-action-pill',
+    id: 'ui-morph-action-pill',
     name: 'Morph Action Expand Pill',
     category: 'ui-kit',
     description: 'Compact action pill that expands on hover to reveal launch indicator.',
@@ -469,7 +463,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
 
   // ROW 18: TOGGLES & MODIFIERS (3 VARIATIONS)
   {
-    id: 'yui-plus-minus-toggle',
+    id: 'ui-plus-minus-toggle',
     name: 'Plus / Minus Toggle',
     category: 'ui-kit',
     description: 'Dual square toggle buttons with solid color fills and spring micro-bounce.',
@@ -477,7 +471,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
     componentCode: `// Dual square toggle buttons with smooth solid color transition.`
   },
   {
-    id: 'yui-light-dark-toggle',
+    id: 'ui-light-dark-toggle',
     name: 'Light / Dark Mode Toggle',
     category: 'ui-kit',
     description: 'Circular icon that morphs between bright sun and crescent moon with rotation.',
@@ -485,7 +479,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
     componentCode: `// Morphing Sun/Moon toggle with spring rotation.`
   },
   {
-    id: 'yui-ab-tabs',
+    id: 'ui-ab-tabs',
     name: 'A / B Segmented Tabs',
     category: 'ui-kit',
     description: 'Segmented control where active letter (A or B) slides into a solid pill.',
@@ -495,7 +489,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
 
   // ROW 19: PROGRESS & STEPPERS (3 VARIATIONS)
   {
-    id: 'yui-progress-stepper',
+    id: 'ui-progress-stepper',
     name: 'Progress Stepper',
     category: 'ui-kit',
     description: 'Horizontal step line (STEP 1 → STEP 2 → STEP 3) with animated fill bar.',
@@ -503,7 +497,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
     componentCode: `// Horizontal timeline with smooth active node expansion.`
   },
   {
-    id: 'yui-segmented-arc-meter',
+    id: 'ui-segmented-arc-meter',
     name: 'Segmented Arc Meter',
     category: 'ui-kit',
     description: 'Stepped 4-bar discrete vertical gauge with percentage readout.',
@@ -511,7 +505,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
     componentCode: `// Discrete stepped level meter with scaling animation.`
   },
   {
-    id: 'yui-segmented-step-bar',
+    id: 'ui-segmented-step-bar',
     name: 'Segmented Step Bar',
     category: 'ui-kit',
     description: 'Battery-style multi-segment discrete progress bar with stepped fill.',
@@ -521,7 +515,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
 
   // ROW 20: TABS & STEPPERS (3 VARIATIONS)
   {
-    id: 'yui-multi-tab-close',
+    id: 'ui-multi-tab-close',
     name: 'Tab Bar with Close',
     category: 'ui-kit',
     description: 'Horizontal tabs with shrinking slide-away close animations and "+" expander.',
@@ -529,7 +523,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
     componentCode: `// Horizontal tab strip with AnimatePresence close shrinkage.`
   },
   {
-    id: 'yui-date-position',
+    id: 'ui-date-position',
     name: 'Date Position Selector',
     category: 'ui-kit',
     description: 'Three consecutive day numbers (24th, 25th, 26th) with sliding highlight pill.',
@@ -537,7 +531,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
     componentCode: `// Consecutive date selector with smooth sliding layoutId background pill.`
   },
   {
-    id: 'yui-stepper-dots',
+    id: 'ui-stepper-dots',
     name: 'Segmented Stepper Dots',
     category: 'ui-kit',
     description: 'Pill-morphing connected page dots with spring expansion indicator.',
@@ -547,7 +541,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
 
   // ROW 21: ACTION FEEDBACK & GLANCES (3 VARIATIONS)
   {
-    id: 'yui-context-menu',
+    id: 'ui-context-menu',
     name: 'Actions Context Menu',
     category: 'ui-kit',
     description: 'Rounded popup menu containing Edit and Delete with soft scale and fade-in.',
@@ -555,7 +549,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
     componentCode: `// Soft context popup with edit/delete actions and AnimatePresence scale.`
   },
   {
-    id: 'yui-glance-preview',
+    id: 'ui-glance-preview',
     name: 'Card Glance Preview',
     category: 'ui-kit',
     description: 'Micro floating glance card popup with status indicator dot.',
@@ -563,7 +557,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
     componentCode: `// Interactive glance card overlay with spring entrance.`
   },
   {
-    id: 'yui-download-icons',
+    id: 'ui-download-icons',
     name: 'Download Progress Icons',
     category: 'ui-kit',
     description: 'Download arrow icons with downward bounce and checkmark completion.',
@@ -573,7 +567,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
 
   // ROW 22: CONTROLS & SWITCHERS (3 VARIATIONS)
   {
-    id: 'yui-wheel-counter',
+    id: 'ui-wheel-counter',
     name: 'Vertical Wheel Counter',
     category: 'ui-kit',
     description: 'Vertical cylinder tumbler wheel number scroll with stepper buttons.',
@@ -581,7 +575,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
     componentCode: `// Vertical cylinder number scroll transition.`
   },
   {
-    id: 'yui-perspective-layout',
+    id: 'ui-perspective-layout',
     name: 'Perspective Layout Switcher',
     category: 'ui-kit',
     description: 'Interactive toggle switching between Grid and 3D Stack layout icons.',
@@ -589,7 +583,7 @@ export const cssAnimationsData: CssAnimationItem[] = [
     componentCode: `// Rotating perspective view layout switcher.`
   },
   {
-    id: 'yui-save-pill',
+    id: 'ui-save-pill',
     name: 'Bookmark Save Pill',
     category: 'ui-kit',
     description: 'Interactive Save / Saved state pill toggle with icon morph.',

@@ -6,6 +6,7 @@ import {
 import { IconSwap, IconSwapItem } from './IconSwap';
 import { ScrambleHover, ScrambleHoverDemo } from './css-animations/ScrambleHover';
 import { FocusBlurDemo } from './css-animations/FocusBlur';
+import { FocusBlur } from './cards/FocusBlur';
 
 export interface TextAnimationItem {
   id: string;
@@ -27,11 +28,61 @@ export const textAnimationsData: TextAnimationItem[] = [
   },
   {
     id: 'focus-blur',
-    name: 'CSS :has() Focus Blur',
+    name: 'Focus Blur Links',
     category: 'hover-focus',
-    description: 'Zero-JS sibling focus-blur depth hierarchy using CSS :has() parent-child selector physics.',
+    description: 'Interactive sibling focus-blur depth hierarchy with spring-animated dashed bracket targeting.',
     cliCommand: 'npx @subhanhq/amicro@latest add focus-blur',
-    componentCode: `// Zero JS focus blur via .group:has(.target:hover) .target:not(:hover) { filter: blur(3px); }`
+    componentCode: `import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+
+export function FocusBlur() {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const items = [
+    { label: '@Twitter', href: '#' },
+    { label: '@Threads', href: '#' },
+    { label: '@Instagram', href: '#' },
+    { label: '@GitHub', href: '#' }
+  ];
+
+  return (
+    <div className="flex flex-wrap justify-center items-center gap-6 py-6 px-10">
+      {items.map((item, index) => {
+        const isHovered = hoveredIndex === index;
+        const isAnyHovered = hoveredIndex !== null;
+        const isInactive = isAnyHovered && !isHovered;
+
+        return (
+          <a
+            key={index}
+            href={item.href}
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(null)}
+            className="relative font-semibold text-lg sm:text-2xl no-underline transition-all duration-300 select-none outline-none"
+            style={{
+              filter: isInactive ? 'blur(4px)' : 'none',
+              opacity: isInactive ? 0.4 : 1,
+              color: isHovered ? 'var(--color-blue-500, #3b82f6)' : 'inherit'
+            }}
+          >
+            <span className="relative z-10">{item.label}</span>
+            <AnimatePresence>
+              {isHovered && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 1.3 }}
+                  animate={{ opacity: 1, scale: 1.1 }}
+                  exit={{ opacity: 0, scale: 1.3 }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 20 }}
+                  className="absolute inset-0 border-2 border-dashed border-neutral-300 dark:border-neutral-700 rounded-lg pointer-events-none z-0"
+                  style={{ margin: '-4px -8px' }}
+                />
+              )}
+            </AnimatePresence>
+          </a>
+        );
+      })}
+    </div>
+  );
+}`
   },
   {
     id: 'wave-reveal',
@@ -69,6 +120,7 @@ export const textAnimationsData: TextAnimationItem[] = [
 
 interface TextAnimationsPageProps {
   theme: 'dark' | 'light';
+  embedded?: boolean;
   showToast?: (message: string) => void;
   triggerHaptic?: (type: 'success' | 'warning' | 'error' | 'light' | 'medium' | 'heavy') => void;
   onNavigateHome?: () => void;
@@ -76,6 +128,7 @@ interface TextAnimationsPageProps {
 
 export function TextAnimationsPage({
   theme,
+  embedded = false,
   showToast,
   triggerHaptic,
   onNavigateHome,
@@ -130,8 +183,17 @@ export function TextAnimationsPage({
         );
       case 'focus-blur':
         return (
-          <div className="w-full flex items-center justify-center">
-            <FocusBlurDemo theme={theme} />
+          <div className="w-full flex items-center justify-center p-2">
+            <FocusBlur 
+              items={[
+                { label: '@Twitter', href: '#' },
+                { label: '@Threads', href: '#' },
+                { label: '@Instagram', href: '#' },
+                { label: '@GitHub', href: '#' }
+              ]} 
+              showBrackets={true} 
+              className="text-base sm:text-xl gap-4 sm:gap-6 py-2 px-2" 
+            />
           </div>
         );
       case 'wave-reveal':
@@ -207,54 +269,45 @@ export function TextAnimationsPage({
   };
 
   return (
-    <div className="w-full max-w-[1080px] mx-auto px-4 sm:px-6 py-8 flex flex-col gap-10 font-sans">
-      {/* Top Header Back Navigation */}
-      <div className="flex items-center justify-between w-full">
-        {onNavigateHome && (
-          <button
-            onClick={onNavigateHome}
-            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border ${
-              theme === 'dark' 
-                ? 'bg-white/5 border-white/10 text-neutral-300 hover:bg-white/10 hover:text-white' 
-                : 'bg-neutral-100 border-neutral-200 text-neutral-700 hover:bg-neutral-200 hover:text-black'
-            }`}
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Home</span>
-          </button>
-        )}
+    <div className={`w-full max-w-[1800px] mx-auto ${embedded ? 'px-0 py-2' : 'px-4 sm:px-6 py-8'} flex flex-col gap-8 font-sans`}>
+      {!embedded ? (
+        <>
+          {/* Top Header Back Navigation */}
+          <div className="flex items-center justify-between w-full">
+            {onNavigateHome && (
+              <button
+                onClick={onNavigateHome}
+                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border ${
+                  theme === 'dark' 
+                    ? 'bg-white/5 border-white/10 text-neutral-300 hover:bg-white/10 hover:text-white' 
+                    : 'bg-neutral-100 border-neutral-200 text-neutral-700 hover:bg-neutral-200 hover:text-black'
+                }`}
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Home</span>
+              </button>
+            )}
+          </div>
 
-        <button
-          onClick={() => setRefreshKey((k) => k + 1)}
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer border ${
-            theme === 'dark'
-              ? 'bg-white/5 border-white/10 text-neutral-300 hover:bg-white/10 hover:text-white'
-              : 'bg-neutral-100 border-neutral-200 text-neutral-700 hover:bg-neutral-200'
-          }`}
-          title="Replay text animations"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-          <span>Replay Animations</span>
-        </button>
-      </div>
-
-      {/* Hero Header */}
-      <div className="flex flex-col items-center text-center gap-4 max-w-3xl mx-auto">
-        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase ${
-          theme === 'dark' ? 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/30' : 'bg-indigo-50 text-indigo-700 border border-indigo-200'
-        }`}>
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Typography & Text Motion</span>
-        </div>
-        
-        <h1 className="text-3xl sm:text-5xl font-bold tracking-tight">
-          Text Animations
-        </h1>
-        
-        <p className={`text-sm sm:text-base max-w-xl ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
-          A curated collection of {textAnimationsData.length} interactive text decoders, focus blur depth selectors, and pure-CSS kinetic typography effects.
-        </p>
-      </div>
+          {/* Hero Header */}
+          <div className="flex flex-col items-center text-center gap-4 max-w-3xl mx-auto">
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase ${
+              theme === 'dark' ? 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/30' : 'bg-indigo-50 text-indigo-700 border border-indigo-200'
+            }`}>
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Typography & Text Motion</span>
+            </div>
+            
+            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight">
+              Text Animations
+            </h1>
+            
+            <p className={`text-sm sm:text-base max-w-xl ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
+              A curated collection of {textAnimationsData.length} interactive text decoders, focus blur depth selectors, and pure-CSS kinetic typography effects.
+            </p>
+          </div>
+        </>
+      ) : null}
 
       {/* Featured Spotlight: Scramble Text Sandbox */}
       <div className={`rounded-[28px] p-6 sm:p-8 border flex flex-col justify-between items-center text-center gap-4 shadow-xl transition-all ${
@@ -298,78 +351,46 @@ export function TextAnimationsPage({
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center sm:place-items-stretch">
+        <div className="grid grid-cols-1 gap-x-4 gap-y-8 transition-opacity duration-200 sm:grid-cols-2 lg:gap-x-6 lg:gap-y-10 xl:grid-cols-3 xl:gap-x-8">
           {textAnimationsData.map((item) => {
             const isCopied = copiedId === item.id;
             return (
-              <div
-                key={item.id}
-                className={`relative w-full max-w-[340px] sm:max-w-none h-[230px] sm:h-[268px] rounded-[24px] transition-all duration-300 group ${
-                  theme === 'dark'
-                    ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]'
-                    : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] border border-neutral-100/85 hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] text-black'
-                }`}
-              >
-                {/* Inner Preview Stage Canvas */}
-                <div
-                  className={`absolute left-[12px] top-[12px] right-[12px] h-[155px] sm:h-[188px] rounded-[14px] flex items-center justify-center overflow-hidden transition-colors duration-300 ${
-                    theme === 'dark' ? 'bg-[#131313]' : 'bg-[#f4f4f6]'
-                  }`}
-                >
-                  <div
-                    className={`absolute inset-0 rounded-[14px] pointer-events-none z-10 ${
-                      theme === 'dark'
-                        ? 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]'
-                        : 'shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)]'
-                    }`}
-                  />
-                  {/* Live Render */}
+              <article key={item.id} className="group/card relative">
+                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-3xl bg-black flex items-center justify-center p-4">
                   {renderLiveTextEffect(item.id)}
                 </div>
 
-                {/* Card Footer Bar */}
-                <div className="absolute left-[16px] bottom-[14px] right-[16px] flex items-center justify-between">
-                  <div className="flex flex-col truncate pr-2">
-                    <span
-                      className={`text-[13px] font-semibold tracking-[-0.01em] truncate transition-colors ${
-                        theme === 'dark' ? 'text-white' : 'text-black'
-                      }`}
-                    >
+                <div className="flex items-center justify-between gap-3 pt-3 px-1">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base sm:text-[17px] font-semibold tracking-[-0.015em] text-foreground truncate">
                       {item.name}
-                    </span>
-                    <span className="text-[10px] text-neutral-400 capitalize truncate">
+                    </h3>
+                    <p className="text-xs sm:text-[13px] font-medium text-muted-foreground truncate capitalize mt-0.5">
                       {item.category.replace('-', ' ')}
-                    </span>
+                    </p>
                   </div>
 
-                  {/* Action Copy Button */}
                   <motion.button
                     whileHover={{ scale: 1.08 }}
                     whileTap={{ scale: 0.92 }}
                     onClick={() => handleCopyCode(item)}
-                    className={`p-2 rounded-xl transition-all cursor-pointer border flex items-center justify-center shrink-0 ${
-                      isCopied
-                        ? (theme === 'dark'
-                            ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                            : 'bg-emerald-100 text-emerald-600 border-emerald-300')
-                        : (theme === 'dark'
-                            ? 'bg-white/[0.08] border-transparent hover:bg-white/[0.14] text-neutral-300 hover:text-white'
-                            : 'bg-neutral-100 border-transparent hover:bg-neutral-200 text-neutral-650 hover:text-black')
+                    className={`size-8 rounded-lg transition-all duration-200 cursor-pointer border border-border/80 bg-card hover:bg-muted text-muted-foreground hover:text-foreground flex items-center justify-center shrink-0 opacity-0 group-hover/card:opacity-100 focus-visible:opacity-100 ${
+                      isCopied ? 'opacity-100 bg-white/10 border-white/30 text-white' : ''
                     }`}
                     title="Copy component code"
                   >
                     <IconSwap>
                       <IconSwapItem key={isCopied ? 'check' : 'copy'}>
                         {isCopied ? (
-                          <Check className="w-4 h-4 text-emerald-500" />
+                          <Check className="w-3.5 h-3.5 text-white" />
                         ) : (
-                          <Copy className="w-4 h-4" />
+                          <Copy className="w-3.5 h-3.5" />
                         )}
                       </IconSwapItem>
                     </IconSwap>
                   </motion.button>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>

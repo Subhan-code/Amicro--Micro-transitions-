@@ -1,79 +1,80 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { motion } from 'motion/react';
 import { 
-  Copy, Check, ArrowLeft, RefreshCw, Terminal 
+  Copy, Check, ArrowLeft 
 } from 'lucide-react';
 import { IconSwap, IconSwapItem } from './IconSwap';
-import { cssAnimationsData, CSS_ANIMATION_CATEGORIES, CssAnimationItem } from '../data/cssAnimationsData';
+import { cssAnimationsData, CssAnimationItem } from '../data/cssAnimationsData';
 
 // Import Motion kit components
 import { Dock } from './css-animations/Dock';
 
-// Import Whimsical animations
-import { KineticTensionCapsule } from './css-animations/whimsical/KineticTensionCapsule';
-import { MatrixGridLoader } from './css-animations/whimsical/MatrixGridLoader';
-import { AppleRadialSpinner, PulseOrbitDots } from './css-animations/whimsical/AppleLoaders';
+// Import Kinetic physics animations
+import { KineticTensionCapsule } from './css-animations/physics/KineticTensionCapsule';
+import { MatrixGridLoader } from './css-animations/physics/MatrixGridLoader';
+import { AppleRadialSpinner, PulseOrbitDots } from './css-animations/physics/AppleLoaders';
 
-// Import Concept Trios 1
+// Import Paper Fold Trios
 import { 
   BookmarkCornerPeel, ShutterSlide, StickyNotePeel, ReceiptTapePrint 
-} from './css-animations/whimsical/ConceptTrios1';
+} from './css-animations/physics/PaperFoldTrios';
 
-// Import Concept Trios 2
+// Import Structural Build Trios
 import { 
   StrokeWaveform, PyramidBlockBuild, ScrollCanvasUnroll 
-} from './css-animations/whimsical/ConceptTrios2';
+} from './css-animations/physics/StructuralBuildTrios';
 
-// Import Concept Trios 3
+// Import Elastic Deform Trios
 import { 
   DropletSquish, SegmentedLinkStretch, RotatingLouvers, 
   SlinkyCoil, SquashStretchSphere, CardDeckCascade, GearToothStep 
-} from './css-animations/whimsical/ConceptTrios3';
+} from './css-animations/physics/ElasticDeformTrios';
 
-// Import Yui Pure CSS Physics Experiments
+// Import Pure CSS Inertia Physics Experiments
 import { 
   NeonSignDraw, SuddenBrake, RollingTumble, PageTurnCurl, 
   ShutterStepBlocks, InertiaSkidStop 
-} from './css-animations/whimsical/YuiPhysicsExperiments';
+} from './css-animations/physics/InertiaPhysicsExperiments';
 
-// Import Redesigned Physics Trios (Replacements)
+// Import Mechanical Physics Trios
 import { 
   CardStackPeel, ElasticTagSnap, SplitGateReveal, OrigamiEnvelopeUnfold, 
   SmartCardDispenser, CircuitTraceDraw, HexagonLatticeDraw, PrismBlockStack, 
   ModularTileSnap, RollerBlindDrop, RibbonBannerSlide, GeometricIrisShutter, 
   PendulumBubbleLevel, KineticTickingMetronome, NestedOrbitalGimbal, 
   DualMagnetDipole, CompassNeedleDeflect 
-} from './css-animations/whimsical/RedesignedPhysicsTrios';
+} from './css-animations/physics/MechanicalPhysicsTrios';
 
-// Import Redesigned UI Trios (Replacements)
+// Import Status & Preview Trios
 import { 
   SegmentedArcMeter, SegmentedStepperDots, CardGlancePreview, 
   VerticalWheelCounter, PerspectiveLayoutSwitcher, BookmarkSavePill 
-} from './css-animations/yui-components/RedesignedUiTrios';
+} from './css-animations/ui-interactions/StatusPreviewTrios';
 
-// Import Authentic Whimsical & Physics Variations
+// Import Elastic Variations
 import { 
   BlindPull, GelatinWobble, DominoChain, MagneticDisks 
-} from './css-animations/whimsical/WhimsicalVariations';
+} from './css-animations/physics/ElasticVariations';
 
-// Import UI Kit Trios
+// Import Navigation Trios
 import { 
   FilterTagPill, SubmenuFlyout, MagneticIconButton, MorphActionPill, 
   SegmentedStepBar 
-} from './css-animations/yui-components/UiKitTrios';
+} from './css-animations/ui-interactions/NavigationTrios';
 
-// Import 19 UI Micro-Components
+// Import Controls UI Kit
 import { 
   CategorySelect, HoverLinkCard, PlusMinusToggle, LightDarkMorphToggle, 
   ProgressStepper, MultiTabCloseBar, DatePositionSelector 
-} from './css-animations/yui-components/YuiUiKit1';
+} from './css-animations/ui-interactions/ControlsUiKit';
 
 import { 
   ContextMenuEditDelete, DownloadAnimatedIcons, SegmentedABTabs 
-} from './css-animations/yui-components/YuiUiKit2';
+} from './css-animations/ui-interactions/ActionsUiKit';
 
 interface CssAnimationsPageProps {
   theme: 'dark' | 'light';
+  embedded?: boolean;
   showToast?: (message: string) => void;
   triggerHaptic?: (type: 'success' | 'warning' | 'error' | 'light' | 'medium' | 'heavy') => void;
   onNavigateHome?: () => void;
@@ -81,13 +82,13 @@ interface CssAnimationsPageProps {
 
 export function CssAnimationsPage({
   theme,
+  embedded = false,
   showToast,
   triggerHaptic,
   onNavigateHome,
 }: CssAnimationsPageProps) {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [copiedCli, setCopiedCli] = useState(false);
   const [previewLoopTrigger, setPreviewLoopTrigger] = useState<number>(0);
 
   const filteredItems = useMemo(() => {
@@ -109,24 +110,6 @@ export function CssAnimationsPage({
         .catch(() => {
           if (triggerHaptic) triggerHaptic('error');
           if (showToast) showToast('Failed to copy code.');
-        });
-    },
-    [showToast, triggerHaptic]
-  );
-
-  const handleCopyCli = useCallback(
-    (command: string, name: string) => {
-      navigator.clipboard
-        .writeText(command)
-        .then(() => {
-          if (triggerHaptic) triggerHaptic('success');
-          setCopiedCli(true);
-          setTimeout(() => setCopiedCli(false), 2000);
-          if (showToast) showToast(`Copied ${name} CLI command!`);
-        })
-        .catch(() => {
-          if (triggerHaptic) triggerHaptic('error');
-          if (showToast) showToast('Failed to copy CLI command.');
         });
     },
     [showToast, triggerHaptic]
@@ -262,59 +245,59 @@ export function CssAnimationsPage({
         return <PulseOrbitDots theme="dark" />;
 
       // ROW 16: SELECTS & MENUS (3 VARIATIONS)
-      case 'yui-category-select':
+      case 'ui-category-select':
         return <CategorySelect theme="dark" />;
-      case 'yui-filter-tag-pill':
+      case 'ui-filter-tag-pill':
         return <FilterTagPill theme="dark" />;
-      case 'yui-submenu-flyout':
+      case 'ui-submenu-flyout':
         return <SubmenuFlyout theme="dark" />;
 
       // ROW 17: BUTTONS & LINKS (3 VARIATIONS)
-      case 'yui-hover-link':
+      case 'ui-hover-link':
         return <HoverLinkCard theme="dark" />;
-      case 'yui-magnetic-icon-btn':
+      case 'ui-magnetic-icon-btn':
         return <MagneticIconButton theme="dark" />;
-      case 'yui-morph-action-pill':
+      case 'ui-morph-action-pill':
         return <MorphActionPill theme="dark" />;
 
       // ROW 18: TOGGLES & MODIFIERS (3 VARIATIONS)
-      case 'yui-plus-minus-toggle':
+      case 'ui-plus-minus-toggle':
         return <PlusMinusToggle theme="dark" />;
-      case 'yui-light-dark-toggle':
+      case 'ui-light-dark-toggle':
         return <LightDarkMorphToggle theme="dark" />;
-      case 'yui-ab-tabs':
+      case 'ui-ab-tabs':
         return <SegmentedABTabs theme="dark" />;
 
       // ROW 19: PROGRESS & STEPPERS (3 VARIATIONS)
-      case 'yui-progress-stepper':
+      case 'ui-progress-stepper':
         return <ProgressStepper theme="dark" />;
-      case 'yui-segmented-arc-meter':
+      case 'ui-segmented-arc-meter':
         return <SegmentedArcMeter theme="dark" />;
-      case 'yui-segmented-step-bar':
+      case 'ui-segmented-step-bar':
         return <SegmentedStepBar theme="dark" />;
 
       // ROW 20: TABS & STEPPERS (3 VARIATIONS)
-      case 'yui-multi-tab-close':
+      case 'ui-multi-tab-close':
         return <MultiTabCloseBar theme="dark" />;
-      case 'yui-date-position':
+      case 'ui-date-position':
         return <DatePositionSelector theme="dark" />;
-      case 'yui-stepper-dots':
+      case 'ui-stepper-dots':
         return <SegmentedStepperDots theme="dark" />;
 
       // ROW 21: ACTION FEEDBACK & GLANCES (3 VARIATIONS)
-      case 'yui-context-menu':
+      case 'ui-context-menu':
         return <ContextMenuEditDelete theme="dark" />;
-      case 'yui-glance-preview':
+      case 'ui-glance-preview':
         return <CardGlancePreview theme="dark" />;
-      case 'yui-download-icons':
+      case 'ui-download-icons':
         return <DownloadAnimatedIcons theme="dark" />;
 
       // ROW 22: CONTROLS & SWITCHERS (3 VARIATIONS)
-      case 'yui-wheel-counter':
+      case 'ui-wheel-counter':
         return <VerticalWheelCounter theme="dark" />;
-      case 'yui-perspective-layout':
+      case 'ui-perspective-layout':
         return <PerspectiveLayoutSwitcher theme="dark" />;
-      case 'yui-save-pill':
+      case 'ui-save-pill':
         return <BookmarkSavePill theme="dark" />;
 
       default:
@@ -323,78 +306,45 @@ export function CssAnimationsPage({
   };
 
   return (
-    <div className={`w-full max-w-[1120px] mx-auto px-4 sm:px-6 py-5 sm:py-6 flex flex-col gap-6 font-[-apple-system,BlinkMacSystemFont,"SF_Pro_Display","SF_Pro_Text","Helvetica_Neue",sans-serif] transition-colors duration-300 ${
+    <div className={`w-full max-w-[1800px] mx-auto ${embedded ? 'px-0 py-1' : 'px-4 sm:px-6 py-5 sm:py-6'} flex flex-col gap-6 font-[-apple-system,BlinkMacSystemFont,"SF_Pro_Display","SF_Pro_Text","Helvetica_Neue",sans-serif] transition-colors duration-300 ${
       theme === 'dark' ? 'text-[#f5f5f7]' : 'text-[#1d1d1f]'
     }`}>
       
-      {/* Top Bar with Buttons Spanning the Outer Edges of the Container */}
+      {/* Top Bar with Controls */}
       <div className="relative w-full flex flex-col items-center">
-        {/* Left & Right Edge Actions Bar */}
-        <div className="w-full flex items-center justify-between z-10">
-          {onNavigateHome ? (
-            <button
-              onClick={onNavigateHome}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] sm:text-[13px] font-medium transition-all cursor-pointer border ${
-                theme === 'dark' 
-                  ? 'bg-[#1c1c1e] border-[#2c2c2e] text-[#a1a1a6] hover:bg-[#2c2c2e] hover:text-white' 
-                  : 'bg-[#e5e5ea] border-[#d1d1d6] text-[#636366] hover:bg-[#d1d1d6] hover:text-black'
-              }`}
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Home</span>
-            </button>
-          ) : <div />}
-
-          <button
-            onClick={() => setPreviewLoopTrigger((k) => k + 1)}
-            className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] sm:text-[13px] font-medium transition-all cursor-pointer border ${
-              theme === 'dark'
-                ? 'bg-[#1c1c1e] border-[#2c2c2e] text-[#a1a1a6] hover:bg-[#2c2c2e] hover:text-white'
-                : 'bg-[#e5e5ea] border-[#d1d1d6] text-[#636366] hover:bg-[#d1d1d6] hover:text-black'
-            }`}
-            title="Replay all animations"
-          >
-            <RefreshCw className="w-3.5 h-3.5" />
-            <span>Replay Animations</span>
-          </button>
-        </div>
-
-        {/* Center Hero Section Content (Refined & Compact Font Size) */}
-        <div className="flex flex-col items-center text-center gap-2.5 max-w-3xl w-full mx-auto -mt-7 sm:-mt-8">
-          <h1 className="text-2xl sm:text-4xl lg:text-[44px] font-bold sm:font-extrabold tracking-[-0.035em] leading-[1.12]">
-            Claim <span className="text-[#0071e3]">Micro-Motion</span> for<br />your Web UI
-          </h1>
-
-          <p className={`max-w-[580px] text-[13px] sm:text-[14.5px] leading-relaxed font-normal tracking-[-0.01em] ${
-            theme === 'dark' ? 'text-[#86868b]' : 'text-[#6e6e73]'
-          }`}>
-            Refined physics springs, skids, and fluid UI micro-interactions grouped in 3-variation suites. Built with vanilla CSS & zero bloated dependencies.
-          </p>
-
-          {/* Apple Segmented Filter Pill Bar */}
-          <div className={`flex flex-wrap items-center justify-center p-1 rounded-full border transition-colors duration-200 gap-1 mt-1 ${
-            theme === 'dark' ? 'bg-[#1c1c1e] border-[#2c2c2e]' : 'bg-[#e5e5ea] border-[#d1d1d6]'
-          }`}>
-            {CSS_ANIMATION_CATEGORIES.map((cat) => {
-              const isActive = activeCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => {
-                    if (triggerHaptic) triggerHaptic('light');
-                    setActiveCategory(cat.id);
-                  }}
-                  className={`px-4 py-1.5 rounded-full text-[12px] sm:text-[13px] font-medium transition-all cursor-pointer border-0 ${
-                    isActive
-                      ? (theme === 'dark' ? 'bg-[#2c2c2e] text-white shadow-sm font-semibold' : 'bg-white text-[#1d1d1f] shadow-sm font-semibold')
-                      : (theme === 'dark' ? 'text-[#86868b] hover:text-white bg-transparent' : 'text-[#6e6e73] hover:text-black bg-transparent')
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              );
-            })}
+        {!embedded && (
+          <div className="w-full flex items-center justify-between z-10">
+            {onNavigateHome ? (
+              <button
+                onClick={onNavigateHome}
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] sm:text-[13px] font-medium transition-all cursor-pointer border ${
+                  theme === 'dark' 
+                    ? 'bg-[#1c1c1e] border-[#2c2c2e] text-[#a1a1a6] hover:bg-[#2c2c2e] hover:text-white' 
+                    : 'bg-[#e5e5ea] border-[#d1d1d6] text-[#636366] hover:bg-[#d1d1d6] hover:text-black'
+                }`}
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Home</span>
+              </button>
+            ) : null}
           </div>
+        )}
+
+        {/* Center Hero Section Content */}
+        <div className={`flex flex-col items-center text-center gap-2.5 max-w-3xl w-full mx-auto ${embedded ? 'mt-0' : '-mt-7 sm:-mt-8'}`}>
+          {!embedded && (
+            <>
+              <h1 className="text-2xl sm:text-4xl lg:text-[44px] font-bold sm:font-extrabold tracking-[-0.035em] leading-[1.12]">
+                Claim <span className="text-[#0071e3]">Micro-Motion</span> for<br />your Web UI
+              </h1>
+
+              <p className={`max-w-[580px] text-[13px] sm:text-[14.5px] leading-relaxed font-normal tracking-[-0.01em] ${
+                theme === 'dark' ? 'text-[#86868b]' : 'text-[#6e6e73]'
+              }`}>
+                Refined physics springs, skids, and fluid UI micro-interactions grouped in 3-variation suites. Built with vanilla CSS & zero bloated dependencies.
+              </p>
+            </>
+          )}
         </div>
       </div>
 
@@ -410,119 +360,98 @@ export function CssAnimationsPage({
         </div>
 
         {/* Grid Container */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center sm:place-items-stretch">
+        <div className="grid grid-cols-1 gap-x-4 gap-y-8 transition-opacity duration-200 sm:grid-cols-2 lg:gap-x-6 lg:gap-y-10 xl:grid-cols-3 xl:gap-x-8">
           {filteredItems.map((item) => {
             const isCopied = copiedId === item.id;
             const isDock = item.id === 'dock';
 
-            // 1. FIRST ROW FULL-WIDTH COMPONENT: macOS Spring Dock (Restructured & Consistent)
+            // 1. FIRST ROW FULL-WIDTH COMPONENT: macOS Spring Dock (Amicro Card Architecture)
             if (isDock) {
               return (
-                <div
+                <article
                   key={item.id}
-                  className={`col-span-1 md:col-span-2 lg:col-span-3 w-full rounded-[24px] p-3 sm:p-4 border flex flex-col gap-3 transition-all duration-300 ${
-                    theme === 'dark'
-                      ? 'bg-[#161617] border-[#2c2c2e]'
-                      : 'bg-white border-[#d2d2d7] shadow-sm'
-                  }`}
+                  className="col-span-1 md:col-span-2 lg:col-span-3 group/card relative flex flex-col"
                 >
-                  {/* Top Interactive Dock Playground Canvas (Black Background) */}
-                  <div className="w-full flex items-center justify-center h-[96px] sm:h-[105px] rounded-[18px] bg-[#000000] border border-neutral-800/80 shadow-inner overflow-visible">
+                  {/* Top Interactive Dock Playground Canvas (Expanded Rounded-3xl Stage) */}
+                  <div className="relative w-full h-[150px] sm:h-[180px] overflow-hidden rounded-3xl bg-black flex items-center justify-center p-6 border border-white/[0.05] shadow-[0_4px_24px_rgba(0,0,0,0.45)]">
                     <Dock theme="dark" />
                   </div>
 
-                  {/* Bottom Info & CLI Bar */}
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-1">
-                    <div className="flex flex-col">
+                  {/* Clean Metadata & Actions Row */}
+                  <div className="flex items-center justify-between gap-3 pt-3.5 px-1">
+                    <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-[14px] sm:text-[15px] font-semibold tracking-[-0.01em]">
-                          Physics-Based macOS Spring Dock
-                        </span>
-                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
-                          theme === 'dark' ? 'bg-[#2c2c2e] border-neutral-700 text-blue-400' : 'bg-blue-50 border-blue-200 text-blue-600'
+                        <h3 className="text-base sm:text-[17px] font-semibold tracking-[-0.015em] text-foreground">
+                          macOS Spring Dock
+                        </h3>
+                        <span className={`text-[10.5px] font-medium px-2 py-0.5 rounded-full border ${
+                          theme === 'dark' 
+                            ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' 
+                            : 'bg-blue-50 border-blue-200 text-blue-600'
                         }`}>
                           Interactive
                         </span>
                       </div>
-                      <p className={`text-[11px] sm:text-[12px] font-normal leading-normal mt-0.5 ${
-                        theme === 'dark' ? 'text-[#86868b]' : 'text-[#6e6e73]'
-                      }`}>
-                        Dynamic cursor proximity magnification, smooth spring damping, and drag-and-drop item reordering.
+                      <p className="text-xs sm:text-[13px] font-medium text-muted-foreground mt-0.5">
+                        Proximity magnification and smooth spring damping.
                       </p>
                     </div>
 
-                    {/* CLI Command Bar */}
-                    <div className={`flex items-center gap-2 pl-3 pr-1.5 py-1 rounded-full border text-[11px] font-mono shrink-0 transition-all ${
-                      theme === 'dark' ? 'bg-[#111111] border-neutral-800 text-neutral-300' : 'bg-neutral-50 border-neutral-200 text-neutral-800'
-                    }`}>
-                      <Terminal className="w-3.5 h-3.5 text-[#0071e3] shrink-0" />
-                      <span className="select-all">npx @subhanhq/amicro@latest add physics-dock</span>
-                      <button
-                        onClick={() => handleCopyCli('npx @subhanhq/amicro@latest add physics-dock', 'Physics Spring Dock')}
-                        className={`p-1.5 rounded-full transition-all cursor-pointer flex items-center justify-center border shrink-0 ${
-                          copiedCli
-                            ? (theme === 'dark' ? 'bg-[#30d158]/20 border-[#30d158]/40 text-[#30d158]' : 'bg-[#34c759]/20 border-[#34c759]/40 text-[#34c759]')
-                            : (theme === 'dark' ? 'bg-[#222222] border-neutral-700 text-white hover:bg-[#333333]' : 'bg-white border-neutral-300 text-neutral-800 hover:bg-neutral-100')
-                        }`}
-                        title="Copy CLI command"
-                      >
-                        {copiedCli ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                      </button>
-                    </div>
+                    <motion.button
+                      whileHover={{ scale: 1.08 }}
+                      whileTap={{ scale: 0.92 }}
+                      onClick={() => handleCopyCode(item)}
+                      type="button"
+                      className={`size-8 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer border border-border/80 bg-card hover:bg-muted text-muted-foreground hover:text-foreground shrink-0 opacity-0 group-hover/card:opacity-100 focus-visible:opacity-100 ${
+                        isCopied ? 'opacity-100 bg-emerald-500/10 border-emerald-500/30 text-emerald-500' : ''
+                      }`}
+                      aria-label="Copy macOS Spring Dock code"
+                      title="Copy component code"
+                    >
+                      <IconSwap>
+                        <IconSwapItem key={isCopied ? "check" : "copy"}>
+                          {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                        </IconSwapItem>
+                      </IconSwap>
+                    </motion.button>
                   </div>
-                </div>
+                </article>
               );
             }
 
-            // 2. STANDARD 3-IN-A-ROW APPLE STYLE CARDS (Grouped into Trios)
+            // 2. MINIMAL CARD WITH EXPANDED PLAYGROUND
             return (
-              <div
+              <article
                 key={item.id}
-                className={`relative w-full max-w-[340px] sm:max-w-none h-[240px] sm:h-[270px] rounded-[24px] transition-all duration-300 group border ${
-                  theme === 'dark'
-                    ? 'bg-[#161617] border-[#2c2c2e] hover:border-[#3a3a3c]'
-                    : 'bg-white border-[#d2d2d7] hover:border-[#b0b0b8] shadow-sm'
-                }`}
+                className="group/card relative"
               >
-                {/* Inner Playground Canvas (Strictly Solid Black Background) */}
-                <div className="absolute left-[12px] top-[12px] right-[12px] h-[160px] sm:h-[188px] rounded-[18px] flex items-center justify-center bg-[#000000] border border-neutral-800/80 shadow-inner transition-colors duration-300">
-                  {/* Live Component Interactive Render */}
+                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-3xl bg-black flex items-center justify-center p-4">
                   {renderLiveComponent(item.id)}
                 </div>
 
-                {/* Card Footer Bar */}
-                <div className="absolute left-[18px] bottom-[14px] right-[18px] flex items-center justify-between">
-                  <div className="flex flex-col truncate pr-2">
-                    <span className="text-[13px] font-semibold tracking-[-0.01em] truncate">
+                <div className="flex items-center justify-between gap-3 pt-3 px-1">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base sm:text-[17px] font-semibold tracking-[-0.015em] text-foreground truncate">
                       {item.name}
-                    </span>
-                    <span className={`text-[11px] font-normal capitalize truncate ${
-                      theme === 'dark' ? 'text-[#86868b]' : 'text-[#86868b]'
-                    }`}>
+                    </h3>
+                    <p className="text-xs sm:text-[13px] font-medium text-muted-foreground truncate capitalize mt-0.5">
                       {item.category.replace('-', ' ')}
-                    </span>
+                    </p>
                   </div>
 
-                  {/* Action Copy Button */}
                   <motion.button
-                    whileHover={{ scale: 1.06 }}
-                    whileTap={{ scale: 0.94 }}
+                    whileHover={{ scale: 1.08 }}
+                    whileTap={{ scale: 0.92 }}
                     onClick={() => handleCopyCode(item)}
-                    className={`p-2 rounded-xl transition-all cursor-pointer border flex items-center justify-center shrink-0 ${
-                      isCopied
-                        ? (theme === 'dark'
-                            ? 'bg-[#30d158]/20 border-[#30d158]/40 text-[#30d158]'
-                            : 'bg-[#34c759]/20 border-[#34c759]/40 text-[#34c759]')
-                        : (theme === 'dark'
-                            ? 'bg-[#2c2c2e] border-[#3a3a3c] text-[#a1a1a6] hover:text-white'
-                            : 'bg-[#f5f5f7] border-[#e5e5ea] text-[#636366] hover:text-black')
+                    className={`size-8 rounded-lg transition-all duration-200 cursor-pointer border border-border/80 bg-card hover:bg-muted text-muted-foreground hover:text-foreground flex items-center justify-center shrink-0 opacity-0 group-hover/card:opacity-100 focus-visible:opacity-100 ${
+                      isCopied ? 'opacity-100 bg-emerald-500/10 border-emerald-500/30 text-emerald-500' : ''
                     }`}
                     title="Copy component code"
                   >
                     <IconSwap>
                       <IconSwapItem key={isCopied ? 'check' : 'copy'}>
                         {isCopied ? (
-                          <Check className="w-3.5 h-3.5" />
+                          <Check className="w-3.5 h-3.5 text-emerald-500" />
                         ) : (
                           <Copy className="w-3.5 h-3.5" />
                         )}
@@ -530,7 +459,7 @@ export function CssAnimationsPage({
                     </IconSwap>
                   </motion.button>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>

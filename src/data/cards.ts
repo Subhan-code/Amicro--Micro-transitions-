@@ -100,15 +100,6 @@ export const cardsData: CardConfig[] = [
     cliCommand: 'npx @subhanhq/amicro@latest add card-wheel-fan' 
   },
   { 
-    id: 'c11', 
-    label: 'Interactive Carousel', 
-    interactionType: 'card-carousel', 
-    description: 'An interactive arc-based 3D motion carousel featuring smooth dot indicators and dynamic prev/next controls, inspired by vivi.',
-    inspiration: { name: 'vivi', url: 'https://x.com/vivitseng_' },
-    cliCommand: 'npx @subhanhq/amicro@latest add card-carousel',
-    category: 'carousels'
-  },
-  { 
     id: 'c12', 
     label: 'CoverFlow Carousel', 
     interactionType: 'card-cover-flow', 
@@ -123,30 +114,5 @@ export const cardsData: CardConfig[] = [
     description: 'Apple-style perspective depth card stack with a scrubber timeline controls.',
     cliCommand: 'npx @subhanhq/amicro@latest add card-time-machine',
     category: 'carousels'
-  },
-  { 
-    id: 'c11-mono', 
-    label: 'Interactive Carousel (Monochrome)', 
-    interactionType: 'card-carousel-mono', 
-    description: 'An interactive arc-based 3D motion carousel rendering clean monochrome cards.',
-    inspiration: { name: 'vivi', url: 'https://x.com/vivitseng_' },
-    cliCommand: 'npx @subhanhq/amicro@latest add card-carousel-mono',
-    category: 'spreads'
-  },
-  { 
-    id: 'c12-mono', 
-    label: 'CoverFlow Carousel (Monochrome)', 
-    interactionType: 'card-cover-flow-mono', 
-    description: 'A premium 3D CoverFlow carousel rendering clean monochrome cards.',
-    cliCommand: 'npx @subhanhq/amicro@latest add card-cover-flow-mono',
-    category: 'spreads'
-  },
-  { 
-    id: 'c13-mono', 
-    label: 'Time Machine Stack (Monochrome)', 
-    interactionType: 'card-time-machine-mono', 
-    description: 'Apple-style perspective depth card stack rendering clean monochrome cards.',
-    cliCommand: 'npx @subhanhq/amicro@latest add card-time-machine-mono',
-    category: 'spreads'
   }
 ];

@@ -20,64 +20,76 @@ This skill defines the authoritative design tokens, component architecture, styl
 | Token | Dark Mode (`.dark`) | Light Mode |
 |---|---|---|
 | **Page Background** | `#121212` | `#f8f9fa` |
-| **Card Container BG** | `#181818` | `bg-white` |
-| **Card Container Hover BG** | `#202020` | `bg-white` + `hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)]` |
-| **Preview Stage Canvas** | `#131313` | `#f4f4f6` |
-| **Primary Text** | `#ffffff` / `#ededed` | `#000000` |
-| **Secondary / Muted Text** | `#767676` / `text-neutral-400` | `text-neutral-600` / `text-neutral-750` |
-| **Card Inset Border Glow** | `shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]` | `border border-neutral-100/85` |
+| **Card Container BG** | `#161616` | `bg-white` |
+| **Card Container Border** | `border-white/[0.07] hover:border-white/[0.18]` | `border-neutral-200/80 hover:border-neutral-300` |
+| **Card Container Elevation** | `shadow-[0_4px_24px_-4px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.06)]` | `shadow-[0_2px_8px_rgba(0,0,0,0.04),0_12px_28px_-6px_rgba(0,0,0,0.05)]` |
+| **Preview Stage Canvas** | `#0d0d0d` + `shadow-[inset_0_2px_6px_rgba(0,0,0,0.5)]` | `#f5f6f8` + `shadow-[inset_0_1px_3px_rgba(0,0,0,0.03)]` |
+| **Primary Text** | `#ffffff` / `#f0f0f0` | `#000000` |
+| **Secondary / Muted Text** | `text-neutral-400` / `text-neutral-500` | `text-neutral-600` / `text-neutral-750` |
 | **Pill / Button Inactive** | `bg-[rgba(255,255,255,0.07)]` | `bg-neutral-200/80` |
 | **Pill / Button Active** | `bg-[#2a2a2a] text-white` | `bg-white text-black shadow-sm` |
 
 ---
 
-## 2. Standard Card Architecture
+## 2. Standard Card Architecture (Minimal Expanded Layout)
 
-Every component entry in the catalog grid (Buttons, Card Spreads, 3D Carousels, Loaders, Page Transitions) **MUST** use the exact standard card layout geometry:
+Every component entry in the catalog grid (Buttons, Card Spreads, 3D Carousels, Loaders, Page Transitions) **MUST** use the minimal, optimized card layout architecture:
 
+### Gallery Container
 ```tsx
-<div className={`relative w-full max-w-[320px] sm:w-[320px] h-[220px] sm:h-[268px] rounded-[24px] transition-all duration-300 group ${
-  theme === 'dark'
-    ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]'
-    : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.02)] border border-neutral-100/85 hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] text-black'
-}`}>
-  {/* Inner Preview Stage Canvas */}
-  <div className={`absolute left-[12px] top-[12px] right-[12px] h-[150px] sm:h-[188px] rounded-[14px] flex items-center justify-center overflow-hidden transition-colors duration-300 ${
-    theme === 'dark' ? 'bg-[#131313]' : 'bg-[#f4f4f6]'
-  }`}>
-    <div className={`absolute inset-0 rounded-[14px] pointer-events-none z-10 ${
-      theme === 'dark' ? 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]' : 'shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)]'
-    }`} />
-    {/* Component Live Interactive Preview Component Here */}
-  </div>
-
-  {/* Card Footer Bar */}
-  <div className="absolute left-[16px] bottom-[14px] right-[16px] flex items-center justify-between">
-    <span className={`text-[13px] font-semibold tracking-[-0.01em] transition-colors ${
-      theme === 'dark' ? 'text-white' : 'text-black'
-    }`}>
-      {label}
-    </span>
-
-    {/* Action Copy Button */}
-    <motion.button
-      whileHover={{ scale: 1.08 }}
-      whileTap={{ scale: 0.92 }}
-      onClick={handleCopy}
-      className={`p-2 rounded-xl transition-all cursor-pointer border flex items-center justify-center ${
-        isCopied
-          ? (theme === 'dark' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-emerald-100 text-emerald-600 border-emerald-300')
-          : (theme === 'dark' ? 'bg-white/[0.08] border-transparent hover:bg-white/[0.14] text-neutral-300 hover:text-white' : 'bg-neutral-100 border-transparent hover:bg-neutral-200 text-neutral-650 hover:text-black')
-      }`}
-    >
-      <IconSwap>
-        <IconSwapItem key={isCopied ? "check" : "copy"}>
-          {isCopied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-        </IconSwapItem>
-      </IconSwap>
-    </motion.button>
+<div className="mx-auto max-w-[1800px] px-6 pt-5 pb-16 sm:px-10 sm:pt-3 lg:px-16 xl:px-24">
+  <div className="space-y-6">
+    {/* Island Filter Bar & Secondary Controls */}
+    ...
+    {/* Responsive Grid */}
+    <div className="grid grid-cols-1 gap-x-4 gap-y-8 transition-opacity duration-200 sm:grid-cols-2 lg:gap-x-6 lg:gap-y-10 xl:grid-cols-3 xl:gap-x-8">
+      {/* Component Cards */}
+    </div>
   </div>
 </div>
+```
+
+### Component Card Architecture
+```tsx
+<article className="group/card relative">
+  <a 
+    href={detailUrl}
+    onClick={handleClick}
+    className="block focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 rounded-3xl no-underline text-inherit"
+  >
+    {/* Expanded Borderless Playground Stage filling completely with black background */}
+    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-3xl bg-black flex items-center justify-center p-4">
+      {/* Component Live Interactive Preview Component Here */}
+    </div>
+
+    {/* Minimal Card Footer: Only Title & Description, Hover Copy Button */}
+    <div className="flex items-center justify-between gap-3 pt-3 px-1">
+      <div className="min-w-0 flex-1">
+        <h3 className="text-base sm:text-[17px] font-semibold tracking-[-0.015em] text-foreground truncate">
+          {label}
+        </h3>
+        <p className="text-xs sm:text-[13px] font-medium text-muted-foreground truncate mt-0.5">
+          {description}
+        </p>
+      </div>
+
+      {/* Action Copy Button - Fades in on card hover */}
+      <motion.button
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.92 }}
+        onClick={handleCopy}
+        className="size-8 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer border border-border/80 bg-card hover:bg-muted text-muted-foreground hover:text-foreground shrink-0 opacity-0 group-hover/card:opacity-100 focus-visible:opacity-100"
+        title="Copy component code"
+      >
+        <IconSwap>
+          <IconSwapItem key={isCopied ? "check" : "copy"}>
+            {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+          </IconSwapItem>
+        </IconSwap>
+      </motion.button>
+    </div>
+  </a>
+</article>
 ```
 
 ---

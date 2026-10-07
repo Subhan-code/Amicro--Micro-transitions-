@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import {
   ResponsiveContainer,
   BarChart,
@@ -11,14 +12,15 @@ import { DitherChartTooltipContent } from '../dither-charts/lib/recharts-tooltip
 
 interface FunnelPoint {
   stage: string;
-  volume: number;
+  users: number;
+  rate: string;
 }
 
 const FUNNEL_DATA: FunnelPoint[] = [
-  { stage: 'Visits', volume: 100 },
-  { stage: 'Signup', volume: 68 },
-  { stage: 'Active', volume: 42 },
-  { stage: 'Pro', volume: 24 },
+  { stage: 'Site Visitor', users: 100, rate: '100%' },
+  { stage: 'Wallet Connect', users: 68, rate: '68.0%' },
+  { stage: 'First Tx', users: 44, rate: '44.0%' },
+  { stage: 'Recurring', users: 26, rate: '26.0%' },
 ];
 
 interface MonoRoundedFunnelChartProps {
@@ -30,58 +32,61 @@ export function MonoRoundedFunnelChart({ theme = 'dark', compact = false }: Mono
   const isDark = theme === 'dark';
 
   return (
-    <div
-      className={`relative w-full rounded-[24px] transition-all duration-300 group flex flex-col justify-between overflow-hidden p-4 sm:p-5 ${
-        compact ? 'h-[220px] sm:h-[268px]' : 'min-h-[290px]'
+    <motion.div
+      initial={{ opacity: 0, scale: 0.98, y: 6 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      className={`relative w-full rounded-3xl transition-all duration-300 group flex flex-col justify-between overflow-hidden p-3.5 sm:p-4 ${
+        compact ? 'aspect-[16/10] min-h-[220px] w-full' : 'min-h-[290px]'
       } ${
-        isDark
-          ? 'bg-[#181818] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-[#202020]'
-          : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-neutral-100 text-black hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)]'
+        isDark ? 'bg-[#141414] border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:border-white/20' : 'bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-neutral-200 text-black hover:border-neutral-300'
       }`}
     >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-1">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className={`text-xs font-semibold tracking-wider uppercase ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
-              Stage Funnel
-            </span>
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-mono bg-white/10 text-white border border-white/20">
-              Pipeline
-            </span>
+      {/* Metric Header */}
+      <div className="flex items-center justify-between mb-1.5">
+        <div className="flex items-baseline gap-2">
+          <div className="text-xl sm:text-2xl font-bold tracking-tight tabular-nums font-sans">
+            26,400 <span className="text-xs font-normal opacity-70">converted</span>
           </div>
-          <div className="text-xl font-bold tracking-tight tabular-nums mt-0.5 font-sans">
-            24% <span className="text-xs font-normal opacity-70">conversion</span>
-          </div>
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            26% Final Rate
+          </span>
+        </div>
+
+        <div className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-mono ${
+          isDark ? 'bg-white/5 text-neutral-400' : 'bg-neutral-100 text-neutral-600'
+        }`}>
+          4 Stages
         </div>
       </div>
 
       {/* Main Stage */}
-      <div className={`relative w-full flex-1 rounded-[14px] overflow-hidden p-2 transition-colors duration-300 ${
+      <div className={`relative w-full flex-1 rounded-[14px] overflow-hidden p-2 transition-colors min-h-0 duration-300 ${
         isDark ? 'bg-[#131313]' : 'bg-[#f4f4f6]'
       }`}>
-        <ResponsiveContainer width="100%" height={compact ? 130 : 160}>
-          <BarChart data={FUNNEL_DATA} layout="vertical" margin={{ top: 8, right: 12, left: -10, bottom: 0 }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={FUNNEL_DATA} layout="vertical" margin={{ top: 8, right: 16, left: 10, bottom: 0 }}>
             <XAxis type="number" hide />
-            <YAxis dataKey="stage" type="category" tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: isDark ? '#71717A' : '#A1A1AA' }} />
+            <YAxis
+              dataKey="stage"
+              type="category"
+              tickLine={false}
+              axisLine={false}
+              width={82}
+              tick={{ fontSize: 9.5, fill: isDark ? '#A1A1AA' : '#52525B' }}
+            />
             <Tooltip content={<DitherChartTooltipContent theme={theme} indicator="dot" />} />
             <Bar
-              dataKey="volume"
-              name="Volume"
+              dataKey="users"
+              name="Conversion Index (%)"
               fill={isDark ? '#FFFFFF' : '#09090B'}
               radius={[0, 8, 8, 0]}
-              barSize={14}
+              barSize={compact ? 12 : 16}
               animationDuration={800}
             />
           </BarChart>
         </ResponsiveContainer>
       </div>
-
-      {/* Footer */}
-      <div className="flex items-center justify-between mt-3 pt-1 border-t border-white/5 text-[11px] font-mono">
-        <span className={isDark ? 'text-neutral-400' : 'text-neutral-600'}>Rounded Horizontal Pills</span>
-        <span className={isDark ? 'text-white font-medium' : 'text-black font-medium'}>4 Funnel Stages</span>
-      </div>
-    </div>
+    </motion.div>
   );
 }

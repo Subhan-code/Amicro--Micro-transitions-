@@ -17,7 +17,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-size: 20
+          node-version: 20
           cache: 'npm'
 
       - name: Install Dependencies
@@ -28,3 +28,15 @@ jobs:
 
       - name: Build Project
         run: npm run build
+
+      - name: Verify Registry Output
+        run: |
+          node -e "
+            const fs = require('fs');
+            const fadeUp = JSON.parse(fs.readFileSync('public/r/fade-up.json', 'utf8'));
+            if (!fadeUp.name || fadeUp.name !== 'fade-up') throw new Error('Invalid fade-up.json');
+            const items = fs.readdirSync('public/r').filter(f => f.endsWith('.json') && f !== 'index.json' && f !== 'registry.json');
+            if (items.length < 160) throw new Error('Expected at least 160 registry items, found ' + items.length);
+            console.log('✓ CI Registry check passed: ' + items.length + ' items generated.');
+          "
+

@@ -9,12 +9,13 @@ import { IconSwap, IconSwapItem } from './IconSwap';
 
 interface ThreeDPageProps {
   theme: 'dark' | 'light';
+  embedded?: boolean;
   showToast?: (message: string) => void;
   triggerHaptic?: (type: 'success' | 'warning' | 'error' | 'light' | 'medium' | 'heavy') => void;
   onNavigateHome?: () => void;
 }
 
-export function ThreeDPage({ theme, showToast, triggerHaptic, onNavigateHome }: ThreeDPageProps) {
+export function ThreeDPage({ theme, embedded = false, showToast, triggerHaptic, onNavigateHome }: ThreeDPageProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const handleCopySnippet = useCallback((id: string, snippet: string, label: string) => {
@@ -32,40 +33,44 @@ export function ThreeDPage({ theme, showToast, triggerHaptic, onNavigateHome }: 
   }, [showToast, triggerHaptic]);
 
   return (
-    <div className="w-full max-w-[1240px] mx-auto px-4 sm:px-6 py-8 flex flex-col gap-10 font-sans">
+    <div className={`w-full max-w-[1800px] mx-auto ${embedded ? 'px-0 py-2' : 'px-4 sm:px-6 py-8'} flex flex-col gap-8 font-sans`}>
       
-      {/* Top Header Navigation */}
-      <div className="flex items-center justify-between w-full">
-        {onNavigateHome && (
-          <button
-            onClick={onNavigateHome}
-            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border ${
-              theme === 'dark' 
-                ? 'bg-white/5 border-white/10 text-neutral-300 hover:bg-white/10 hover:text-white' 
-                : 'bg-neutral-100 border-neutral-200 text-neutral-700 hover:bg-neutral-200 hover:text-black'
-            }`}
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back</span>
-          </button>
-        )}
-      </div>
+      {!embedded && (
+        <>
+          {/* Top Header Navigation */}
+          <div className="flex items-center justify-between w-full">
+            {onNavigateHome && (
+              <button
+                onClick={onNavigateHome}
+                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border ${
+                  theme === 'dark' 
+                    ? 'bg-white/5 border-white/10 text-neutral-300 hover:bg-white/10 hover:text-white' 
+                    : 'bg-neutral-100 border-neutral-200 text-neutral-700 hover:bg-neutral-200 hover:text-black'
+                }`}
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Back</span>
+              </button>
+            )}
+          </div>
 
-      {/* Hero Header */}
-      <div className="flex flex-col items-center text-center gap-4 max-w-2xl mx-auto">
-        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase ${
-          theme === 'dark' ? 'bg-white/10 text-neutral-300 border border-white/10' : 'bg-neutral-200 text-neutral-700 border border-neutral-300'
-        }`}>
-          <Box className="w-3.5 h-3.5 text-indigo-400" />
-          <span>3D Motion Lab</span>
-        </div>
-        <h1 className="text-3xl sm:text-5xl font-bold tracking-tight">
-          3D Showcase
-        </h1>
-        <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
-          High-performance 3D perspective flipbooks, CoverFlow carousels, depth stacks, and spatial card motion.
-        </p>
-      </div>
+          {/* Hero Header */}
+          <div className="flex flex-col items-center text-center gap-4 max-w-2xl mx-auto">
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase ${
+              theme === 'dark' ? 'bg-white/10 text-neutral-300 border border-white/10' : 'bg-neutral-200 text-neutral-700 border border-neutral-300'
+            }`}>
+              <Box className="w-3.5 h-3.5 text-indigo-400" />
+              <span>3D Motion Lab</span>
+            </div>
+            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight">
+              3D Showcase
+            </h1>
+            <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
+              High-performance 3D perspective flipbooks, CoverFlow carousels, depth stacks, and spatial card motion.
+            </p>
+          </div>
+        </>
+      )}
 
       {/* 1. Hero Spotlight: 3D Dither Lab Book */}
       <div className={`w-full rounded-[28px] p-6 sm:p-8 border flex flex-col items-center gap-6 shadow-2xl transition-all ${
@@ -92,20 +97,20 @@ export function ThreeDPage({ theme, showToast, triggerHaptic, onNavigateHome }: 
 
         {/* CLI Command & Copy */}
         <div className={`w-full max-w-md flex items-center justify-between p-3 rounded-2xl border text-xs font-mono transition-all ${
-          theme === 'dark' ? 'bg-[#121212] border-white/10 text-neutral-300' : 'bg-neutral-50 border-neutral-200 text-neutral-800'
+          theme === 'dark' ? 'bg-[#0F0F0F] border-white/10 text-neutral-300' : 'bg-neutral-50 border-neutral-200 text-neutral-800'
         }`}>
           <span className="truncate pr-2 select-all">npx @subhanhq/amicro@latest add dither-book</span>
           <button
             onClick={() => handleCopySnippet('dither-book', 'npx @subhanhq/amicro@latest add dither-book', '3D Dither Lab Book')}
             className={`p-2 rounded-xl transition-all cursor-pointer flex items-center justify-center ${
               copiedId === 'dither-book'
-                ? (theme === 'dark' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-600')
+                ? (theme === 'dark' ? 'bg-white/20 text-white' : 'bg-neutral-800 text-white')
                 : (theme === 'dark' ? 'bg-white/10 text-neutral-300 hover:text-white' : 'bg-neutral-200 text-neutral-700 hover:text-black')
             }`}
           >
             <IconSwap>
               <IconSwapItem key={copiedId === 'dither-book' ? 'check' : 'copy'}>
-                {copiedId === 'dither-book' ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                {copiedId === 'dither-book' ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4" />}
               </IconSwapItem>
             </IconSwap>
           </button>

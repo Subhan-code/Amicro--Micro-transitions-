@@ -5,6 +5,76 @@
 
 @theme {
   --font-sans: 'Outfit', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+  --radius-4xl: 2rem;
+  
+  --tracking-heading: -0.025em;
+  --tracking-body: -0.011em;
+  --tracking-ui: -0.015em;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+:root {
+  --background: #f8f9fa;
+  --foreground: #09090b;
+  --card: #ffffff;
+  --card-foreground: #09090b;
+  --popover: #ffffff;
+  --popover-foreground: #09090b;
+  --primary: #09090b;
+  --primary-foreground: #ffffff;
+  --secondary: #f0f1f4;
+  --secondary-foreground: #18181b;
+  --muted: #e4e6ec;
+  --muted-foreground: #64748b;
+  --accent: #f4f4f5;
+  --accent-foreground: #18181b;
+  --destructive: #ef4444;
+  --destructive-foreground: #fafafa;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: rgba(0, 0, 0, 0.15);
+}
+
+.dark, :root.dark {
+  --background: #08080a;
+  --foreground: #ededed;
+  --card: #0d0d0f;
+  --card-foreground: #ededed;
+  --popover: #121214;
+  --popover-foreground: #ededed;
+  --primary: #ffffff;
+  --primary-foreground: #08080a;
+  --secondary: #141417;
+  --secondary-foreground: #ededed;
+  --muted: #1c1c20;
+  --muted-foreground: #8e8e96;
+  --accent: #222227;
+  --accent-foreground: #fafafa;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #fafafa;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: rgba(255, 255, 255, 0.2);
 }
 
 /* Custom scroll bar behavior and smooth transitions */
@@ -14,59 +84,82 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Scrollbar for dark and light cement aesthetic */
-::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+/* ========================================================
+   Theme-Aware Scrollbar
+   In Dark Theme: Dark Track (#191919) + Inverted White Thumb (#ffffff)
+   In Light Theme: Light Track (#f1f1f4) + Dark Thumb (#18181b)
+   ======================================================== */
+:root,
+html,
+body {
+  --sb-track-color: #191919;
+  --sb-thumb-color: #ffffff;
+  --sb-thumb-hover: #e4e4e7;
+  --sb-size: 10px;
 }
 
-/* Light mode cement scrollbar */
-::-webkit-scrollbar-thumb {
-  background-color: #b8bbc1;
-  border-radius: 9999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  transition: background-color 0.2s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #9aa0a8;
-}
-
-/* Dark mode cement scrollbar */
-:root.dark ::-webkit-scrollbar-thumb,
-html.dark ::-webkit-scrollbar-thumb,
-body.dark ::-webkit-scrollbar-thumb,
-.dark::-webkit-scrollbar-thumb,
-.dark *::-webkit-scrollbar-thumb {
-  background-color: #35373d;
-  border-radius: 9999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-
-:root.dark ::-webkit-scrollbar-thumb:hover,
-html.dark ::-webkit-scrollbar-thumb:hover,
-body.dark ::-webkit-scrollbar-thumb:hover,
-.dark::-webkit-scrollbar-thumb:hover,
-.dark *::-webkit-scrollbar-thumb:hover {
-  background-color: #4b4e57;
-}
-
-/* Firefox scrollbar styling */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #b8bbc1 transparent;
-}
-
+/* Explicit Dark theme inverse colors (Track #191919, Thumb #ffffff) */
 :root.dark,
 html.dark,
+html.dark body,
 body.dark {
-  scrollbar-color: #35373d transparent;
+  --sb-track-color: #191919;
+  --sb-thumb-color: #ffffff;
+  --sb-thumb-hover: #e4e4e7;
+}
+
+/* Explicit Light theme (Track #f1f1f4, Thumb #18181b) */
+:root.light,
+html.light,
+html.light body,
+body.light {
+  --sb-track-color: #f1f1f4;
+  --sb-thumb-color: #18181b;
+  --sb-thumb-hover: #09090b;
+}
+
+body::-webkit-scrollbar,
+html::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: var(--sb-size);
+  height: var(--sb-size);
+}
+
+body::-webkit-scrollbar-track,
+html::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb,
+html::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 10px;
+  transition: background 0.15s ease;
+}
+
+body::-webkit-scrollbar-thumb:hover,
+html::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--sb-thumb-hover);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  body, html, * {
+    scrollbar-color: var(--sb-thumb-color)
+                     var(--sb-track-color);
+  }
 }
 
 /* Glassmorphism utility classes */

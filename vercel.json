@@ -38,7 +38,7 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!api/).*)",
+      "source": "/((?!api/|r/|registry\\.json).*)",
       "destination": "/index.html"
     }
   ]
