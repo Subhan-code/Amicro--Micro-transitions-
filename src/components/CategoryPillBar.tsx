@@ -45,7 +45,7 @@ export function CategoryPillBar({
   const isDark = theme === 'dark';
 
   return (
-    <div className="w-full select-none max-w-[1800px] mx-auto py-2">
+    <div className="w-full select-none max-w-[1600px] mx-auto py-2">
       
       {/* 1. Mobile Filter Layout (< sm): Individual Rounded-Corner Buttons */}
       <div className="block sm:hidden w-full">
@@ -83,7 +83,7 @@ export function CategoryPillBar({
         <div
           role="tablist"
           aria-label="Component categories"
-          className={`relative inline-flex items-center p-1 rounded-full border transition-all duration-300 gap-1 shrink-0 ${
+          className={`relative inline-flex items-center p-1 2xl:p-1.5 rounded-full border transition-all duration-300 gap-1 shrink-0 ${
             isDark
               ? 'bg-[#121214] border-white/[0.08] shadow-[0_4px_24px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.04)]'
               : 'bg-white border-neutral-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.04)]'
@@ -103,7 +103,7 @@ export function CategoryPillBar({
                   triggerHaptic?.('light');
                   onSelectCategory(cat.id);
                 }}
-                className={`relative px-3.5 lg:px-4 py-1.5 rounded-full text-[13px] font-medium leading-none cursor-pointer transition-colors duration-200 border-0 bg-transparent shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 active:scale-95 ${
+                className={`relative px-3.5 lg:px-4 2xl:px-4.5 py-1.5 2xl:py-2 rounded-full text-[13px] 2xl:text-[13.5px] font-medium leading-none cursor-pointer transition-colors duration-200 border-0 bg-transparent shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 active:scale-95 ${
                   isSelected
                     ? isDark
                       ? 'text-[#08080a] font-semibold'

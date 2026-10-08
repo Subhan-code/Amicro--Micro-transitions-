@@ -18,9 +18,9 @@ export function CtaSection({
   triggerHaptic,
 }: CtaSectionProps) {
   return (
-    <section className="relative z-10 w-full max-w-[1240px] mx-auto px-4 sm:px-6 my-6 sm:my-8 select-none">
+    <section className="relative z-10 w-full max-w-[1360px] 2xl:max-w-[1480px] mx-auto px-4 sm:px-8 lg:px-12 my-8 sm:my-12 2xl:my-16 select-none">
       <div
-        className={`relative w-full rounded-[24px] sm:rounded-[32px] py-9 sm:py-12 md:py-14 px-6 sm:px-10 border overflow-hidden transition-all duration-300 flex flex-col items-center text-center ${
+        className={`relative w-full rounded-[24px] sm:rounded-[32px] 2xl:rounded-[40px] py-10 sm:py-14 md:py-16 2xl:py-20 px-6 sm:px-12 2xl:px-16 border overflow-hidden transition-all duration-300 flex flex-col items-center text-center ${
           theme === 'dark'
             ? 'bg-[#09090b] border-white/[0.1] shadow-[0_8px_32px_rgba(0,0,0,0.65)] text-white'
             : 'bg-[#0c0c0e] border-neutral-800 shadow-[0_8px_32px_rgba(0,0,0,0.2)] text-white'
@@ -41,12 +41,12 @@ export function CtaSection({
         />
 
         {/* 1. Title */}
-        <h2 className="relative z-10 text-[26px] sm:text-[38px] lg:text-[44px] font-semibold tracking-[-0.03em] leading-[1.12] max-w-xl mx-auto mb-3 sm:mb-3.5 text-white">
+        <h2 className="relative z-10 text-fluid-h1 font-semibold max-w-xl 2xl:max-w-2xl mx-auto mb-3 sm:mb-4 text-white">
           Ready to make your interface feel alive?
         </h2>
 
         {/* 2. Sub Para */}
-        <p className="relative z-10 text-[14px] sm:text-[15.5px] leading-[22px] sm:leading-[25px] max-w-[500px] mx-auto font-normal tracking-[-0.01em] mb-7 sm:mb-8 text-neutral-300">
+        <p className="relative z-10 text-fluid-sub max-w-[500px] 2xl:max-w-[620px] mx-auto font-normal mb-8 2xl:mb-10 text-neutral-300">
           160+ copy-paste React components for spring physics, card spreads, fluid loaders, and UI effects. Free and open-source.
         </p>
 

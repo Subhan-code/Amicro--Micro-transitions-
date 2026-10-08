@@ -383,16 +383,16 @@ export function MonoChartsPage({
           )}
 
           {/* Hero Header matching main page simplicity with decreased top margin */}
-          <div className="mt-1 sm:mt-2 mb-7 sm:mb-9 text-center w-full max-w-[1240px] mx-auto px-4 flex flex-col items-center">
+          <div className="mt-1 sm:mt-2 mb-7 sm:mb-9 text-center w-full max-w-[1360px] 2xl:max-w-[1480px] mx-auto px-4 sm:px-8 flex flex-col items-center">
             {/* Hero Heading */}
-            <h1 className={`text-[34px] sm:text-[52px] lg:text-[58px] font-bold tracking-[-0.03em] leading-[1.1] mb-3 sm:mb-4 font-sans max-w-4xl mx-auto transition-colors duration-300 ${
+            <h1 className={`text-fluid-hero font-bold mb-3 sm:mb-4 font-sans max-w-4xl 2xl:max-w-5xl mx-auto transition-colors duration-300 ${
               isDark ? 'text-white' : 'text-neutral-900'
             }`}>
               Mono Charts.
             </h1>
 
             {/* Hero Subtitle */}
-            <p className={`text-[15px] sm:text-[18px] leading-[24px] sm:leading-[28px] max-w-[620px] mx-auto font-normal tracking-[-0.012em] transition-colors duration-300 ${
+            <p className={`text-fluid-sub max-w-[620px] 2xl:max-w-[720px] mx-auto font-normal transition-colors duration-300 ${
               isDark ? 'text-neutral-400' : 'text-neutral-600'
             }`}>
               A unified collection of 30 single-ink chart visualizers built with rounded geometry and minimalist typography.
@@ -490,7 +490,7 @@ export function MonoChartsPage({
       )}
 
       {/* Main Charts Showcase Grid */}
-      <div id="mono-charts-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 w-full max-w-[1240px] mx-auto">
+      <div id="mono-charts-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 sm:gap-7 2xl:gap-8 w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 2xl:px-16">
         <AnimatePresence mode="popLayout">
           {CARD_ITEMS.map((item) => (
             <motion.div

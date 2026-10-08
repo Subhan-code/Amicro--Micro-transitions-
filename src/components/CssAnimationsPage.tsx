@@ -306,7 +306,7 @@ export function CssAnimationsPage({
   };
 
   return (
-    <div className={`w-full max-w-[1800px] mx-auto ${embedded ? 'px-0 py-1' : 'px-4 sm:px-6 py-5 sm:py-6'} flex flex-col gap-6 font-[-apple-system,BlinkMacSystemFont,"SF_Pro_Display","SF_Pro_Text","Helvetica_Neue",sans-serif] transition-colors duration-300 ${
+    <div className={`w-full max-w-[1600px] mx-auto ${embedded ? 'px-0 py-1' : 'px-4 sm:px-8 lg:px-12 2xl:px-16 py-5 sm:py-6 2xl:py-8'} flex flex-col gap-6 font-[-apple-system,BlinkMacSystemFont,"SF_Pro_Display","SF_Pro_Text","Helvetica_Neue",sans-serif] transition-colors duration-300 ${
       theme === 'dark' ? 'text-[#f5f5f7]' : 'text-[#1d1d1f]'
     }`}>
       
@@ -334,11 +334,11 @@ export function CssAnimationsPage({
         <div className={`flex flex-col items-center text-center gap-2.5 max-w-3xl w-full mx-auto ${embedded ? 'mt-0' : '-mt-7 sm:-mt-8'}`}>
           {!embedded && (
             <>
-              <h1 className="text-2xl sm:text-4xl lg:text-[44px] font-bold sm:font-extrabold tracking-[-0.035em] leading-[1.12]">
+              <h1 className="text-fluid-h1 font-bold sm:font-extrabold tracking-[-0.035em]">
                 Claim <span className="text-[#0071e3]">Micro-Motion</span> for<br />your Web UI
               </h1>
 
-              <p className={`max-w-[580px] text-[13px] sm:text-[14.5px] leading-relaxed font-normal tracking-[-0.01em] ${
+              <p className={`text-fluid-sub max-w-[580px] 2xl:max-w-[680px] font-normal tracking-[-0.01em] ${
                 theme === 'dark' ? 'text-[#86868b]' : 'text-[#6e6e73]'
               }`}>
                 Refined physics springs, skids, and fluid UI micro-interactions grouped in 3-variation suites. Built with vanilla CSS & zero bloated dependencies.
@@ -360,7 +360,7 @@ export function CssAnimationsPage({
         </div>
 
         {/* Grid Container */}
-        <div className="grid grid-cols-1 gap-x-4 gap-y-8 transition-opacity duration-200 sm:grid-cols-2 lg:gap-x-6 lg:gap-y-10 xl:grid-cols-3 xl:gap-x-8">
+        <div className="grid grid-cols-1 gap-x-4 gap-y-8 transition-opacity duration-200 sm:grid-cols-2 lg:gap-x-6 lg:gap-y-10 xl:grid-cols-3 xl:gap-x-7 2xl:grid-cols-4 2xl:gap-x-8 2xl:gap-y-12">
           {filteredItems.map((item) => {
             const isCopied = copiedId === item.id;
             const isDock = item.id === 'dock';
@@ -370,7 +370,7 @@ export function CssAnimationsPage({
               return (
                 <article
                   key={item.id}
-                  className="col-span-1 md:col-span-2 lg:col-span-3 group/card relative flex flex-col"
+                  className="col-span-full group/card relative flex flex-col"
                 >
                   {/* Top Interactive Dock Playground Canvas (Expanded Rounded-3xl Stage) */}
                   <div className="relative w-full h-[150px] sm:h-[180px] overflow-hidden rounded-3xl bg-black flex items-center justify-center p-6 border border-white/[0.05] shadow-[0_4px_24px_rgba(0,0,0,0.45)]">

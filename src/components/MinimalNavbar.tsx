@@ -18,6 +18,9 @@ interface MinimalNavbarProps {
   onToggleMobileMenu: () => void;
   triggerHaptic?: (type: 'light' | 'medium' | 'success' | 'error') => void;
   onBack?: () => void;
+  onOpenSearch?: () => void;
+  isSoundOn?: boolean;
+  onToggleSound?: () => void;
 }
 
 export function MinimalNavbar({
@@ -77,14 +80,15 @@ export function MinimalNavbar({
 
       {/* Sticky Navbar (Logo, Name, GitHub Stars, Menu) with Morphic Transparent Gradient */}
       <header
-        className={`sticky top-0 z-50 w-full h-16 select-none transition-colors duration-200 ${onBack
+        className={`sticky top-0 z-50 w-full h-16 select-none transition-colors duration-200 ${
+          onBack
             ? 'bg-transparent border-b-0 shadow-none'
             : theme === 'dark'
               ? 'bg-gradient-to-b from-black/40 to-transparent'
               : 'bg-gradient-to-b from-white/65 to-transparent'
-          }`}
+        }`}
       >
-        <div className="relative h-full flex items-center justify-between max-w-[1240px] mx-auto px-4 sm:px-6">
+        <div className="relative h-full flex items-center justify-between max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 2xl:px-16">
 
           {/* Left: Back Arrow (when in component detail) + Amicro Logo + Wordmark */}
           <div className="z-20 flex items-center gap-1.5 sm:gap-2">
@@ -149,7 +153,7 @@ export function MinimalNavbar({
         </div>
 
         {/* Center: Apple-style Minimal Navigation */}
-        <div className="absolute left-1/2 -translate-x-1/2 z-20 hidden sm:flex items-center">
+        <div className="absolute left-1/2 -translate-x-1/2 z-20 hidden lg:flex items-center">
           <nav
             aria-label="Main Navigation"
             onMouseLeave={() => setHoveredNav(null)}
@@ -170,7 +174,7 @@ export function MinimalNavbar({
                   onClick={() => setActiveItem(item.key)}
                   whileTap={{ scale: 0.94 }}
                   transition={{ type: "spring", stiffness: 500, damping: 20 }}
-                  className={`relative px-3.5 py-1.5 text-sm font-medium leading-none cursor-pointer transition-colors duration-150 border-0 bg-transparent no-underline select-none ${
+                  className={`relative px-2.5 2xl:px-3.5 py-1.5 text-sm font-medium leading-none cursor-pointer transition-colors duration-150 border-0 bg-transparent no-underline select-none ${
                     isActive
                       ? onBack
                         ? "text-neutral-50 font-semibold"
@@ -263,7 +267,7 @@ export function MinimalNavbar({
               whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.94 }}
               transition={{ type: 'spring', stiffness: 500, damping: 25 }}
-              className={`hidden sm:inline-flex items-center justify-center size-8 sm:size-8.5 rounded-full transition-colors duration-200 cursor-pointer select-none group border-0 ${theme === 'dark'
+              className={`hidden xl:inline-flex items-center justify-center size-8 sm:size-8.5 rounded-full transition-colors duration-200 cursor-pointer select-none group border-0 ${theme === 'dark'
                   ? 'bg-white/[0.08] hover:bg-white/[0.12] text-neutral-200 hover:text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]'
                   : 'bg-black/[0.05] hover:bg-black/[0.08] text-neutral-700 hover:text-black'
                 }`}
@@ -319,7 +323,7 @@ export function MinimalNavbar({
                 triggerHaptic?.('light');
                 onToggleMobileMenu();
               }}
-              className={`inline-flex sm:hidden items-center justify-center size-8 sm:size-8.5 rounded-full transition-colors cursor-pointer border-0 select-none ${theme === 'dark'
+              className={`inline-flex lg:hidden items-center justify-center size-8 sm:size-8.5 rounded-full transition-colors cursor-pointer border-0 select-none ${theme === 'dark'
                   ? 'bg-white/[0.08] hover:bg-white/[0.12] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]'
                   : 'bg-black/[0.05] hover:bg-black/[0.08] text-neutral-900'
                 }`}

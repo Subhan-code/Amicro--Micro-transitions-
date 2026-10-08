@@ -602,7 +602,7 @@ export function ChartDetailPage({
   return (
     <div className={`w-full min-h-screen flex flex-col font-sans transition-colors duration-200 ${isAppDark ? 'dark bg-[#08080a] text-[#ededed]' : 'bg-[#f8f9fa] text-[#0a0a0c]'}`}>
 
-      <main className="flex-1 w-full max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+      <main className="flex-1 w-full max-w-[1480px] 2xl:max-w-[1560px] mx-auto px-4 sm:px-8 lg:px-12 2xl:px-16 py-4 sm:py-6 2xl:py-8">
 
         <div className="w-full space-y-6">
 
@@ -611,7 +611,7 @@ export function ChartDetailPage({
 
             {/* Identity: Component Title */}
             <div className="min-w-0">
-              <h1 className="text-2xl sm:text-3xl lg:text-[34px] font-semibold tracking-[-0.025em] text-foreground truncate">
+              <h1 className="text-2xl sm:text-3xl lg:text-[34px] 2xl:text-[38px] font-semibold tracking-[-0.025em] text-foreground truncate">
                 {entry.name}
               </h1>
             </div>
@@ -784,8 +784,8 @@ export function ChartDetailPage({
           <div className="w-full">
             <div
               className={`w-full rounded-3xl sm:rounded-[36px] border-2 border-[#242427] flex items-center justify-center relative overflow-hidden transition-all duration-200 select-none ${isSmallComponent
-                  ? 'min-h-[200px] sm:min-h-[260px] p-6 sm:p-10'
-                  : 'min-h-[380px] sm:min-h-[500px] p-6 sm:p-12'
+                  ? 'min-h-[200px] sm:min-h-[260px] 2xl:min-h-[300px] p-6 sm:p-10'
+                  : 'min-h-[380px] sm:min-h-[500px] 2xl:min-h-[560px] p-6 sm:p-12 2xl:p-16'
                 } ${isAppDark ? 'bg-black' : 'bg-[#f5f6f8]'}`}
             >
               {activeTab === 'preview' ? (

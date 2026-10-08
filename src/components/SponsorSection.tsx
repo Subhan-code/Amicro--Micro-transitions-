@@ -251,7 +251,7 @@ export function SponsorSection({
     <section
       id="sponsors"
       aria-label="Amicro Sponsors"
-      className="relative z-10 w-full max-w-[1240px] mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-4 sm:pb-6 select-none"
+      className="relative z-10 w-full max-w-[1360px] 2xl:max-w-[1480px] mx-auto px-4 sm:px-8 lg:px-12 pt-16 sm:pt-24 2xl:pt-28 pb-4 sm:pb-6 select-none"
     >
       <div className="flex flex-col items-center text-center">
         {/* Eyebrow Heading */}
@@ -264,14 +264,14 @@ export function SponsorSection({
         </span>
 
         {/* Tier 1: Diamond Tier Header (Title on left) */}
-        <div className="w-full max-w-[1140px] flex items-center justify-start mb-2.5 px-1">
+        <div className="w-full max-w-[1140px] 2xl:max-w-[1240px] flex items-center justify-start mb-2.5 px-1">
           <span className={`text-[11px] sm:text-[12px] font-semibold tracking-[0.2em] uppercase ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
             Diamond
           </span>
         </div>
 
         {/* Tier 1: Diamond Tier (No description, exact Maple reference card, enlarged) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full max-w-[1140px] mb-4 sm:mb-5 items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full max-w-[1140px] 2xl:max-w-[1240px] mb-4 sm:mb-5 items-stretch">
           {finalDiamond.map((slot) => {
             if (!slot.isAvailable) {
               const isMaple =
@@ -343,14 +343,14 @@ export function SponsorSection({
         </div>
 
         {/* Tier 2: Gold Tier Header (Title on left) */}
-        <div className="w-full max-w-[1140px] flex items-center justify-start mt-4 sm:mt-5 mb-2 px-1">
+        <div className="w-full max-w-[1140px] 2xl:max-w-[1240px] flex items-center justify-start mt-4 sm:mt-5 mb-2 px-1">
           <span className={`text-[11px] sm:text-[12px] font-semibold tracking-[0.2em] uppercase ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
             Gold
           </span>
         </div>
 
         {/* Tier 2: Gold Tier (No description, clean minimal cards) */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3.5 w-full max-w-[1140px] mb-2.5 sm:mb-3.5">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3.5 w-full max-w-[1140px] 2xl:max-w-[1240px] mb-2.5 sm:mb-3.5">
           {finalGold.map((slot) => {
             const isFirstEmpty = slot.isAvailable && !firstEmptyGoldFound;
             if (isFirstEmpty) firstEmptyGoldFound = true;

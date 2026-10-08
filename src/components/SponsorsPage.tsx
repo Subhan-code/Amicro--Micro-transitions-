@@ -5,7 +5,7 @@ import { useWebHaptics } from '../hooks/useWebHaptics';
 import { MapleLogo } from './MapleLogo';
 import { StickerBoard } from './StickerBoard';
 import { SponsorStats } from './SponsorStats';
-import { DiamondAskSlot } from './DiamondAskSlot';
+import { LiquidMetal } from './ui/liquid-metal';
 import { SPONSOR_TIERS } from '../data/tiers';
 
 export interface SponsorSlot {
@@ -706,15 +706,15 @@ export function SponsorsPage({
         }`}
     >
       {/* 1. Hero Section: Morphic pricing header */}
-      <section className="flex flex-col items-center justify-center pt-[60px] pb-10 px-4 sm:pt-[120px] sm:pb-[40px] w-full max-w-[1140px] mx-auto">
+      <section className="flex flex-col items-center justify-center pt-[60px] pb-10 px-4 sm:pt-[120px] 2xl:pt-[140px] sm:pb-[40px] w-full max-w-[1240px] 2xl:max-w-[1360px] mx-auto">
         <h1
-          className={`w-full text-left sm:text-center text-[40px] leading-[48px] sm:text-[52px] sm:leading-[60px] font-bold tracking-tighter m-0 sm:whitespace-nowrap ${isDark ? 'text-neutral-50' : 'text-neutral-900'
+          className={`w-full text-left sm:text-center text-fluid-h1 font-bold tracking-tighter m-0 sm:whitespace-nowrap ${isDark ? 'text-neutral-50' : 'text-neutral-900'
             }`}
         >
           Sponsor Amicro.
         </h1>
         <p
-          className={`mt-3 m-0 w-full sm:w-auto text-left sm:text-center text-[20px] leading-7 font-medium tracking-[-0.4px] max-w-full sm:max-w-[438px] ${isDark ? 'text-white/60' : 'text-neutral-600'
+          className={`mt-3 m-0 w-full sm:w-auto text-left sm:text-center text-fluid-sub font-medium max-w-full sm:max-w-[480px] 2xl:max-w-[560px] ${isDark ? 'text-white/60' : 'text-neutral-600'
             }`}
         >
           Put your product in front of the people building the interface.
@@ -909,13 +909,13 @@ export function SponsorsPage({
       >
         <div className="flex flex-col items-center justify-center text-center mb-8 sm:mb-10">
           <h2
-            className={`text-[26px] leading-[32px] sm:text-[32px] sm:leading-[38px] font-semibold tracking-[-0.6px] m-0 ${isDark ? 'text-neutral-50' : 'text-neutral-900'
+            className={`text-fluid-h2 font-semibold tracking-[-0.6px] m-0 ${isDark ? 'text-neutral-50' : 'text-neutral-900'
               }`}
           >
             Sponsorship Tiers
           </h2>
           <p
-            className={`mt-2.5 text-[15px] sm:text-[16px] leading-relaxed max-w-lg m-0 ${isDark ? 'text-neutral-400' : 'text-neutral-600'
+            className={`mt-2.5 text-[15px] sm:text-[16px] 2xl:text-[17px] leading-relaxed max-w-lg m-0 ${isDark ? 'text-neutral-400' : 'text-neutral-600'
               }`}
           >
             Choose the right tier to showcase your brand, reach thousands of developers, and support open-source craft.
@@ -956,16 +956,41 @@ export function SponsorsPage({
                   }
                 }
               }}
-              className={`relative text-left grid grid-rows-[22px_auto_auto_1fr] rounded-[16px] px-5 pt-[18px] pb-5 cursor-pointer focus:outline-none group select-none border-0 transition-all duration-200 ${isDark
-                ? 'bg-white/[0.08] outline outline-white/20 hover:outline-white/30 focus-visible:outline-white/40'
-                : 'bg-white border border-neutral-200 outline outline-neutral-300 hover:outline-neutral-400 focus-visible:outline-neutral-500 shadow-sm'
-                }`}
+              className={`relative text-left grid grid-rows-[22px_auto_auto_1fr] rounded-[16px] px-5 pt-[18px] pb-5 cursor-pointer focus:outline-none group select-none border-0 transition-all duration-200 overflow-hidden ${
+                isDark
+                  ? 'bg-white/[0.08] outline outline-white/20 hover:outline-white/30 focus-visible:outline-white/40'
+                  : 'bg-white border border-neutral-200 outline outline-neutral-300 hover:outline-neutral-400 focus-visible:outline-neutral-500'
+              }`}
             >
+              {/* Liquid Metal Border Stroke (Edge Perimeter Only) */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 z-0 rounded-[16px] overflow-hidden"
+                style={{
+                  padding: '2px',
+                  mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                  WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                  maskComposite: 'exclude',
+                  WebkitMaskComposite: 'xor',
+                }}
+              >
+                <LiquidMetal
+                  colorBack={isDark ? (isDiamondCardHovered ? '#646470' : '#33333c') : (isDiamondCardHovered ? '#8e8e96' : '#b2b2ba')}
+                  colorTint="#ffffff"
+                  speed={isDiamondCardHovered ? 0.75 : 0.4}
+                  repetition={4}
+                  distortion={0.12}
+                  scale={1}
+                  className="absolute inset-0 w-full h-full"
+                />
+              </div>
+
               {/* Row 1 is the name row, exactly 22px */}
-              <div className="h-[22px] flex items-center justify-between">
+              <div className="relative z-10 h-[22px] flex items-center justify-between">
                 <span
-                  className={`text-[16px] leading-[22px] font-medium m-0 ${isDark ? 'text-neutral-50' : 'text-neutral-900'
-                    }`}
+                  className={`text-[16px] leading-[22px] font-medium m-0 ${
+                    isDark ? 'text-neutral-50' : 'text-neutral-900'
+                  }`}
                 >
                   Diamond
                 </span>
@@ -978,16 +1003,18 @@ export function SponsorsPage({
               </div>
 
               {/* Row 2 is the price, mt-3.5 */}
-              <div className="flex items-baseline gap-1.5 mt-3.5">
+              <div className="relative z-10 flex items-baseline gap-1.5 mt-3.5">
                 <span
-                  className={`text-[36px] leading-[43px] font-bold tracking-[-1.44px] font-sans ${isDark ? 'text-neutral-100' : 'text-neutral-900'
-                    }`}
+                  className={`text-[36px] leading-[43px] font-bold tracking-[-1.44px] font-sans ${
+                    isDark ? 'text-neutral-100' : 'text-neutral-900'
+                  }`}
                 >
                   $250
                 </span>
                 <span
-                  className={`text-[16px] leading-[22px] font-medium ${isDark ? 'text-neutral-400' : 'text-neutral-500'
-                    }`}
+                  className={`text-[16px] leading-[22px] font-medium ${
+                    isDark ? 'text-neutral-400' : 'text-neutral-500'
+                  }`}
                 >
                   / month
                 </span>
@@ -995,19 +1022,21 @@ export function SponsorsPage({
 
               {/* Row 3 is the button, mt-6, h-10 w-full rounded-[9px] */}
               <div
-                className={`mt-6 w-full h-10 rounded-[9px] text-sm font-medium transition-colors flex items-center justify-center select-none ${isDark
-                  ? 'bg-neutral-50 text-black group-hover:bg-neutral-200'
-                  : 'bg-neutral-900 text-white group-hover:bg-neutral-800'
-                  }`}
+                className={`relative z-10 mt-6 w-full h-10 rounded-[9px] text-sm font-medium transition-colors flex items-center justify-center select-none ${
+                  isDark
+                    ? 'bg-neutral-50 text-black group-hover:bg-neutral-200'
+                    : 'bg-neutral-900 text-white group-hover:bg-neutral-800'
+                }`}
               >
                 Sponsor Diamond
               </div>
 
               {/* Row 4 is the checks, mt-7, gap 10px, 15/22 medium */}
-              <div className="mt-7 flex flex-col gap-2.5">
+              <div className="relative z-10 mt-7 flex flex-col gap-2.5">
                 <div
-                  className={`flex items-center gap-2.5 text-[15px] leading-[22px] font-medium ${isDark ? 'text-neutral-100' : 'text-neutral-800'
-                    }`}
+                  className={`flex items-center gap-2.5 text-[15px] leading-[22px] font-medium ${
+                    isDark ? 'text-neutral-100' : 'text-neutral-800'
+                  }`}
                 >
                   <Check
                     className={`w-4 h-4 shrink-0 ${isDark ? 'text-[#F5F5F5]' : 'text-neutral-700'}`}
@@ -1016,8 +1045,9 @@ export function SponsorsPage({
                   <span>Homepage &amp; premium site placement</span>
                 </div>
                 <div
-                  className={`flex items-center gap-2.5 text-[15px] leading-[22px] font-medium ${isDark ? 'text-neutral-100' : 'text-neutral-800'
-                    }`}
+                  className={`flex items-center gap-2.5 text-[15px] leading-[22px] font-medium ${
+                    isDark ? 'text-neutral-100' : 'text-neutral-800'
+                  }`}
                 >
                   <Check
                     className={`w-4 h-4 shrink-0 ${isDark ? 'text-[#F5F5F5]' : 'text-neutral-700'}`}
@@ -1026,8 +1056,9 @@ export function SponsorsPage({
                   <span>Dedicated spotlight &amp; X shoutout</span>
                 </div>
                 <div
-                  className={`flex items-center gap-2.5 text-[15px] leading-[22px] font-medium ${isDark ? 'text-neutral-100' : 'text-neutral-800'
-                    }`}
+                  className={`flex items-center gap-2.5 text-[15px] leading-[22px] font-medium ${
+                    isDark ? 'text-neutral-100' : 'text-neutral-800'
+                  }`}
                 >
                   <Check
                     className={`w-4 h-4 shrink-0 ${isDark ? 'text-[#F5F5F5]' : 'text-neutral-700'}`}
@@ -1036,8 +1067,9 @@ export function SponsorsPage({
                   <span>Featured sponsor card &amp; README logo</span>
                 </div>
                 <div
-                  className={`flex items-center gap-2.5 text-[15px] leading-[22px] font-medium ${isDark ? 'text-neutral-100' : 'text-neutral-800'
-                    }`}
+                  className={`flex items-center gap-2.5 text-[15px] leading-[22px] font-medium ${
+                    isDark ? 'text-neutral-100' : 'text-neutral-800'
+                  }`}
                 >
                   <Check
                     className={`w-4 h-4 shrink-0 ${isDark ? 'text-[#F5F5F5]' : 'text-neutral-700'}`}

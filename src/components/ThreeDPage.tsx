@@ -33,7 +33,7 @@ export function ThreeDPage({ theme, embedded = false, showToast, triggerHaptic, 
   }, [showToast, triggerHaptic]);
 
   return (
-    <div className={`w-full max-w-[1800px] mx-auto ${embedded ? 'px-0 py-2' : 'px-4 sm:px-6 py-8'} flex flex-col gap-8 font-sans`}>
+    <div className={`w-full max-w-[1600px] mx-auto ${embedded ? 'px-0 py-2' : 'px-4 sm:px-8 lg:px-12 2xl:px-16 py-8 2xl:py-12'} flex flex-col gap-8 2xl:gap-12 font-sans`}>
       
       {!embedded && (
         <>
@@ -55,17 +55,17 @@ export function ThreeDPage({ theme, embedded = false, showToast, triggerHaptic, 
           </div>
 
           {/* Hero Header */}
-          <div className="flex flex-col items-center text-center gap-4 max-w-2xl mx-auto">
+          <div className="flex flex-col items-center text-center gap-4 max-w-2xl 2xl:max-w-3xl mx-auto">
             <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase ${
               theme === 'dark' ? 'bg-white/10 text-neutral-300 border border-white/10' : 'bg-neutral-200 text-neutral-700 border border-neutral-300'
             }`}>
               <Box className="w-3.5 h-3.5 text-indigo-400" />
               <span>3D Motion Lab</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight">
+            <h1 className="text-fluid-h1 font-bold">
               3D Showcase
             </h1>
-            <p className={`text-sm sm:text-base ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
+            <p className={`text-fluid-sub max-w-xl mx-auto ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
               High-performance 3D perspective flipbooks, CoverFlow carousels, depth stacks, and spatial card motion.
             </p>
           </div>

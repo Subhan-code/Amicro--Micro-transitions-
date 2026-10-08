@@ -3,7 +3,6 @@ import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { AnimatedStarCounter } from './AnimatedStarCounter';
 import { DiaTextReveal, BLUE_SHADES_PALETTE } from './DiaTextReveal';
 
-
 interface HeroSectionProps {
   theme: 'dark' | 'light';
   stars: number | null;
@@ -60,8 +59,19 @@ export function HeroSection({
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative z-10 w-full max-w-[1240px] mx-auto px-4 sm:px-6 pt-12 sm:pt-20 pb-12 sm:pb-16 flex flex-col items-start text-left sm:items-center sm:text-center select-none"
+      className="relative z-10 w-full max-w-[1360px] 2xl:max-w-[1480px] mx-auto px-4 sm:px-8 lg:px-12 pt-12 sm:pt-20 lg:pt-24 2xl:pt-28 pb-10 sm:pb-14 lg:pb-16 flex flex-col items-start text-left sm:items-center sm:text-center select-none"
     >
+      {/* Cinematic Ambient Atmosphere Glow */}
+      <div 
+        aria-hidden="true" 
+        className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[680px] sm:w-[900px] 2xl:w-[1100px] h-[340px] sm:h-[420px] 2xl:h-[500px] opacity-45 dark:opacity-20 blur-[120px] rounded-full transition-opacity duration-500"
+        style={{
+          background: theme === 'dark' 
+            ? 'radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.4), rgba(59, 130, 246, 0.2), transparent 70%)'
+            : 'radial-gradient(circle at 50% 50%, rgba(147, 197, 253, 0.5), rgba(199, 210, 254, 0.3), transparent 70%)',
+        }}
+      />
+
       {/* Eyebrow: Backed by Vercel OSS Program - Increased Size */}
       <motion.div
         initial={{ opacity: 0, y: 8 }}
@@ -107,7 +117,7 @@ export function HeroSection({
         className="relative w-full"
       >
         <h1
-          className={`text-[36px] sm:text-[54px] lg:text-[66px] font-semibold tracking-[-0.035em] leading-[1.08] mb-4 sm:mb-5 max-w-4xl text-left sm:text-center sm:mx-auto transition-colors duration-300 ${
+          className={`text-fluid-hero font-semibold mb-4 sm:mb-5 max-w-4xl 2xl:max-w-5xl text-left sm:text-center sm:mx-auto transition-colors duration-300 ${
             theme === 'dark' ? 'text-[#ededed]' : 'text-[#0a0a0c]'
           }`}
         >
@@ -137,7 +147,7 @@ export function HeroSection({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className={`text-[15px] sm:text-[17px] leading-[25px] sm:leading-[27px] max-w-[560px] text-left sm:text-center sm:mx-auto font-normal tracking-[-0.012em] transition-colors duration-300 ${
+        className={`text-fluid-sub max-w-[560px] lg:max-w-[640px] 2xl:max-w-[720px] text-left sm:text-center sm:mx-auto font-normal transition-colors duration-300 ${
           theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'
         }`}
       >
@@ -149,7 +159,7 @@ export function HeroSection({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-        className="flex flex-row items-center justify-start sm:justify-center gap-2 sm:gap-3.5 mt-8 sm:mt-10 w-full max-w-md px-0 sm:px-2"
+        className="flex flex-row items-center justify-start sm:justify-center gap-2 sm:gap-3.5 2xl:gap-4 mt-8 sm:mt-10 2xl:mt-12 w-full max-w-md 2xl:max-w-lg px-0 sm:px-2"
       >
         {/* Primary CTA: Explore Components with Micro-Spring (Rectangle with rounded corners) */}
         <motion.button

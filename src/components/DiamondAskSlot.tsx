@@ -16,9 +16,8 @@ function DiamondIcon({ size = 28, isDark = true }: { size?: number; isDark?: boo
       height={Math.round((size * 88) / 100)}
       viewBox="0 0 100 88"
       fill="none"
-      className={`shrink-0 pointer-events-none transition-colors ${
-        isDark ? 'text-white/80 group-hover:text-white' : 'text-neutral-800 group-hover:text-black'
-      }`}
+      className={`shrink-0 pointer-events-none transition-colors ${isDark ? 'text-white/80 group-hover:text-white' : 'text-neutral-800 group-hover:text-black'
+        }`}
       aria-hidden="true"
     >
       <path
@@ -64,11 +63,10 @@ export const DiamondAskSlot: React.FC<DiamondAskSlotProps> = ({
         onClick={handleClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`px-4 py-2.5 sm:py-3 rounded-[14px] border border-dotted flex items-center gap-2.5 transition-colors select-none no-underline cursor-pointer whitespace-nowrap group ${
-          isDark
+        className={`px-4 py-2.5 sm:py-3 rounded-[14px] border border-dotted flex items-center gap-2.5 transition-colors select-none no-underline cursor-pointer whitespace-nowrap group ${isDark
             ? 'bg-white/[0.04] hover:bg-white/[0.08] border-white/20 hover:border-white/40 text-neutral-300 hover:text-white'
             : 'bg-black/[0.03] hover:bg-black/[0.06] border-black/20 hover:border-black/40 text-neutral-700 hover:text-neutral-900'
-        } ${className}`}
+          } ${className}`}
       >
         <motion.div
           animate={isHovered ? { rotateY: 360, scale: 1.15 } : { rotateY: 0, scale: 1 }}
@@ -90,11 +88,10 @@ export const DiamondAskSlot: React.FC<DiamondAskSlotProps> = ({
       onClick={handleClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`relative flex items-center justify-center text-center rounded-[16px] border-2 border-dotted transition-all no-underline cursor-pointer select-none group w-full h-full min-h-[148px] p-6 ${
-        isDark
+      className={`relative flex items-center justify-center text-center rounded-[16px] border-2 border-dotted transition-all no-underline cursor-pointer select-none group w-full h-full min-h-[148px] p-6 ${isDark
           ? 'bg-white/[0.04] hover:bg-white/[0.08] border-white/20 hover:border-white/40'
           : 'bg-black/[0.02] hover:bg-black/[0.05] border-black/15 hover:border-black/30'
-      } ${className}`}
+        } ${className}`}
     >
       <div className="flex items-center justify-center gap-3.5 my-auto">
         <motion.div
@@ -114,9 +111,8 @@ export const DiamondAskSlot: React.FC<DiamondAskSlotProps> = ({
                 animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
                 exit={{ opacity: 0, filter: 'blur(6px)', y: -2 }}
                 transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                className={`text-[22px] sm:text-[26px] font-bold tracking-tight transition-colors ${
-                  isDark ? 'text-neutral-300 group-hover:text-white' : 'text-neutral-700 group-hover:text-black'
-                }`}
+                className={`text-[22px] sm:text-[26px] font-bold tracking-tight transition-colors ${isDark ? 'text-neutral-300 group-hover:text-white' : 'text-neutral-700 group-hover:text-black'
+                  }`}
               >
                 Your logo here
               </motion.span>
@@ -127,9 +123,8 @@ export const DiamondAskSlot: React.FC<DiamondAskSlotProps> = ({
                 animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
                 exit={{ opacity: 0, filter: 'blur(6px)', y: -2 }}
                 transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                className={`text-[22px] sm:text-[26px] font-bold tracking-tight transition-colors ${
-                  isDark ? 'text-white' : 'text-neutral-900'
-                }`}
+                className={`text-[22px] sm:text-[26px] font-bold tracking-tight transition-colors ${isDark ? 'text-white' : 'text-neutral-900'
+                  }`}
               >
                 take this slot &lt;3
               </motion.span>

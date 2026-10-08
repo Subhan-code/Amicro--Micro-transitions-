@@ -79,14 +79,14 @@ export function SkillsPage({ theme, sponsors, checkoutUrl, onNavigateSponsors }:
       isDark ? 'bg-[#08080a] text-[#ededed] selection:bg-neutral-800' : 'bg-[#FAFAFA] text-neutral-900 selection:bg-neutral-200'
     }`}>
       {/* Header, left-aligned */}
-      <section className="w-full max-w-[960px] mx-auto px-4 sm:px-6 pt-16 pb-6">
+      <section className="w-full max-w-[960px] 2xl:max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-6">
         <div className="flex w-full flex-col gap-[4px]">
           <p className={`text-[16px] leading-[22px] font-medium tracking-[-0.24px] m-0 ${
             isDark ? 'text-white/40' : 'text-neutral-500'
           }`}>
             Agent context
           </p>
-          <h1 className={`text-[24px] leading-[30px] font-semibold tracking-[-0.6px] m-0 ${
+          <h1 className={`text-2xl sm:text-3xl 2xl:text-4xl font-semibold tracking-[-0.6px] m-0 ${
             isDark ? 'text-[#fafafa]' : 'text-neutral-900'
           }`}>
             Skills
@@ -136,7 +136,7 @@ export function SkillsPage({ theme, sponsors, checkoutUrl, onNavigateSponsors }:
       </section>
 
       {/* Skills Block Shell */}
-      <section className="w-full max-w-[960px] mx-auto px-4 sm:px-6">
+      <section className="w-full max-w-[960px] 2xl:max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Shell */}
         <div className={`relative overflow-hidden rounded-[16px] outline -outline-offset-1 ${
           isDark ? 'outline-white/[0.03]' : 'outline-black/[0.04]'

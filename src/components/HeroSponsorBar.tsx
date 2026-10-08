@@ -106,7 +106,7 @@ export function HeroSponsorBar({
   ];
 
   return (
-    <section className="w-full max-w-[1020px] mx-auto px-4 sm:px-6 pt-2 pb-10 sm:pb-14 select-none">
+    <section className="w-full max-w-[1040px] lg:max-w-[1160px] 2xl:max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-10 sm:pb-14 2xl:pb-16 select-none">
       {/* Centered "Sponsored by" heading matching screenshot */}
       <p
         className={`text-[12px] sm:text-[13px] font-medium tracking-[0.02em] text-center mb-3 sm:mb-3.5 transition-colors ${

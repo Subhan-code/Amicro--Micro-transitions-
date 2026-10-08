@@ -269,7 +269,7 @@ export function TextAnimationsPage({
   };
 
   return (
-    <div className={`w-full max-w-[1800px] mx-auto ${embedded ? 'px-0 py-2' : 'px-4 sm:px-6 py-8'} flex flex-col gap-8 font-sans`}>
+    <div className={`w-full max-w-[1600px] mx-auto ${embedded ? 'px-0 py-2' : 'px-4 sm:px-8 lg:px-12 2xl:px-16 py-8 2xl:py-12'} flex flex-col gap-8 2xl:gap-12 font-sans`}>
       {!embedded ? (
         <>
           {/* Top Header Back Navigation */}
@@ -290,7 +290,7 @@ export function TextAnimationsPage({
           </div>
 
           {/* Hero Header */}
-          <div className="flex flex-col items-center text-center gap-4 max-w-3xl mx-auto">
+          <div className="flex flex-col items-center text-center gap-4 max-w-3xl 2xl:max-w-4xl mx-auto">
             <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase ${
               theme === 'dark' ? 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/30' : 'bg-indigo-50 text-indigo-700 border border-indigo-200'
             }`}>
@@ -298,11 +298,11 @@ export function TextAnimationsPage({
               <span>Typography & Text Motion</span>
             </div>
             
-            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight">
+            <h1 className="text-fluid-h1 font-bold tracking-tight">
               Text Animations
             </h1>
             
-            <p className={`text-sm sm:text-base max-w-xl ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
+            <p className={`text-fluid-sub max-w-xl 2xl:max-w-2xl ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>
               A curated collection of {textAnimationsData.length} interactive text decoders, focus blur depth selectors, and pure-CSS kinetic typography effects.
             </p>
           </div>
@@ -351,7 +351,7 @@ export function TextAnimationsPage({
           </span>
         </div>
 
-        <div className="grid grid-cols-1 gap-x-4 gap-y-8 transition-opacity duration-200 sm:grid-cols-2 lg:gap-x-6 lg:gap-y-10 xl:grid-cols-3 xl:gap-x-8">
+        <div className="grid grid-cols-1 gap-x-4 gap-y-8 transition-opacity duration-200 sm:grid-cols-2 lg:gap-x-6 lg:gap-y-10 xl:grid-cols-3 xl:gap-x-7 2xl:grid-cols-4 2xl:gap-x-8 2xl:gap-y-12">
           {textAnimationsData.map((item) => {
             const isCopied = copiedId === item.id;
             return (

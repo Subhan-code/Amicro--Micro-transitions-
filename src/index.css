@@ -79,9 +79,18 @@
 
 /* Custom scroll bar behavior and smooth transitions */
 html {
+  overflow-x: clip;
+  max-width: 100vw;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  overflow-x: clip;
+  max-width: 100vw;
+  position: relative;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -191,3 +200,38 @@ html::-webkit-scrollbar-thumb:hover,
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* ========================================================
+   Fluid Typography & Defensive Layout Scaling System
+   Smooth proportional scaling across phones (360px) to
+   large monitors (1920x1080) and 2K/ultrawide displays (2560px+)
+   ======================================================== */
+.text-fluid-hero {
+  font-size: clamp(2.25rem, 4.4vw + 0.25rem, 4.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.text-fluid-h1 {
+  font-size: clamp(1.85rem, 3.2vw + 0.25rem, 3.5rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+.text-fluid-h2 {
+  font-size: clamp(1.4rem, 2.2vw + 0.2rem, 2.5rem);
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+}
+
+.text-fluid-sub {
+  font-size: clamp(0.95rem, 1vw + 0.25rem, 1.25rem);
+  line-height: 1.6;
+  letter-spacing: -0.012em;
+}
+
+.text-fluid-body {
+  font-size: clamp(0.875rem, 0.4vw + 0.75rem, 1.05rem);
+  line-height: 1.5;
+}
+

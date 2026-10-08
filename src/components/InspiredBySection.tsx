@@ -73,7 +73,7 @@ export function InspiredBySection({ theme, triggerHaptic, className = '' }: Insp
     <section
       id="inspired-by"
       aria-label="Inspired by"
-      className={`relative z-10 w-full max-w-[1240px] mx-auto py-10 select-none ${className}`}
+      className={`relative z-10 w-full max-w-[1360px] 2xl:max-w-[1480px] mx-auto px-4 sm:px-8 lg:px-12 py-10 2xl:py-16 select-none ${className}`}
     >
       <div className="flex flex-col items-start mb-8 sm:mb-10">
         <span
@@ -84,7 +84,7 @@ export function InspiredBySection({ theme, triggerHaptic, className = '' }: Insp
           GENEALOGY &amp; CRAFT
         </span>
         <h2
-          className={`text-2xl sm:text-3xl font-semibold tracking-tight ${
+          className={`text-fluid-h2 font-semibold ${
             isDark ? 'text-white' : 'text-zinc-950'
           }`}
         >

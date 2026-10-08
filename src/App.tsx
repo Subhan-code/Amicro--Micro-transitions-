@@ -23,6 +23,8 @@ import { loaderGroups, LoaderConfig } from './data/loaders';
 import { loadersCode } from './utils/loadersCode';
 import { InViewRender } from './components/InViewRender';
 import { IconSwap, IconSwapItem } from './components/IconSwap';
+import { CommandPalette } from './components/CommandPalette';
+import { SpotlightCard } from './components/SpotlightCard';
 
 // Card layouts imports
 import { cardsData, CardConfig } from './data/cards';
@@ -120,7 +122,20 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolledPastHero, setIsScrolledPastHero] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
-  const { trigger: triggerHaptic } = useWebHaptics();
+  const [searchOpen, setSearchOpen] = useState(false);
+  const { trigger: triggerHaptic, isSoundOn, toggleSound } = useWebHaptics();
+
+  // Global ⌘K / Ctrl+K keyboard shortcut to launch Command Palette
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const handleNavigateToSponsors = useCallback(() => {
     triggerHaptic('medium');
@@ -148,6 +163,14 @@ export default function App() {
       document.documentElement.classList.add('light');
     }
   }, [theme]);
+
+  // Eagerly preload SponsorsPage in background so navigating to sponsors is instant with 0ms delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      import('./components/SponsorsPage');
+    }, 150);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Auto-hiding scrollbar: adds .is-scrolling to html while scrolling, removes after 1s idle
   const [isScrolled, setIsScrolled] = useState(false);
@@ -341,7 +364,7 @@ export default function App() {
       } else if (route.startsWith('3d')) {
         setCurrentPage('home');
         setCatalogTab('3d');
-      } else if (route.startsWith('sponsors')) {
+      } else if (route.startsWith('sponsors') || route.startsWith('sponsorship-tiers')) {
         setCurrentPage('sponsors');
       } else if (route.startsWith('text-animations')) {
         setCurrentPage('home');
@@ -740,7 +763,7 @@ export default function App() {
   }, [currentPage, triggerHaptic]);
 
   return (
-    <div className={`relative w-full min-h-dvh flex flex-col font-sans antialiased transition-colors duration-300 ${theme === 'dark' ? 'dark bg-[#08080a] text-[#ededed] selection:bg-neutral-800' : 'bg-[#f8f9fa] text-[#0a0a0c] selection:bg-neutral-200'}`}>
+    <div className={`relative w-full max-w-full overflow-x-clip min-h-dvh flex flex-col font-sans antialiased transition-colors duration-300 ${theme === 'dark' ? 'dark bg-[#08080a] text-[#ededed] selection:bg-neutral-800' : 'bg-[#f8f9fa] text-[#0a0a0c] selection:bg-neutral-200'}`}>
       
       {/* Site Minimal Floating Navbar */}
       <MinimalNavbar
@@ -1046,7 +1069,7 @@ export default function App() {
             />
 
             {/* Component Cards Gallery & Discovery Playground */}
-            <section id="components" className="mx-auto max-w-[1800px] w-full px-4 sm:px-8 lg:px-12 pt-2 pb-16">
+            <section id="components" className="mx-auto max-w-[1600px] w-full px-4 sm:px-8 lg:px-12 2xl:px-16 pt-2 pb-16 2xl:pb-24">
               <div className="space-y-6">
                 {/* Minimalist Stadium Category Filter Bar */}
                 <CategoryPillBar
@@ -1073,7 +1096,7 @@ export default function App() {
                       w-full scroll-mt-24 transition-opacity duration-200
                       ${['loaders', 'mono-charts', 'anime', '3d', 'text-animations', 'morphing'].includes(catalogTab)
                         ? 'w-full' 
-                        : 'grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:gap-x-6 lg:gap-y-10 xl:grid-cols-3 xl:gap-x-8'
+                        : 'grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:gap-x-6 lg:gap-y-10 xl:grid-cols-3 xl:gap-x-7 2xl:grid-cols-4 2xl:gap-x-8 2xl:gap-y-12'
                       }
                     `}
                   >
@@ -1111,11 +1134,14 @@ export default function App() {
                               }}
                               className="block focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 rounded-3xl no-underline text-inherit cursor-pointer"
                             >
-                              <div className={`relative aspect-[16/10] w-full overflow-hidden rounded-2xl sm:rounded-3xl border transition-all duration-300 flex items-center justify-center p-6 ${
-                                theme === 'dark'
-                                  ? 'bg-black border-white/[0.07] group-hover/card:border-white/[0.18] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]'
-                                  : 'bg-[#f5f6f8] border-neutral-200/80 group-hover/card:border-neutral-300 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]'
-                              }`}>
+                              <SpotlightCard
+                                theme={theme}
+                                className={`relative aspect-[16/10] w-full rounded-2xl sm:rounded-3xl border transition-all duration-300 flex items-center justify-center p-6 ${
+                                  theme === 'dark'
+                                    ? 'bg-black border-white/[0.07] group-hover/card:border-white/[0.18] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]'
+                                    : 'bg-[#f5f6f8] border-neutral-200/80 group-hover/card:border-neutral-300 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]'
+                                }`}
+                              >
                                 <div
                                   onClick={(e) => {
                                     // On mobile: clicking the component directly triggers its hover/micro-interaction without navigating
@@ -1128,7 +1154,7 @@ export default function App() {
                                 >
                                   <AnimatedButton config={button} layoutMode="grid" theme={theme} />
                                 </div>
-                              </div>
+                              </SpotlightCard>
 
                               <div className="flex items-center justify-between gap-3 pt-3 px-1">
                                 <div className="min-w-0 flex-1">
@@ -1182,7 +1208,7 @@ export default function App() {
                                 </span>
                               </div>
 
-                              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3.5 sm:gap-4">
+                              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-3.5 sm:gap-4 2xl:gap-5">
                                 {group.loaders.map((loader, loaderIdx) => {
                                   const LoaderComponent = loader.component;
                                   const isWavePhysics = loader.name === 'Wave Physics' || group.title === 'Physics & Simulation';
@@ -1205,11 +1231,14 @@ export default function App() {
                                         }}
                                         className="block focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 rounded-2xl sm:rounded-3xl cursor-pointer"
                                       >
-                                        <div className={`relative w-full overflow-hidden rounded-2xl sm:rounded-3xl bg-black flex items-center justify-center ${
-                                          isWavePhysics 
-                                            ? 'h-44 sm:h-48 md:h-52 p-4 sm:p-5' 
-                                            : 'aspect-[16/10] p-3 sm:p-4'
-                                        }`}>
+                                        <SpotlightCard
+                                          theme={theme}
+                                          className={`relative w-full rounded-2xl sm:rounded-3xl bg-black border border-white/[0.06] group-hover/card:border-white/[0.16] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] flex items-center justify-center transition-all duration-300 ${
+                                            isWavePhysics 
+                                              ? 'h-44 sm:h-48 md:h-52 p-4 sm:p-5' 
+                                              : 'aspect-[16/10] p-3 sm:p-4'
+                                          }`}
+                                        >
                                           <div
                                             onClick={(e) => {
                                               const isTouch = typeof window !== 'undefined' && (window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768);
@@ -1229,7 +1258,7 @@ export default function App() {
                                               </div>
                                             </InViewRender>
                                           </div>
-                                        </div>
+                                        </SpotlightCard>
 
                                         <div className="flex items-center justify-between gap-2 pt-2.5 px-1">
                                           <div className="min-w-0 flex-1">
@@ -1523,6 +1552,18 @@ export default function App() {
           refreshSponsors();
           showToast('Your sponsorship is live!');
         }}
+      />
+
+      {/* Global ⌘K Command Palette */}
+      <CommandPalette
+        isOpen={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        onSelectComponent={(id, cat) => {
+          setSearchOpen(false);
+          navigateToChartDetail(id, cat);
+        }}
+        showToast={showToast}
+        theme={theme}
       />
 
       <Analytics />

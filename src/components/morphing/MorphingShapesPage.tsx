@@ -136,7 +136,7 @@ export function MorphingShapesPage({
   return (
     <div className="w-full">
       {/* Standard Amicro Responsive Component Grid */}
-      <div className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:gap-x-6 lg:gap-y-10 xl:grid-cols-3 xl:gap-x-8">
+      <div className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:gap-x-6 lg:gap-y-10 xl:grid-cols-3 xl:gap-x-7 2xl:grid-cols-4 2xl:gap-x-8 2xl:gap-y-12">
         {ALL_MORPHS.map((item, index) => {
           const isCopied = copiedId === item.id;
 

@@ -15,7 +15,7 @@ export function MinimalFooter({
 }: MinimalFooterProps) {
   return (
     <footer className="relative z-10 w-full border-t border-white/[0.03] select-none">
-      <div className="w-full max-w-[1240px] mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3.5 sm:gap-6 text-[13px] text-neutral-400">
+      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 2xl:px-16 py-6 2xl:py-8 flex flex-col sm:flex-row items-center justify-between gap-3.5 sm:gap-6 text-[13px] 2xl:text-[14px] text-neutral-400">
         {/* Left: Website Logo & Name + Created by Syed Subhan */}
         <div className="flex items-center gap-2.5">
           <a
