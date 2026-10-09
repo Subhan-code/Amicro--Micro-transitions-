@@ -98,7 +98,7 @@ export function CommandPalette({
     textAnimationsData.forEach((txt) => {
       list.push({
         id: txt.id,
-        title: txt.name,
+        title: txt.label,
         category: 'Text Animations',
         categorySlug: 'text-animations',
         description: txt.description,

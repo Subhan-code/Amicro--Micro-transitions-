@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useReducedMotion, useAnimation, useInView } fr
 import { Check, ArrowUpRight } from 'lucide-react';
 import { useWebHaptics } from '../hooks/useWebHaptics';
 import { MapleLogo } from './MapleLogo';
+import { DiamondAskSlot } from './DiamondAskSlot';
 import { StickerBoard } from './StickerBoard';
 import { SponsorStats } from './SponsorStats';
 import { LiquidMetal } from './ui/liquid-metal';
