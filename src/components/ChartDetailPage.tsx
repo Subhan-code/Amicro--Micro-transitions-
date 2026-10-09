@@ -1139,7 +1139,7 @@ export function ChartDetailPage({
                     </button>
                   ) : (
                     <a
-                      href={checkoutUrl || "https://polar.sh/checkout/polar_c_aJ9w76csnccSI8uNxJ6rIopDFzVFJkzobaGNC17YNtS"}
+                      href={checkoutUrl || "https://buy.polar.sh/polar_cl_1sD84lka9aX34JuZpm6ACJxGQPMjiBGQCtfRo1RSfGh"}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => triggerHaptic?.('light')}
@@ -1256,7 +1256,7 @@ export function ChartDetailPage({
                       </button>
                     ) : (
                       <a
-                        href={checkoutUrl || "https://polar.sh/checkout/polar_c_aJ9w76csnccSI8uNxJ6rIopDFzVFJkzobaGNC17YNtS"}
+                        href={checkoutUrl || "https://buy.polar.sh/polar_cl_1sD84lka9aX34JuZpm6ACJxGQPMjiBGQCtfRo1RSfGh"}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => triggerHaptic?.('medium')}

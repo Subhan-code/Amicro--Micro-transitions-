@@ -323,7 +323,7 @@ export function CliPage({ theme, sponsors, checkoutUrl, onNavigateSponsors }: Cl
           <SponsorSection
             theme={theme}
             sponsors={sponsors}
-            checkoutUrl={checkoutUrl || "https://polar.sh/checkout/polar_c_aJ9w76csnccSI8uNxJ6rIopDFzVFJkzobaGNC17YNtS"}
+            checkoutUrl={checkoutUrl || "https://buy.polar.sh/polar_cl_1sD84lka9aX34JuZpm6ACJxGQPMjiBGQCtfRo1RSfGh"}
             onNavigateSponsors={onNavigateSponsors}
             triggerHaptic={triggerHaptic}
           />

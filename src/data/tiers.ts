@@ -20,7 +20,7 @@ export const POLAR_PRODUCT_IDS = {
   silver: 'dd643ac1-9559-4430-ad6b-cd8ebef2f5a9',
 };
 
-export const POLAR_DEFAULT_URL = 'https://polar.sh/checkout/polar_c_aJ9w76csnccSI8uNxJ6rIopDFzVFJkzobaGNC17YNtS';
+export const POLAR_DEFAULT_URL = 'https://buy.polar.sh/polar_cl_1sD84lka9aX34JuZpm6ACJxGQPMjiBGQCtfRo1RSfGh';
 
 export const SPONSOR_TIERS: SponsorTier[] = [
   {
@@ -35,7 +35,7 @@ export const SPONSOR_TIERS: SponsorTier[] = [
     popular: true,
     slotsTotal: 1,
     productId: POLAR_PRODUCT_IDS.diamond,
-    checkoutUrl: 'https://polar.sh/checkout/polar_c_aJ9w76csnccSI8uNxJ6rIopDFzVFJkzobaGNC17YNtS',
+    checkoutUrl: 'https://buy.polar.sh/polar_cl_1sD84lka9aX34JuZpm6ACJxGQPMjiBGQCtfRo1RSfGh',
     features: [
       'Sticky bottom ad banner placement across all pages',
       'Top-level prominent logo on Homepage and Catalog',
@@ -56,7 +56,7 @@ export const SPONSOR_TIERS: SponsorTier[] = [
     description: 'Prominent showcase across Amicro component pages, CLI documentation, and charts.',
     slotsTotal: 3,
     productId: POLAR_PRODUCT_IDS.gold,
-    checkoutUrl: 'https://polar.sh/checkout/polar_c_e8o6kfWMdh8Yan4qBRNOs9GkeXQ3Xt3oUXCZp3uBDgE',
+    checkoutUrl: 'https://buy.polar.sh/polar_cl_zM0N55eXXEIVBQMdt783wuY7ZIYoeub7QQgCJ3QBUfY',
     features: [
       'Featured brand logo in Amicro sponsor grid',
       'Placement across subpages (CLI, Skills, Mono Charts)',

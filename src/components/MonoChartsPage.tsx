@@ -580,7 +580,7 @@ export function MonoChartsPage({
           <SponsorSection
             theme={theme}
             sponsors={activeSponsors}
-            checkoutUrl={checkoutUrl || 'https://polar.sh/checkout/polar_c_aJ9w76csnccSI8uNxJ6rIopDFzVFJkzobaGNC17YNtS'}
+            checkoutUrl={checkoutUrl || 'https://buy.polar.sh/polar_cl_1sD84lka9aX34JuZpm6ACJxGQPMjiBGQCtfRo1RSfGh'}
             onNavigateSponsors={() => {
               if (triggerHaptic) triggerHaptic('light');
               window.location.href = '/sponsors';
