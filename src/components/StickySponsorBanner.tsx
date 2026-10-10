@@ -175,8 +175,7 @@ export function StickySponsorBanner({
                 </svg>
               </button>
 
-              {/* Vertical Dotnav Slider Progress below the cross:
-                  Runs top-to-bottom. As one decreases, the other expands in sync. */}
+              {/* Vertical Dotnav Slider Progress below the cross */}
               <ul
                 role="tablist"
                 aria-label="Sponsor gallery navigation"
@@ -261,15 +260,15 @@ export function StickySponsorBanner({
                         )}
                       </div>
 
-                      {/* Right: Name + Sponsor Badge + Description (no arrows) */}
+                      {/* Right: Name + Sponsor Badge (right edge on desktop) + Description */}
                       <div className="flex-1 min-w-0 flex flex-col justify-center gap-0.5 sm:gap-1">
-                        {/* Top row: Name + Sponsor Badge */}
-                        <div className="flex items-center gap-1.5 sm:gap-2">
+                        {/* Top row: Name on left + Sponsor Badge on right edge */}
+                        <div className="flex items-center justify-between gap-1.5 sm:gap-2 w-full">
                           <span className="text-[14px] sm:text-[16px] font-bold text-white tracking-tight leading-none truncate group-hover/ad:text-neutral-200 transition-colors">
                             {currentItem.data.companyName}
                           </span>
 
-                          <span className="text-[8px] sm:text-[9px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded-full bg-white/10 text-zinc-300 border border-white/10 leading-none shrink-0">
+                          <span className="text-[8px] sm:text-[9px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded-full bg-white/10 text-zinc-300 border border-white/10 leading-none shrink-0 sm:ml-auto">
                             SPONSOR
                           </span>
                         </div>

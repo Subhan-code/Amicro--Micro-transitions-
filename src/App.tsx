@@ -1152,7 +1152,9 @@ export default function App() {
                                   }}
                                   className="cursor-default"
                                 >
-                                  <AnimatedButton config={button} layoutMode="grid" theme={theme} />
+                                  <InViewRender active={catalogTab === 'buttons'}>
+                                    <AnimatedButton config={button} layoutMode="grid" theme={theme} />
+                                  </InViewRender>
                                 </div>
                               </SpotlightCard>
 
@@ -1248,7 +1250,7 @@ export default function App() {
                                             }}
                                             className="cursor-default"
                                           >
-                                            <InViewRender>
+                                            <InViewRender active={catalogTab === 'loaders'}>
                                               <div className={`origin-center flex items-center justify-center ${
                                                 isWavePhysics
                                                   ? 'scale-95 sm:scale-100 md:scale-105'
@@ -1397,21 +1399,23 @@ export default function App() {
                                   className={`relative aspect-[16/10] w-full rounded-2xl sm:rounded-3xl bg-black border border-white/[0.07] group-hover/card:border-white/[0.18] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] flex items-center justify-center transition-all duration-300 cursor-pointer ${hoveredCardId === card.id ? 'overflow-visible z-20' : 'overflow-hidden z-1'}`}
                                 >
                                   <div className="relative h-full w-full flex items-center justify-center pointer-events-none">
-                                    {card.interactionType === 'card-arc-5' && <CardArc5 hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
-                                    {card.interactionType === 'card-arc-7' && <CardArc7 hovered={hoveredCardId === card.id} className="scale-[0.55] sm:scale-[0.85] origin-center" />}
-                                    {card.interactionType === 'card-long-arc-5' && <CardLongArc5 hovered={hoveredCardId === card.id} className="scale-[0.55] sm:scale-[0.85] origin-center" />}
-                                    {card.interactionType === 'card-linear-spread' && <CardLinearSpread hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
-                                    {card.interactionType === 'card-corner-fan' && <CardCornerFan hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
-                                    {card.interactionType === 'card-stamp-arc' && <CardStampArc hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
-                                    {card.interactionType === 'card-cascade-stagger' && <CardCascadeStagger hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
-                                    {card.interactionType === 'card-scatter-spread' && <CardScatterSpread hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
-                                    {card.interactionType === 'card-wheel-fan' && <CardWheelFan hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
-                                    {card.interactionType === 'card-carousel' && <CardCarousel hovered={hoveredCardId === card.id} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
-                                    {card.interactionType === 'card-cover-flow' && <CardCoverFlow hovered={hoveredCardId === card.id} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
-                                    {card.interactionType === 'card-time-machine' && <CardTimeMachine hovered={hoveredCardId === card.id} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
-                                    {card.interactionType === 'card-carousel-mono' && <CardCarousel hovered={hoveredCardId === card.id} isMonochrome={true} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
-                                    {card.interactionType === 'card-cover-flow-mono' && <CardCoverFlow hovered={hoveredCardId === card.id} isMonochrome={true} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
-                                    {card.interactionType === 'card-time-machine-mono' && <CardTimeMachine hovered={hoveredCardId === card.id} isMonochrome={true} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
+                                    <InViewRender active={catalogTab === 'cards' || catalogTab === 'carousels'}>
+                                      {card.interactionType === 'card-arc-5' && <CardArc5 hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
+                                      {card.interactionType === 'card-arc-7' && <CardArc7 hovered={hoveredCardId === card.id} className="scale-[0.55] sm:scale-[0.85] origin-center" />}
+                                      {card.interactionType === 'card-long-arc-5' && <CardLongArc5 hovered={hoveredCardId === card.id} className="scale-[0.55] sm:scale-[0.85] origin-center" />}
+                                      {card.interactionType === 'card-linear-spread' && <CardLinearSpread hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
+                                      {card.interactionType === 'card-corner-fan' && <CardCornerFan hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
+                                      {card.interactionType === 'card-stamp-arc' && <CardStampArc hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
+                                      {card.interactionType === 'card-cascade-stagger' && <CardCascadeStagger hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
+                                      {card.interactionType === 'card-scatter-spread' && <CardScatterSpread hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
+                                      {card.interactionType === 'card-wheel-fan' && <CardWheelFan hovered={hoveredCardId === card.id} className="scale-[0.6] sm:scale-[0.9] origin-center" />}
+                                      {card.interactionType === 'card-carousel' && <CardCarousel hovered={hoveredCardId === card.id} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
+                                      {card.interactionType === 'card-cover-flow' && <CardCoverFlow hovered={hoveredCardId === card.id} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
+                                      {card.interactionType === 'card-time-machine' && <CardTimeMachine hovered={hoveredCardId === card.id} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
+                                      {card.interactionType === 'card-carousel-mono' && <CardCarousel hovered={hoveredCardId === card.id} isMonochrome={true} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
+                                      {card.interactionType === 'card-cover-flow-mono' && <CardCoverFlow hovered={hoveredCardId === card.id} isMonochrome={true} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
+                                      {card.interactionType === 'card-time-machine-mono' && <CardTimeMachine hovered={hoveredCardId === card.id} isMonochrome={true} className="scale-[0.5] sm:scale-[0.8] origin-center" />}
+                                    </InViewRender>
                                   </div>
                                 </div>
                                 <div

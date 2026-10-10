@@ -19,15 +19,24 @@
       ]
     },
     {
+      "source": "/(r/(.*)|registry\\.json)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, OPTIONS"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         {
           "key": "X-Content-Type-Options",
           "value": "nosniff"
-        },
-        {
-          "key": "Content-Security-Policy",
-          "value": "frame-ancestors 'self' https://shoogle.dev https://*.shoogle.dev;"
         },
         {
           "key": "Referrer-Policy",

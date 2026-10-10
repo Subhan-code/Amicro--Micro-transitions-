@@ -16,6 +16,7 @@ import { formatCliCommand, getStoredRegistryMode, RegistryMode } from '../utils/
 import type { SponsorItem } from './SponsorSection';
 import { MapleLogo } from './MapleLogo';
 import { CopyButton } from './CopyButton';
+import { InViewRender } from './InViewRender';
 
 // Mono Charts imports
 import { MonoActivityHeatmap } from './mono-charts/MonoActivityHeatmap';
@@ -238,7 +239,14 @@ export function ChartDetailPage({
     return `src/components/ui/${cleanName}.tsx`;
   }, [entry.registry]);
 
+  const isCodeViewActive = activeTab === 'code' || installMode === 'manual';
+
   const realComponentCode = useMemo(() => {
+    // Deferred code resolution: do not evaluate until user opens Code or Manual view
+    if (!isCodeViewActive) {
+      return '';
+    }
+
     // 1. Buttons: use codeGenerator
     const cleanButtonId = chartId.replace(/^btn-/, '');
     const foundButton = buttonsData.find(
@@ -288,7 +296,7 @@ export function ChartDetailPage({
 
     // 6. Fallback
     return entry.usage;
-  }, [chartId, entry]);
+  }, [chartId, entry, isCodeViewActive]);
 
   const handleCopyInstallCmd = () => {
     navigator.clipboard.writeText(installCommand);
@@ -804,7 +812,9 @@ export function ChartDetailPage({
                       : 'min-h-[320px] sm:min-h-[440px]'
                     }`}
                 >
-                  {renderLiveComponent()}
+                  <InViewRender active={activeTab === 'preview'}>
+                    {renderLiveComponent()}
+                  </InViewRender>
                 </div>
               ) : (
                 <div className="w-full h-full max-h-[460px] overflow-hidden rounded-2xl border border-[#1A1A1C] bg-[#0c0c0e] p-2 text-neutral-300 font-mono text-xs flex flex-col">

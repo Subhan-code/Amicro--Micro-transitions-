@@ -7,6 +7,7 @@ import { IconSwap, IconSwapItem } from './IconSwap';
 import { ScrambleHover, ScrambleHoverDemo } from './css-animations/ScrambleHover';
 import { FocusBlurDemo } from './css-animations/FocusBlur';
 import { FocusBlur } from './cards/FocusBlur';
+import { InViewRender } from './InViewRender';
 
 export interface TextAnimationItem {
   id: string;
@@ -357,7 +358,9 @@ export function TextAnimationsPage({
             return (
               <article key={item.id} className="group/card relative">
                 <div className="relative aspect-[16/10] w-full overflow-hidden rounded-3xl bg-black flex items-center justify-center p-4">
-                  {renderLiveTextEffect(item.id)}
+                  <InViewRender active={true}>
+                    {renderLiveTextEffect(item.id)}
+                  </InViewRender>
                 </div>
 
                 <div className="flex items-center justify-between gap-3 pt-3 px-1">
