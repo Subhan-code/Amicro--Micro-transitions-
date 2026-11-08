@@ -1,4 +1,5 @@
 {
+  "$schema": "https://fundingjson.org/schema/v1.1.0.json",
   "version": "v1.0.0",
   "entity": {
     "type": "individual",
@@ -21,15 +22,15 @@
       "repositoryUrl": {
         "url": "https://github.com/Subhan-code/Amicro--Micro-transitions-"
       },
-      "licenses": ["MIT"],
-      "tags": ["react", "ui", "micro-interactions", "animations", "open-source", "components"]
+      "licenses": ["spdx:MIT"],
+      "tags": ["react", "ui", "micro-interactions", "animations", "open-source"]
     }
   ],
   "funding": {
     "channels": [
       {
         "guid": "github-sponsors",
-        "type": "other",
+        "type": "payment-provider",
         "address": "https://github.com/sponsors/Subhan-code",
         "description": "GitHub Sponsors"
       }
@@ -37,11 +38,13 @@
     "plans": [
       {
         "guid": "foss-united-grant",
+        "status": "active",
         "name": "FOSS United Project Grant",
         "description": "Support to improve accessibility (reduced-motion, keyboard, screen readers), mobile interactions, documentation, and expand micro-interaction primitives for common UI patterns.",
         "amount": 150000,
         "currency": "INR",
-        "frequency": "one-time"
+        "frequency": "one-time",
+        "channels": ["github-sponsors"]
       }
     ]
   }
