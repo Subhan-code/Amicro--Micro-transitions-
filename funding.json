@@ -2,6 +2,7 @@
   "version": "v1.0.0",
   "entity": {
     "type": "individual",
+    "role": "owner",
     "name": "Syed Subhan",
     "email": "su2491251@gmail.com",
     "description": "Creator and maintainer of Amicro, an open-source React micro-interactions and transition components library.",
