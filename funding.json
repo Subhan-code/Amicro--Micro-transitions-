@@ -1,0 +1,51 @@
+{
+  "$schema": "https://fundingjson.org/schema/v1.1.0.json",
+  "version": "v1.0.0",
+  "entity": {
+    "type": "individual",
+    "role": "owner",
+    "name": "Syed Subhan",
+    "email": "su2491251@gmail.com",
+    "description": "Creator and maintainer of Amicro, an open-source React micro-interactions and transition components library.",
+    "webpageUrl": {
+      "url": "https://amicro.dev"
+    }
+  },
+  "projects": [
+    {
+      "guid": "amicro",
+      "name": "Amicro",
+      "description": "Open-source React library of production-ready micro-interactions and transition components.",
+      "webpageUrl": {
+        "url": "https://amicro.dev"
+      },
+      "repositoryUrl": {
+        "url": "https://github.com/Subhan-code/Amicro--Micro-transitions-"
+      },
+      "licenses": ["spdx:MIT"],
+      "tags": ["react", "ui", "micro-interactions"]
+    }
+  ],
+  "funding": {
+    "channels": [
+      {
+        "guid": "github-sponsors",
+        "type": "payment-provider",
+        "address": "https://github.com/sponsors/Subhan-code",
+        "description": "GitHub Sponsors"
+      }
+    ],
+    "plans": [
+      {
+        "guid": "grant",
+        "status": "active",
+        "name": "Project Grant",
+        "description": "Support for accessibility improvements and documentation.",
+        "amount": 150000,
+        "currency": "INR",
+        "frequency": "one-time",
+        "channels": ["github-sponsors"]
+      }
+    ]
+  }
+}
