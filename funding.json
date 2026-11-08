@@ -15,7 +15,7 @@
     {
       "guid": "amicro",
       "name": "Amicro",
-      "description": "Open-source React library of production-ready micro-interactions and transition components. Supports copy-paste and CLI/shadcn registry installation. Built with Motion and Tailwind.",
+      "description": "Open-source React library of production-ready micro-interactions and transition components.",
       "webpageUrl": {
         "url": "https://amicro.dev"
       },
@@ -23,7 +23,7 @@
         "url": "https://github.com/Subhan-code/Amicro--Micro-transitions-"
       },
       "licenses": ["spdx:MIT"],
-      "tags": ["react", "ui", "micro-interactions", "animations", "open-source"]
+      "tags": ["react", "ui", "micro-interactions"]
     }
   ],
   "funding": {
@@ -37,10 +37,10 @@
     ],
     "plans": [
       {
-        "guid": "foss-united-grant",
+        "guid": "grant",
         "status": "active",
-        "name": "FOSS United Project Grant",
-        "description": "Support to improve accessibility (reduced-motion, keyboard, screen readers), mobile interactions, documentation, and expand micro-interaction primitives for common UI patterns.",
+        "name": "Project Grant",
+        "description": "Support for accessibility improvements and documentation.",
         "amount": 150000,
         "currency": "INR",
         "frequency": "one-time",
