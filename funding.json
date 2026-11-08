@@ -1,0 +1,47 @@
+{
+  "version": "v1.0.0",
+  "entity": {
+    "type": "individual",
+    "name": "Syed Subhan",
+    "email": "su2491251@gmail.com",
+    "description": "Creator and maintainer of Amicro, an open-source React micro-interactions and transition components library.",
+    "webpageUrl": {
+      "url": "https://amicro.dev"
+    }
+  },
+  "projects": [
+    {
+      "guid": "amicro",
+      "name": "Amicro",
+      "description": "Open-source React library of production-ready micro-interactions and transition components. Supports copy-paste and CLI/shadcn registry installation. Built with Motion and Tailwind.",
+      "webpageUrl": {
+        "url": "https://amicro.dev"
+      },
+      "repositoryUrl": {
+        "url": "https://github.com/Subhan-code/Amicro--Micro-transitions-"
+      },
+      "licenses": ["MIT"],
+      "tags": ["react", "ui", "micro-interactions", "animations", "open-source", "components"]
+    }
+  ],
+  "funding": {
+    "channels": [
+      {
+        "guid": "github-sponsors",
+        "type": "other",
+        "address": "https://github.com/sponsors/Subhan-code",
+        "description": "GitHub Sponsors"
+      }
+    ],
+    "plans": [
+      {
+        "guid": "foss-united-grant",
+        "name": "FOSS United Project Grant",
+        "description": "Support to improve accessibility (reduced-motion, keyboard, screen readers), mobile interactions, documentation, and expand micro-interaction primitives for common UI patterns.",
+        "amount": 150000,
+        "currency": "INR",
+        "frequency": "one-time"
+      }
+    ]
+  }
+}
