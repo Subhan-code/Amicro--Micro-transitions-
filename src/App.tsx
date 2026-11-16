@@ -892,7 +892,6 @@ export default function App() {
         onToggleMobileMenu={() => setMobileMenuOpen(!mobileMenuOpen)}
         triggerHaptic={triggerHaptic}
         onBack={currentPage === 'chart-detail' && selectedChartId ? () => {
-          // URL segment is the category the user came from; entry fallback guesses mono-charts for unknown ids
           const urlCat = window.location.pathname.split('/')[1];
           const cat = urlCat in tabLabels ? urlCat : getComponentEntry(selectedChartId).category;
           setSelectedChartId(null);
