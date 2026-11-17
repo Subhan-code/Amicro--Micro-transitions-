@@ -75,7 +75,7 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!api/|r/|registry.json).*)",
+      "source": "/((?!api/|r/|registry.json|google[a-z0-9]+\\.html).*)",
       "destination": "/index.html"
     }
   ]
