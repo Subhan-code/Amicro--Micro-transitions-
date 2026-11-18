@@ -892,8 +892,8 @@ export default function App() {
         onToggleMobileMenu={() => setMobileMenuOpen(!mobileMenuOpen)}
         triggerHaptic={triggerHaptic}
         onBack={currentPage === 'chart-detail' && selectedChartId ? () => {
-          const entry = getComponentEntry(selectedChartId);
-          const cat = entry ? entry.category : catalogTab;
+          const urlCat = window.location.pathname.split('/')[1];
+          const cat = urlCat in tabLabels ? urlCat : getComponentEntry(selectedChartId).category;
           setSelectedChartId(null);
           if (cat === 'mono-charts') {
             navigateTo('mono-charts');
@@ -988,8 +988,8 @@ export default function App() {
                   }
                 }}
                 onBack={() => {
-                  const entry = getComponentEntry(selectedChartId);
-                  const cat = entry ? entry.category : catalogTab;
+                  const urlCat = window.location.pathname.split('/')[1];
+                  const cat = urlCat in tabLabels ? urlCat : getComponentEntry(selectedChartId).category;
                   setSelectedChartId(null);
                   if (cat === 'mono-charts') {
                     navigateTo('mono-charts');
